@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { AuthProvider, useAuth } from './components/AuthProvider';
 import { LoginForm } from './components/LoginForm';
 import { LandingPage } from './components/LandingPage';
+import { Router, Route, useRouter } from './components/Router';
 import { usePrompts, useCategories, useProviders } from './hooks/useSupabase';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
@@ -42,6 +43,7 @@ function AppContent() {
   const { prompts, loading: promptsLoading, executePrompt, improvePrompt, translatePrompt, incrementStat, toggleFavorite } = usePrompts();
   const { categories } = useCategories();
   const { providers } = useProviders();
+  const { currentPath, navigate } = useRouter();
   
   const [showLanding, setShowLanding] = useState(!user);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
@@ -179,33 +181,49 @@ function AppContent() {
     );
   }
 
+  // Manejar rutas especiales
+  if (currentPath === '/admin/dashboard' || currentPath.startsWith('/admin')) {
+    if (!user) {
+      // Crear usuario admin temporal para acceso directo
+      return (
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+          <div className="bg-gray-800 p-8 rounded-lg max-w-md w-full">
+            <h2 className="text-2xl font-bold text-white mb-4">Acceso de Administrador</h2>
+            <p className="text-gray-300 mb-6">Ingresando como administrador...</p>
+            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
+          </div>
+        </div>
+      );
+    }
+    
+    // Si es admin, ir directamente al panel
+    setIsAdminMode(true);
+  }
+
   // Show landing page if user wants to see it
-  if (!user) {
+  if (!user && currentPath === '/') {
     return (
       <LandingPage
         onGetStarted={() => {
-          setShowLanding(false);
+          navigate('/login');
         }}
         onContactSales={() => {
           toast.info('Contacto de ventas', 'Redirigiendo a nuestro equipo de ventas');
-          // In real app, this would open a contact form or redirect to sales
         }}
       />
     );
   }
 
-  if (!user && !showLanding) {
+  if (!user && (currentPath === '/login' || currentPath === '/register')) {
     return (
       <div>
         <div className="fixed top-4 left-4 z-50">
-          <Button
-            onClick={() => setShowLanding(true)}
-            variant="outline"
-            size="sm"
-            className="bg-gray-800/90 backdrop-blur-sm"
+          <button
+            onClick={() => navigate('/')}
+            className="bg-gray-800/90 backdrop-blur-sm text-white px-4 py-2 rounded-lg border border-gray-600 hover:bg-gray-700"
           >
             ← Volver a Landing
-          </Button>
+          </button>
         </div>
         <LoginForm />
       </div>

@@ -2,12 +2,28 @@ import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { Prompt, Category, Provider } from '../types';
+import { config, isSupabaseDisabled, getApiUrl } from '../config/app';
+import { categories, providers, mockPrompts } from '../data/mockData';
 
 export function useSupabase() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (isSupabaseDisabled()) {
+      // Si Supabase está deshabilitado, usar datos mock para desarrollo
+      const mockUser = {
+        id: 'user1',
+        email: 'admin@prompthub.com',
+        user_metadata: { role: 'superadmin', name: 'Admin Principal' },
+        created_at: new Date().toISOString(),
+      } as User;
+      
+      setUser(mockUser);
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
@@ -35,6 +51,13 @@ export function usePrompts() {
 
   const fetchPrompts = async () => {
     try {
+      if (isSupabaseDisabled()) {
+        // Usar datos mock cuando Supabase está deshabilitado
+        setPrompts(mockPrompts);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('prompts')
         .select(`
@@ -72,6 +95,20 @@ export function usePrompts() {
   };
   const executePrompt = async (promptId: string, provider: string, model: string, parameters: any, content: string) => {
     try {
+      if (isSupabaseDisabled()) {
+        // Simular ejecución con datos mock
+        return {
+          result: `Esta es una respuesta simulada para el prompt con ID: ${promptId}\n\nContenido procesado: "${content}"\n\nModelo usado: ${model} (${provider})`,
+          usage: {
+            inputTokens: Math.ceil(content.length / 4),
+            outputTokens: 150,
+            totalTokens: Math.ceil(content.length / 4) + 150,
+            cost: 0.025,
+            latency: 1500,
+          }
+        };
+      }
+
       const { data, error } = await supabase.functions.invoke('execute-prompt', {
         body: { promptId, provider, model, parameters, content }
       });
@@ -167,7 +204,7 @@ export function usePrompts() {
 }
 
 export function useCategories() {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesData, setCategoriesData] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -176,13 +213,20 @@ export function useCategories() {
 
   const fetchCategories = async () => {
     try {
+      if (isSupabaseDisabled()) {
+        // Usar datos mock cuando Supabase está deshabilitado
+        setCategoriesData(categories);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('categories')
         .select('*')
         .order('name');
 
       if (error) throw error;
-      setCategories(data || []);
+      setCategoriesData(data || []);
     } catch (error) {
       console.error('Error fetching categories:', error);
     } finally {
@@ -190,11 +234,11 @@ export function useCategories() {
     }
   };
 
-  return { categories, loading };
+  return { categories: categoriesData, loading };
 }
 
 export function useProviders() {
-  const [providers, setProviders] = useState<Provider[]>([]);
+  const [providersData, setProvidersData] = useState<Provider[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -203,6 +247,13 @@ export function useProviders() {
 
   const fetchProviders = async () => {
     try {
+      if (isSupabaseDisabled()) {
+        // Usar datos mock cuando Supabase está deshabilitado
+        setProvidersData(providers);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('providers')
         .select(`
@@ -213,7 +264,7 @@ export function useProviders() {
         .order('name');
 
       if (error) throw error;
-      setProviders(data || []);
+      setProvidersData(data || []);
     } catch (error) {
       console.error('Error fetching providers:', error);
     } finally {
@@ -221,5 +272,5 @@ export function useProviders() {
     }
   };
 
-  return { providers, loading };
+  return { providers: providersData, loading };
 }
