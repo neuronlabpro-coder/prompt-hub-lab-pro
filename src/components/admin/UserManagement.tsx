@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Search, Filter, Edit, Trash2, Crown, Shield, Eye, Ban, CheckCircle } from 'lucide-react';
+import { Users, Search, Filter, Edit, Trash2, Crown, Shield, Eye, Ban, CheckCircle, LogIn } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -14,9 +14,10 @@ interface UserManagementProps {
   onDeleteUser: (userId: string) => void;
   onChangeRole: (userId: string, role: Role) => void;
   onBanUser: (userId: string) => void;
+  onAccessAsUser?: (userId: string) => void;
 }
 
-export function UserManagement({ users, onEditUser, onDeleteUser, onChangeRole, onBanUser }: UserManagementProps) {
+export function UserManagement({ users, onEditUser, onDeleteUser, onChangeRole, onBanUser, onAccessAsUser }: UserManagementProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [planFilter, setPlanFilter] = useState('all');
@@ -318,10 +319,23 @@ export function UserManagement({ users, onEditUser, onDeleteUser, onChangeRole, 
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-2">
+                        {onAccessAsUser && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => onAccessAsUser(user.id)}
+                            className="text-blue-400 hover:text-blue-300"
+                            title="Acceder como este usuario"
+                            data-testid={`button-access-user-${user.id}`}
+                          >
+                            <LogIn className="h-4 w-4" />
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => onEditUser(user)}
+                          data-testid={`button-edit-user-${user.id}`}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -330,6 +344,7 @@ export function UserManagement({ users, onEditUser, onDeleteUser, onChangeRole, 
                           variant="ghost"
                           onClick={() => onBanUser(user.id)}
                           className="text-yellow-400 hover:text-yellow-300"
+                          data-testid={`button-ban-user-${user.id}`}
                         >
                           <Ban className="h-4 w-4" />
                         </Button>
@@ -338,6 +353,7 @@ export function UserManagement({ users, onEditUser, onDeleteUser, onChangeRole, 
                           variant="ghost"
                           onClick={() => onDeleteUser(user.id)}
                           className="text-red-400 hover:text-red-300"
+                          data-testid={`button-delete-user-${user.id}`}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

@@ -16,6 +16,10 @@ export interface Prompt {
   is_favorite: boolean;
   stats: PromptStats;
   versions?: PromptVersion[];
+  media_type?: 'text' | 'image' | 'video';
+  media_url?: string;
+  preview_url?: string;
+  media_size_mb?: number;
 }
 
 export interface PromptStats {
@@ -188,4 +192,24 @@ export interface TestCase {
   input: string;
   expected_output?: string;
   criteria: string[];
+}
+
+export interface VideoCompressionConfig {
+  id: string;
+  codec: string;
+  bitrate: string;
+  crf: number;
+  audio_codec: string;
+  max_preview_duration: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserStorage {
+  user_id: string;
+  used_mb: number;
+  limit_mb: number;
+  files_count: number;
+  last_cleanup?: string;
 }

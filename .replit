@@ -2,6 +2,7 @@ modules = ["nodejs-20", "web", "postgresql-16"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["ffmpeg"]
 
 [deployment]
 deploymentTarget = "autoscale"
@@ -36,7 +37,3 @@ expertMode = true
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 35789
-externalPort = 3000

@@ -10,6 +10,7 @@ import { Header } from './components/Header';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { UserManagement } from './components/admin/UserManagement';
+import { AdminAccessBanner } from './components/AdminAccessBanner';
 import { PlanManagement } from './components/admin/PlanManagement';
 import { PromptManagement } from './components/admin/PromptManagement';
 import { CategoryManagement } from './components/admin/CategoryManagement';
@@ -328,6 +329,26 @@ function AppContent() {
     toast.warning('Usuario suspendido', 'El usuario ha sido suspendido temporalmente');
   };
 
+  const handleAccessAsUser = (userId: string) => {
+    const user = adminUsers.find(u => u.id === userId);
+    if (user) {
+      sessionStorage.setItem('adminAccessingAs', userId);
+      sessionStorage.setItem('originalAdminId', currentUser?.id || '');
+      toast.success('Acceso como usuario', `Ahora estás viendo como ${user.name}`);
+      navigate('/');
+    }
+  };
+
+  const handleBackToAdmin = () => {
+    sessionStorage.removeItem('adminAccessingAs');
+    sessionStorage.removeItem('originalAdminId');
+    toast.info('Volver a Admin', 'Has vuelto al panel de administración');
+    navigate('/admin/dashboard');
+  };
+
+  const accessingAsUserId = sessionStorage.getItem('adminAccessingAs');
+  const accessingAsUser = accessingAsUserId ? adminUsers.find(u => u.id === accessingAsUserId) : null;
+
   const handleCreatePlan = (plan: Omit<Plan, 'id' | 'created_at' | 'updated_at'>) => {
     const newPlan: Plan = {
       ...plan,
@@ -515,6 +536,7 @@ function AppContent() {
               onDeleteUser={handleDeleteUser}
               onChangeRole={handleChangeRole}
               onBanUser={handleBanUser}
+              onAccessAsUser={handleAccessAsUser}
             />
           );
         case 'plans':
@@ -713,6 +735,12 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      {accessingAsUser && (
+        <AdminAccessBanner 
+          userName={accessingAsUser.name} 
+          onBackToAdmin={handleBackToAdmin}
+        />
+      )}
       <Header 
         onNewPrompt={handleNewPrompt}
         onOpenPlayground={() => handleOpenPlayground()}
