@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Zap, 
   ArrowRight, 
@@ -8,7 +8,6 @@ import {
   TrendingUp, 
   Shield, 
   Clock, 
-  DollarSign,
   Sparkles,
   Target,
   BarChart3,
@@ -20,7 +19,6 @@ import {
   Play,
   Quote,
   Building,
-  CreditCard,
   Mail,
   Phone,
   BookOpen,
@@ -44,7 +42,6 @@ interface LandingPageProps {
 
 export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState('pro');
 
   const features = [
     {
