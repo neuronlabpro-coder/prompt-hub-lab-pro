@@ -2,6 +2,36 @@
 
 PromptHub v2 is an advanced AI prompt management platform that enables users to create, test, optimize, and manage prompts across multiple AI models. The platform features a comprehensive prompt library, multi-model testing playground, analytics dashboard, and billing system based on token usage. It includes both user-facing features and a complete admin panel for managing users, plans, providers, and system settings.
 
+## Admin Configurable Features
+
+All system configurations can be edited from the Admin Panel without code changes:
+
+**Plan Management** (Admin → Planes)
+- Plan name, price, tokens included, overage price
+- Storage limits per plan (MB)
+- Plan activation/deactivation status
+
+**Video Compression Settings** (Admin → Configuración del Sistema → Video)
+- Video codec (libvpx-vp9 default)
+- Audio codec (libopus default)
+- Bitrate configuration
+- CRF (quality factor: 0-63)
+- Maximum preview duration (seconds)
+
+**Multitenant Discounts** (Admin → Configuración del Sistema → Descuentos)
+- Tier 1: 2-19 users → 10% discount (configurable)
+- Tier 2: 20+ users → 20% discount (configurable)
+- User thresholds per tier
+
+**API & Provider Settings** (Admin → Configuración del Sistema → APIs)
+- OpenAI, Anthropic, Replicate API keys
+- Rate limits and token limits
+
+**User Impersonation**
+- Admin can access as any user with "Acceder como usuario" button
+- Banner shows current impersonation status
+- Useful for debugging and user support
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
