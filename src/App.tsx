@@ -35,6 +35,8 @@ import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
 import { ReferralSettings } from './components/admin/ReferralSettings';
 import { UserProfile } from './components/UserProfile';
+import { Marketplace } from './components/Marketplace';
+import { SupportCenter } from './components/SupportCenter';
 import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
 function AppContent() {
@@ -227,6 +229,50 @@ function AppContent() {
   // Show user profile page
   if (currentPath === '/profile' && user) {
     return <UserProfile user={user} onClose={() => navigate('/')} />;
+  }
+
+  // Show marketplace
+  if (currentPath === '/marketplace') {
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <Header 
+          user={user}
+          onCreatePrompt={() => {}}
+          onOpenPlayground={() => {}}
+          onOpenDashboard={() => {}}
+          onOpenAdminPanel={() => {}}
+          onOpenProfile={() => navigate('/profile')}
+          currentView="marketplace"
+          onLogout={() => navigate('/login')}
+          isDemoUser={false}
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Marketplace />
+        </div>
+      </div>
+    );
+  }
+
+  // Show support center
+  if (currentPath === '/soporte') {
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <Header 
+          user={user}
+          onCreatePrompt={() => {}}
+          onOpenPlayground={() => {}}
+          onOpenDashboard={() => {}}
+          onOpenAdminPanel={() => {}}
+          onOpenProfile={() => navigate('/profile')}
+          currentView="soporte"
+          onLogout={() => navigate('/login')}
+          isDemoUser={false}
+        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <SupportCenter />
+        </div>
+      </div>
+    );
   }
 
   if (promptsLoading) {

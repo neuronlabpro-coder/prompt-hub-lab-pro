@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, Building, Users, MessageSquare, Phone } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, Building, Users, MessageSquare, Phone, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -9,13 +9,15 @@ interface HeaderProps {
   onNewPrompt: () => void;
   onOpenPlayground: () => void;
   onOpenDashboard: () => void;
+  onOpenMarketplace?: () => void;
+  onOpenSupport?: () => void;
   onOpenProfile?: () => void;
-  currentView: 'prompts' | 'dashboard';
+  currentView: 'prompts' | 'dashboard' | 'marketplace' | 'soporte';
   onToggleAdmin?: () => void;
   isAdmin?: boolean;
 }
 
-export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
+export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
   const { signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
@@ -63,32 +65,61 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenP
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <Button
                 onClick={onOpenDashboard}
                 variant={currentView === 'dashboard' ? 'default' : 'outline'}
                 className="flex items-center gap-2"
+                size="sm"
               >
                 <BarChart3 className="h-4 w-4" />
-                Dashboard
+                <span className="hidden lg:inline">Dashboard</span>
               </Button>
               
               <Button
                 onClick={onNewPrompt}
                 variant={currentView === 'prompts' ? 'default' : 'outline'}
                 className="flex items-center gap-2"
+                size="sm"
               >
                 <Plus className="h-4 w-4" />
-                {currentView === 'prompts' ? 'Prompts' : 'Nuevo Prompt'}
+                <span className="hidden lg:inline">{currentView === 'prompts' ? 'Prompts' : 'Nuevo'}</span>
               </Button>
+
+              {onOpenMarketplace && (
+                <Button
+                  onClick={onOpenMarketplace}
+                  variant={currentView === 'marketplace' ? 'default' : 'outline'}
+                  className="flex items-center gap-2"
+                  size="sm"
+                  data-testid="button-marketplace"
+                >
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="hidden lg:inline">Marketplace</span>
+                </Button>
+              )}
+
+              {onOpenSupport && (
+                <Button
+                  onClick={onOpenSupport}
+                  variant={currentView === 'soporte' ? 'default' : 'outline'}
+                  className="flex items-center gap-2"
+                  size="sm"
+                  data-testid="button-support"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span className="hidden lg:inline">Soporte</span>
+                </Button>
+              )}
               
               <Button
                 onClick={onOpenPlayground}
                 variant="outline"
                 className="flex items-center gap-2"
+                size="sm"
               >
                 <PlayCircle className="h-4 w-4" />
-                Playground
+                <span className="hidden lg:inline">Playground</span>
               </Button>
 
               {/* WhatsApp Support Button */}
