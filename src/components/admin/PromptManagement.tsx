@@ -67,7 +67,7 @@ export function PromptManagement({
 
   const [tagInput, setTagInput] = useState('');
 
-  const ITEMS_PER_PAGE = 15;
+  const [itemsPerPage, setItemsPerPage] = useState(15);
 
   const typeOptions = [
     { value: 'all', label: 'Todos los tipos' },
@@ -159,9 +159,14 @@ export function PromptManagement({
   }, [prompts, searchTerm, typeFilter, categoryFilter, sortBy]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredPrompts.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedPrompts = filteredPrompts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredPrompts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedPrompts = filteredPrompts.slice(startIndex, startIndex + itemsPerPage);
+
+  // Reset page when filters or items per page change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, typeFilter, categoryFilter, sortBy, itemsPerPage]);
 
   // Calculate stats
   const promptStats = React.useMemo(() => {
@@ -737,12 +742,29 @@ export function PromptManagement({
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="p-4 border-t border-gray-700">
-              <div className="flex items-center justify-between">
+          <div className="p-4 border-t border-gray-700">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-4">
                 <div className="text-sm text-gray-400">
-                  Mostrando {startIndex + 1} a {Math.min(startIndex + ITEMS_PER_PAGE, filteredPrompts.length)} de {filteredPrompts.length} prompts
+                  Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredPrompts.length)} de {filteredPrompts.length} prompts
                 </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-gray-400">Por página:</label>
+                  <Select
+                    options={[
+                      { value: '10', label: '10' },
+                      { value: '15', label: '15' },
+                      { value: '25', label: '25' },
+                      { value: '50', label: '50' },
+                      { value: '100', label: '100' },
+                    ]}
+                    value={String(itemsPerPage)}
+                    onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                    className="w-20"
+                  />
+                </div>
+              </div>
+              {totalPages > 1 && (
                 <div className="flex gap-2">
                   <Button
                     size="sm"
@@ -764,9 +786,9 @@ export function PromptManagement({
                     Siguiente
                   </Button>
                 </div>
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </CardContent>
       </Card>
     </div>
