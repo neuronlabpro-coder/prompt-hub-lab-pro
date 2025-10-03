@@ -4,6 +4,7 @@ import { LoginForm } from './components/LoginForm';
 import { LandingPage } from './components/LandingPage';
 import { Router, Route, useRouter } from './components/Router';
 import { usePrompts, useCategories, useProviders } from './hooks/useSupabase';
+import { useAdminUsers, useAdminPlans } from './hooks/useAdminData';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
 import { AdminLayout } from './components/admin/AdminLayout';
@@ -65,9 +66,9 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
-  // Admin data state - Los datos se cargarán desde Supabase
-  const [adminUsers, setAdminUsers] = useState<User[]>([]);
-  const [adminPlans, setAdminPlans] = useState<Plan[]>([]);
+  // Admin data state - Cargar desde Supabase
+  const { users: adminUsers, reload: reloadUsers } = useAdminUsers();
+  const { plans: adminPlans, reload: reloadPlans } = useAdminPlans();
   const [adminCoupons, setAdminCoupons] = useState<Coupon[]>([]);
   const [adminAffiliates, setAdminAffiliates] = useState<Affiliate[]>([]);
   const [adminPromotions, setAdminPromotions] = useState<TokenPromotion[]>([]);
