@@ -9,12 +9,13 @@ interface HeaderProps {
   onNewPrompt: () => void;
   onOpenPlayground: () => void;
   onOpenDashboard: () => void;
+  onOpenProfile?: () => void;
   currentView: 'prompts' | 'dashboard';
   onToggleAdmin?: () => void;
   isAdmin?: boolean;
 }
 
-export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
+export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
   const { signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
@@ -175,6 +176,19 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, current
                     </div>
 
                     <div className="py-1">
+                      {onOpenProfile && (
+                        <button
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
+                          onClick={() => {
+                            onOpenProfile();
+                            setShowUserMenu(false);
+                          }}
+                          data-testid="button-open-profile"
+                        >
+                          <Settings className="h-4 w-4" />
+                          Mi Perfil
+                        </button>
+                      )}
                       <button
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
                         onClick={() => {

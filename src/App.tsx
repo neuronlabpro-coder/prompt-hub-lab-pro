@@ -34,6 +34,7 @@ import { TokenWarningModal } from './components/TokenWarningModal';
 import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
 import { ReferralSettings } from './components/admin/ReferralSettings';
+import { UserProfile } from './components/UserProfile';
 import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
 function AppContent() {
@@ -221,6 +222,11 @@ function AppContent() {
         <LoginForm />
       </div>
     );
+  }
+
+  // Show user profile page
+  if (currentPath === '/profile' && user) {
+    return <UserProfile user={user} onClose={() => navigate('/')} />;
   }
 
   if (promptsLoading) {
@@ -519,6 +525,10 @@ function AppContent() {
     setCurrentView('dashboard');
   };
 
+  const handleOpenProfile = () => {
+    navigate('/profile');
+  };
+
   // Render admin panel
   if (isAdminMode) {
     const renderAdminContent = () => {
@@ -748,6 +758,7 @@ function AppContent() {
         onNewPrompt={handleNewPrompt}
         onOpenPlayground={() => handleOpenPlayground()}
         onOpenDashboard={handleOpenDashboard}
+        onOpenProfile={handleOpenProfile}
         currentView={currentView}
         onToggleAdmin={toggleAdminMode}
         isAdmin={isUserAdmin}
