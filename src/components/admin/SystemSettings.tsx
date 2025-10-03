@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Settings, Save, RefreshCw, Database, Key, Shield, Globe, Mail, Bell, Video, Users, Percent } from 'lucide-react';
+import { useState } from 'react';
+import { Settings, Save, Database, Key, Shield, Mail, Bell, Video, Users, Percent } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { Badge } from '../ui/Badge';
 import { useToast } from '../../hooks/useToast';
 
 interface SystemSettingsProps {
