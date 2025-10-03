@@ -32,6 +32,33 @@ All system configurations can be edited from the Admin Panel without code change
 - Banner shows current impersonation status
 - Useful for debugging and user support
 
+## User Profile Management
+
+All users (including admins and superadmins) have access to a complete profile page at `/profile`:
+
+**Personal Information**
+- Name editing with Supabase integration
+- Avatar display with user initials fallback
+
+**Security Settings**
+- Password change functionality with confirmation
+- Email change (with verification required)
+- Two-factor authentication (2FA) setup using TOTP
+  - QR code generation for authenticator apps
+  - Secret key backup display
+  - Verification and removal options
+
+**Account Information**
+- Current subscription plan display
+- Token usage tracking (used/total)
+- Token usage progress bar
+- Plan-specific storage limits visibility
+
+**Navigation**
+- Accessible from Header user menu
+- Clean close button to return to main app
+- Dedicated route at `/profile`
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
