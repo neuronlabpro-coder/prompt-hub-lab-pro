@@ -18,17 +18,17 @@ interface HeaderProps {
 }
 
 export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
-  const { signOut } = useAuth();
+  const { user: authUser, signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
 
-  // Mock user data - esto se reemplazará con datos reales de Clerk
+  // User data from Supabase auth
   const user = {
-    name: 'Usuario Demo',
-    email: 'demo@prompthub.com',
-    plan: 'Pro',
-    tokensUsed: 750000,
-    tokensLimit: 2000000,
+    name: authUser?.user_metadata?.name || authUser?.email?.split('@')[0] || 'Usuario',
+    email: authUser?.email || '',
+    plan: authUser?.user_metadata?.plan || 'Pro',
+    tokensUsed: 750000, // TODO: Get from database
+    tokensLimit: 2000000, // TODO: Get from plan info
   };
 
   const tokenUsagePercent = (user.tokensUsed / user.tokensLimit) * 100;
