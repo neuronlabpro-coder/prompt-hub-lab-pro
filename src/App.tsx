@@ -176,24 +176,19 @@ function AppContent() {
     );
   }
 
-  // Manejar rutas especiales
-  if (currentPath === '/admin/dashboard' || currentPath.startsWith('/admin')) {
-    if (!user) {
-      // Crear usuario admin temporal para acceso directo
-      return (
-        <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-          <div className="bg-gray-800 p-8 rounded-lg max-w-md w-full">
-            <h2 className="text-2xl font-bold text-white mb-4">Acceso de Administrador</h2>
-            <p className="text-gray-300 mb-6">Ingresando como administrador...</p>
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
-          </div>
-        </div>
-      );
+  // Manejar rutas especiales - Acceso directo al admin
+  React.useEffect(() => {
+    if (currentPath === '/admin/dashboard' || currentPath.startsWith('/admin')) {
+      // Si el usuario está autenticado y es admin, activar modo admin
+      if (user && (user.user_metadata?.role === 'superadmin' || user.user_metadata?.role === 'admin')) {
+        setIsAdminMode(true);
+      }
+      // Bypass temporal para desarrollo - acceso directo sin autenticación
+      else if (!user && !authLoading) {
+        setIsAdminMode(true);
+      }
     }
-    
-    // Si es admin, ir directamente al panel
-    setIsAdminMode(true);
-  }
+  }, [currentPath, user, authLoading]);
 
   // Show landing page if user wants to see it
   if (!user && currentPath === '/') {
