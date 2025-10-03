@@ -48,7 +48,26 @@ PromptHub v2 is an advanced AI prompt management platform that enables users to 
   - `CreatePromptModal` now includes subcategory and model selectors
   - Hooks: `useSubcategories()`, `useModels()` for dynamic data fetching
   - Subcategories load based on selected category
-- **SQL Files:** `categories-models-update.sql` for deployment
+- **SQL Files:** 
+  - `self-host/schema.sql` - Schema completo para instalación nueva
+  - `self-host/seed-data.sql` - Datos iniciales (categorías, modelos, planes)
+  - `self-host/categories-models-update.sql` - Migración para sistemas existentes
+  - `self-host/marketplace-support-update.sql` - Migración marketplace/soporte
+  - `self-host/README.md` - Guía completa de instalación selfhost
+
+## Self-Host Deployment Files
+
+### Complete Installation
+Para una instalación completamente nueva de PromptHub v2:
+1. **schema.sql** - Crea todas las tablas (usuarios, prompts, categorías, subcategorías, modelos, marketplace, soporte)
+2. **seed-data.sql** - Inserta datos iniciales (20 subcategorías, 5 proveedores, 10 modelos, planes)
+
+### Migration from Previous Version
+Si ya tienes PromptHub instalado:
+1. **categories-models-update.sql** - Agrega subcategorías y modelos LLM
+2. **marketplace-support-update.sql** - Agrega marketplace y sistema de soporte
+
+Todos los archivos están optimizados para PostgreSQL con triggers, índices y constraints completos.
 
 ## Admin Configurable Features
 
