@@ -170,16 +170,16 @@ function AppContent() {
   // Manejar rutas especiales - Acceso directo al admin
   React.useEffect(() => {
     if (currentPath === '/admin/dashboard' || currentPath.startsWith('/admin')) {
-      // Si el usuario está autenticado y es admin, activar modo admin
+      // Solo usuarios autenticados con rol superadmin o admin pueden acceder
       if (user && (user.user_metadata?.role === 'superadmin' || user.user_metadata?.role === 'admin')) {
         setIsAdminMode(true);
-      }
-      // Bypass temporal para desarrollo - acceso directo sin autenticación
-      else if (!user && !authLoading) {
-        setIsAdminMode(true);
+      } else if (!authLoading) {
+        // Redirigir a login si no está autenticado o no tiene permisos
+        setIsAdminMode(false);
+        navigate('/login');
       }
     }
-  }, [currentPath, user, authLoading]);
+  }, [currentPath, user, authLoading, navigate]);
 
   // Show login form if not authenticated
   if (authLoading) {

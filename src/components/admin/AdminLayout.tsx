@@ -126,7 +126,7 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout }: A
         </div>
 
         {/* Content Area */}
-        <div className="p-6 overflow-y-auto h-[calc(100vh-73px)]">
+        <div className="p-6 overflow-y-auto" style={{ height: 'auto', minHeight: 'calc(100vh - 73px)' }}>
           {children}
         </div>
       </div>
