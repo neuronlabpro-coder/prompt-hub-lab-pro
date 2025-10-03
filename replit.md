@@ -31,6 +31,25 @@ PromptHub v2 is an advanced AI prompt management platform that enables users to 
 - Both routes integrated with existing authentication system
 - SQL updates applied via `marketplace-support-update.sql`
 
+### Categories & Models System ✅
+- **Main Categories:** Texto, Imagen, Vídeo (replaced old category system)
+- **Subcategories:** 20 total subcategories across all main categories
+  - Texto: Marketing, Redes Sociales, Negocios, Creativo, Educación, Programación
+  - Imagen: Marketing, Redes Sociales, Animales, Naturaleza, Personas, Arte Digital, Productos
+  - Vídeo: Marketing, Redes Sociales, ASMR, Animales, Educación, Vlogs, Música
+- **New Providers:** Google Gemini, DeepSeek (in addition to OpenAI, Anthropic, Replicate)
+- **New Models:**
+  - Gemini 2.0 Flash, Gemini 1.5 Pro, Gemini 1.5 Flash
+  - DeepSeek Chat, DeepSeek Coder
+- **Prompt Enhancement:**
+  - Added `preferred_model_id` field for model assignment
+  - Added `subcategory_id` field for granular categorization
+- **Frontend Updates:**
+  - `CreatePromptModal` now includes subcategory and model selectors
+  - Hooks: `useSubcategories()`, `useModels()` for dynamic data fetching
+  - Subcategories load based on selected category
+- **SQL Files:** `categories-models-update.sql` for deployment
+
 ## Admin Configurable Features
 
 All system configurations can be edited from the Admin Panel without code changes:
