@@ -36,10 +36,10 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout }: A
   return (
     <div className="min-h-screen bg-gray-900 flex">
       {/* Sidebar */}
-      <div className={`bg-gray-800 border-r border-gray-700 transition-all duration-300 ${
+      <div className={`bg-gray-800 border-r border-gray-700 transition-all duration-300 flex flex-col ${
         sidebarCollapsed ? 'w-16' : 'w-64'
       }`}>
-        <div className="p-4">
+        <div className="p-4 flex-shrink-0">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-8">
             <div className="bg-gradient-to-r from-red-600 to-orange-600 p-2 rounded-lg">
@@ -52,42 +52,42 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout }: A
               </div>
             )}
           </div>
-
-          {/* Navigation */}
-          <nav className="space-y-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentView === item.id;
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onViewChange(item.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
-                >
-                  <Icon className="h-5 w-5 flex-shrink-0" />
-                  {!sidebarCollapsed && (
-                    <>
-                      <span className="flex-1 text-left">{item.label}</span>
-                      {item.badge && (
-                        <Badge variant="secondary" className="text-xs">
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </>
-                  )}
-                </button>
-              );
-            })}
-          </nav>
         </div>
 
-        {/* Footer */}
-        <div className="absolute bottom-4 left-4 right-4">
+        {/* Navigation - con scroll */}
+        <nav className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentView === item.id;
+            
+            return (
+              <button
+                key={item.id}
+                onClick={() => onViewChange(item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  isActive
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                <Icon className="h-5 w-5 flex-shrink-0" />
+                {!sidebarCollapsed && (
+                  <>
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {item.badge && (
+                      <Badge variant="secondary" className="text-xs">
+                        {item.badge}
+                      </Badge>
+                    )}
+                  </>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Footer - fijo en la parte inferior */}
+        <div className="p-4 border-t border-gray-700 flex-shrink-0">
           <Button
             onClick={onLogout}
             variant="ghost"
