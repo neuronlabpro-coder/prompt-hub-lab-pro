@@ -325,7 +325,7 @@ function AppContent() {
 
   const handleImprovePrompt = async (prompt: Prompt) => {
     try {
-      const result = await improvePrompt(prompt.id, 'es');
+      await improvePrompt(prompt.id, 'es');
       toast.success('Prompt mejorado', 'El prompt ha sido mejorado exitosamente');
     } catch (error) {
       toast.error('Error al mejorar', error instanceof Error ? error.message : 'Error desconocido');
@@ -334,7 +334,7 @@ function AppContent() {
 
   const handleTranslatePrompt = async (prompt: Prompt, language: 'es' | 'en') => {
     try {
-      const result = await translatePrompt(prompt.id, language);
+      await translatePrompt(prompt.id, language);
       const targetLang = language === 'es' ? 'español' : 'inglés';
       toast.success('Traducción completada', `Prompt traducido a ${targetLang} exitosamente`);
     } catch (error) {
@@ -476,19 +476,18 @@ function AppContent() {
     toast.success('Modelo eliminado', 'El modelo ha sido eliminado del sistema');
   };
 
-  const handleCreateCoupon = (coupon: Omit<Coupon, 'id' | 'created_at' | 'updated_at'>) => {
+  const handleCreateCoupon = (coupon: Omit<Coupon, 'id' | 'created_at'>) => {
     const newCoupon: Coupon = {
       ...coupon,
       id: `coupon_${Date.now()}`,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
     };
     setAdminCoupons(prev => [...prev, newCoupon]);
     toast.success('Cupón creado', `Cupón "${coupon.code}" creado exitosamente`);
   };
 
   const handleUpdateCoupon = (couponId: string, updates: Partial<Coupon>) => {
-    setAdminCoupons(prev => prev.map(c => c.id === couponId ? { ...c, ...updates, updated_at: new Date().toISOString() } : c));
+    setAdminCoupons(prev => prev.map(c => c.id === couponId ? { ...c, ...updates } : c));
     toast.success('Cupón actualizado', 'Los cambios han sido guardados');
   };
 
@@ -498,23 +497,22 @@ function AppContent() {
   };
 
   const handleUpdateAffiliate = (affiliateId: string, updates: Partial<Affiliate>) => {
-    setAdminAffiliates(prev => prev.map(a => a.id === affiliateId ? { ...a, ...updates, updated_at: new Date().toISOString() } : a));
+    setAdminAffiliates(prev => prev.map(a => a.id === affiliateId ? { ...a, ...updates } : a));
     toast.success('Afiliado actualizado', 'Los cambios han sido guardados');
   };
 
-  const handleCreatePromotion = (promotion: Omit<TokenPromotion, 'id' | 'created_at' | 'updated_at'>) => {
+  const handleCreatePromotion = (promotion: Omit<TokenPromotion, 'id' | 'created_at'>) => {
     const newPromotion: TokenPromotion = {
       ...promotion,
       id: `promo_${Date.now()}`,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
     };
     setAdminPromotions(prev => [...prev, newPromotion]);
     toast.success('Promoción creada', `"${promotion.name}" creada exitosamente`);
   };
 
   const handleUpdatePromotion = (promotionId: string, updates: Partial<TokenPromotion>) => {
-    setAdminPromotions(prev => prev.map(p => p.id === promotionId ? { ...p, ...updates, updated_at: new Date().toISOString() } : p));
+    setAdminPromotions(prev => prev.map(p => p.id === promotionId ? { ...p, ...updates } : p));
     toast.success('Promoción actualizada', 'Los cambios han sido guardados');
   };
 
