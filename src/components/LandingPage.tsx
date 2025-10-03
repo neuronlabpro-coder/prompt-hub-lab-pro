@@ -22,12 +22,20 @@ import {
   Building,
   CreditCard,
   Mail,
-  Phone
+  Phone,
+  BookOpen,
+  Code,
+  FileText,
+  MessageCircle,
+  Github,
+  Twitter,
+  Linkedin
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Badge } from './ui/Badge';
 import { formatCurrency } from '../lib/utils';
+import { NewsletterForm } from './NewsletterForm';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -701,10 +709,28 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
         </div>
       </section>
 
+      {/* Newsletter Section */}
+      <section className="py-20 bg-gray-800/50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Mantente al Día con
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> las Novedades</span>
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Recibe actualizaciones exclusivas, tips de prompts, nuevas funciones y casos de éxito directamente en tu inbox.
+            </p>
+          </div>
+          
+          <NewsletterForm variant="inline" showName={false} />
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-gray-800 border-t border-gray-700 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+            {/* Brand */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
@@ -712,44 +738,94 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
                 </div>
                 <span className="text-xl font-bold">PromptHub</span>
               </div>
-              <p className="text-gray-400 mb-4 max-w-md">
+              <p className="text-gray-400 mb-6 max-w-md">
                 La plataforma más avanzada para optimizar y gestionar prompts de IA en tu empresa.
               </p>
-              <div className="flex items-center gap-4">
-                <Button variant="outline" size="sm">
+              
+              {/* Social & Contact */}
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <a
+                  href="https://wa.me/34623979013"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span className="text-sm font-medium">WhatsApp</span>
+                </a>
+                <Button variant="outline" size="sm" onClick={onContactSales}>
                   <Mail className="h-4 w-4 mr-2" />
-                  Contacto
+                  Email
                 </Button>
-                <Button variant="outline" size="sm">
-                  <Phone className="h-4 w-4 mr-2" />
-                  Soporte
-                </Button>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <Twitter className="h-5 w-5" />
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <Github className="h-5 w-5" />
+                </a>
+                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                  <Linkedin className="h-5 w-5" />
+                </a>
               </div>
             </div>
             
+            {/* Product */}
             <div>
-              <h3 className="font-semibold mb-4">Producto</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Características</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Precios</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
+              <h3 className="font-semibold mb-4 text-white">Producto</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><a href="#features" className="hover:text-white transition-colors">Características</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">Precios</a></li>
+                <li><a href="/docs-site/docs/api/overview" target="_blank" className="hover:text-white transition-colors flex items-center gap-1">
+                  <Code className="h-3 w-3" />
+                  API Docs
+                </a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Integraciones</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Seguridad</a></li>
               </ul>
             </div>
             
+            {/* Resources */}
             <div>
-              <h3 className="font-semibold mb-4">Empresa</h3>
-              <ul className="space-y-2 text-gray-400">
+              <h3 className="font-semibold mb-4 text-white">Recursos</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><a href="/docs-site/docs/intro" target="_blank" className="hover:text-white transition-colors flex items-center gap-1">
+                  <BookOpen className="h-3 w-3" />
+                  Documentación
+                </a></li>
+                <li><a href="/docs-site/docs/getting-started" target="_blank" className="hover:text-white transition-colors">Guía de Inicio</a></li>
+                <li><a href="/docs-site/blog" target="_blank" className="hover:text-white transition-colors flex items-center gap-1">
+                  <FileText className="h-3 w-3" />
+                  Blog
+                </a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Casos de Éxito</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Webinars</a></li>
+              </ul>
+            </div>
+            
+            {/* Company */}
+            <div>
+              <h3 className="font-semibold mb-4 text-white">Empresa</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
                 <li><a href="#" className="hover:text-white transition-colors">Sobre Nosotros</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Carreras</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Prensa</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Partners</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contacto</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 PromptHub. Todos los derechos reservados.</p>
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-gray-400 text-sm">&copy; 2025 PromptHub. Todos los derechos reservados.</p>
+            <div className="flex items-center gap-6 text-sm text-gray-400">
+              <a href="#" className="hover:text-white transition-colors">Términos de Servicio</a>
+              <a href="#" className="hover:text-white transition-colors">Privacidad</a>
+              <a href="#" className="hover:text-white transition-colors">Cookies</a>
+            </div>
           </div>
         </div>
       </footer>
