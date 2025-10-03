@@ -6,8 +6,11 @@ Instalación completa de PromptHub v2 para despliegue self-hosted en tu propio s
 
 Este directorio contiene todo lo necesario para instalar PromptHub v2:
 
-- **schema.sql**: Schema completo de base de datos
-- **seed.sql**: Datos de ejemplo (usuarios, prompts, categorías)
+- **schema.sql**: Schema completo de base de datos con todas las tablas actualizadas
+- **seed-data.sql**: Datos iniciales (categorías, subcategorías, proveedores LLM, modelos, planes)
+- **seed.sql**: Datos de ejemplo (usuarios, prompts - OPCIONAL)
+- **categories-models-update.sql**: Migración para sistemas existentes
+- **marketplace-support-update.sql**: Migración para marketplace y soporte
 - **install.sh**: Script automatizado de instalación
 - **docker-compose.yml**: Configuración para Docker
 - **Dockerfile**: Imagen de Docker optimizada
@@ -54,6 +57,8 @@ psql -U postgres -c "CREATE DATABASE prompthub;"
 
 # 2. Ejecutar migraciones
 psql -U postgres -d prompthub -f schema.sql
+psql -U postgres -d prompthub -f seed-data.sql
+# Opcional: datos de ejemplo
 psql -U postgres -d prompthub -f seed.sql
 
 # 3. Volver al directorio principal
@@ -118,7 +123,19 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_...
    - Comando: `cd self-host && ./install.sh`
 6. **Deploy**
 
-### 4. Configurar Base de Datos en Coolify
+### 4. Migración desde Versión Anterior
+
+Si ya tienes PromptHub instalado y necesitas actualizar:
+
+```bash
+# Aplicar migraciones de categorías y modelos
+psql -U prompthub prompthub < categories-models-update.sql
+
+# Aplicar migraciones de marketplace y soporte
+psql -U prompthub prompthub < marketplace-support-update.sql
+```
+
+### 5. Configurar Base de Datos en Coolify
 
 Si no usas Supabase:
 
@@ -138,14 +155,14 @@ Si no usas Supabase:
    - `docker exec -i coolify-prompthub-db psql -U prompthub prompthub < schema.sql`
    - `docker exec -i coolify-prompthub-db psql -U prompthub prompthub < seed.sql`
 
-### 5. Configurar Dominio
+### 6. Configurar Dominio
 
 1. En Coolify → **Domains**
 2. Agregar tu dominio: `prompthub.tudominio.com`
 3. Coolify configurará SSL automáticamente con Let's Encrypt
 4. En tu DNS, apunta un registro A a la IP de tu servidor Coolify
 
-### 6. Backup Automático en Coolify
+### 7. Backup Automático en Coolify
 
 1. **Settings** → **Backups**
 2. Habilitar backups automáticos
@@ -177,13 +194,28 @@ Después de ejecutar `seed.sql`, tendrás:
 - **5 categorías**: Marketing, Desarrollo, Contenido, Análisis, Educación
 - **Estadísticas iniciales** para testing
 
-### Proveedores y Modelos
+### Categorías y Subcategorías
 
-- OpenAI (GPT-4, GPT-3.5)
-- Anthropic (Claude 3)
-- Google (Gemini Pro)
-- OpenRouter
-- Precios configurados
+- **3 Categorías Principales**: Texto, Imagen, Vídeo
+- **20 Subcategorías Especializadas**:
+  - Texto: Marketing, Redes Sociales, Negocios, Creativo, Educación, Programación
+  - Imagen: Marketing, Redes Sociales, Animales, Naturaleza, Personas, Arte Digital, Productos
+  - Vídeo: Marketing, Redes Sociales, ASMR, Animales, Educación, Vlogs, Música
+
+### Proveedores y Modelos LLM
+
+- **OpenAI**: GPT-5, GPT-5 Mini, GPT-4o
+- **Anthropic**: Claude 3.5 Sonnet
+- **Google Gemini**: Gemini 2.0 Flash, Gemini 1.5 Pro, Gemini 1.5 Flash
+- **DeepSeek**: DeepSeek Chat, DeepSeek Coder
+- **Replicate**: Llama 2 70B Chat
+- Costos configurados por modelo
+
+### Marketplace y Soporte
+
+- **Marketplace**: Sistema completo para venta de prompts
+- **Descuentos por Plan**: Free 0%, Starter 10%, PRO 15%, Business+ 20%
+- **Sistema de Tickets**: Soporte técnico integrado con categorías y prioridades
 
 ## ⚙️ Configuración Avanzada
 
