@@ -12,6 +12,7 @@ import executeRoutes from './routes/execute.js';
 import improveRoutes from './routes/improve.js';
 import translateRoutes from './routes/translate.js';
 import emailRoutes from './routes/email.js';
+import apiKeysRoutes from './routes/apiKeys.js';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ app.use('/api/execute', executeRoutes);
 app.use('/api/improve', improveRoutes);
 app.use('/api/translate', translateRoutes);
 app.use('/api/email', emailRoutes);
+app.use('/api/api-keys', apiKeysRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

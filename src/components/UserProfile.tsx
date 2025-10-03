@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Mail, Lock, Shield, CreditCard, HardDrive, Zap, Save, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Shield, CreditCard, HardDrive, Zap, Save, Eye, EyeOff, Key } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/Card';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
@@ -7,6 +7,7 @@ import { Badge } from './ui/Badge';
 import { useToast } from '../hooks/useToast';
 import { useSupabase } from '../hooks/useSupabase';
 import { TwoFactorAuth } from './TwoFactorAuth';
+import { ApiKeysManager } from './ApiKeysManager';
 
 interface UserProfileProps {
   user: any;
@@ -82,6 +83,7 @@ export function UserProfile({ user, onClose }: UserProfileProps) {
   const tabs = [
     { id: 'profile', label: 'Perfil', icon: User },
     { id: 'security', label: 'Seguridad', icon: Shield },
+    { id: 'api-keys', label: 'API Keys', icon: Key },
     { id: 'usage', label: 'Uso y Plan', icon: Zap },
   ];
 
@@ -351,6 +353,7 @@ export function UserProfile({ user, onClose }: UserProfileProps) {
         <div>
           {activeTab === 'profile' && renderProfileTab()}
           {activeTab === 'security' && renderSecurityTab()}
+          {activeTab === 'api-keys' && <ApiKeysManager />}
           {activeTab === 'usage' && renderUsageTab()}
         </div>
       </div>
