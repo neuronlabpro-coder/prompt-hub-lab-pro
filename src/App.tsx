@@ -314,13 +314,15 @@ function AppContent() {
 
   const handleDeleteUser = (userId: string) => {
     console.log('Delete user:', userId);
-    setAdminUsers(prev => prev.filter(u => u.id !== userId));
+    // TODO: Implement delete user API call
+    reloadUsers();
     toast.success('Usuario eliminado', 'El usuario ha sido eliminado del sistema');
   };
 
   const handleChangeRole = (userId: string, role: Role) => {
     console.log('Change role:', { userId, role });
-    setAdminUsers(prev => prev.map(u => u.id === userId ? { ...u, role } : u));
+    // TODO: Implement change role API call
+    reloadUsers();
     toast.success('Rol actualizado', `Rol cambiado a ${role} exitosamente`);
   };
 
@@ -331,9 +333,9 @@ function AppContent() {
 
   const handleAccessAsUser = (userId: string) => {
     const user = adminUsers.find(u => u.id === userId);
-    if (user) {
+    if (user && currentSessionUser) {
       sessionStorage.setItem('adminAccessingAs', userId);
-      sessionStorage.setItem('originalAdminId', currentUser?.id || '');
+      sessionStorage.setItem('originalAdminId', currentSessionUser.id || '');
       toast.success('Acceso como usuario', `Ahora estás viendo como ${user.name}`);
       navigate('/');
     }
@@ -350,23 +352,23 @@ function AppContent() {
   const accessingAsUser = accessingAsUserId ? adminUsers.find(u => u.id === accessingAsUserId) : null;
 
   const handleCreatePlan = (plan: Omit<Plan, 'id' | 'created_at' | 'updated_at'>) => {
-    const newPlan: Plan = {
-      ...plan,
-      id: `plan_${Date.now()}`,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setAdminPlans(prev => [...prev, newPlan]);
+    console.log('Create plan:', plan);
+    // TODO: Implement create plan API call
+    reloadPlans();
     toast.success('Plan creado', `Plan "${plan.name}" creado exitosamente`);
   };
 
   const handleUpdatePlan = (planId: string, updates: Partial<Plan>) => {
-    setAdminPlans(prev => prev.map(p => p.id === planId ? { ...p, ...updates, updated_at: new Date().toISOString() } : p));
+    console.log('Update plan:', { planId, updates });
+    // TODO: Implement update plan API call
+    reloadPlans();
     toast.success('Plan actualizado', 'Los cambios han sido guardados');
   };
 
   const handleDeletePlan = (planId: string) => {
-    setAdminPlans(prev => prev.filter(p => p.id !== planId));
+    console.log('Delete plan:', planId);
+    // TODO: Implement delete plan API call
+    reloadPlans();
     toast.success('Plan eliminado', 'El plan ha sido eliminado del sistema');
   };
 

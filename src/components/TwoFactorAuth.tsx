@@ -3,8 +3,8 @@ import { supabase } from '../lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/Card';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
-import { Shield, AlertCircle, CheckCircle, Copy } from 'lucide-react';
-import { useToast } from '../hooks/use-toast';
+import { Shield, CheckCircle, Copy } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface TwoFactorAuthProps {
   onSuccess?: () => void;
