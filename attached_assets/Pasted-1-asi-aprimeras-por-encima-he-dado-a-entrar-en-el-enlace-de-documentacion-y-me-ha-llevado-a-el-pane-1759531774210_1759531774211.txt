@@ -1,0 +1,32 @@
+1. asi aprimeras por encima he dado a entrar en el enlace de documentacion y me ha llevado a el panel de usuario pero como un usuario demo que todo pone demo ese es el usuario para poder ver todo? aparte de entrar sin cntraseña, eso es superinseguro. 
+2. al abrir el modal de los token digimos que cuando valla a darle al boton de cerrar le tiene que salir un mensaje de espera si comprar ahora tienes una oferta de un 20% y que este porcentaje yo pueda cambiarlo desde admin.
+3. El boton de marketpalce no fucniona se queda la pantalla en azul no carga nada y deberia de cargar como una especia de landing como si fuera una shop, ademas en todos los botones al darle atras hay que darle despues a actualizar por que si no no funciona el playground tampoco funciona no hay nada ni chat ni nada solo azul oscuro. por favor revisa todos los vinculos de todas las paginas que funcionane qu eno haya errores como por ejemplo en marketplace al entrar dice esto:
+Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+6
+App.tsx:119 Filtering prompts, showFavoritesOnly: false
+react-dom_client.js?v=bc36b920:521 Warning: Received `true` for a non-boolean attribute `jsx`.
+
+If you want to write it to the DOM, pass a string instead: jsx="true" or jsx={value.toString()}.
+    at style
+    at div
+    at TokenUsageModal (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/components/TokenUsageModal.tsx:25:35)
+    at Header (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/components/Header.tsx:24:26)
+    at div
+    at AppContent (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/App.tsx:59:42)
+    at AuthProvider (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/components/AuthProvider.tsx:21:32)
+    at Router (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/components/Router.tsx:24:26)
+    at App
+2
+App.tsx:249 Uncaught ReferenceError: Cannot access 'toggleAdminMode' before initialization
+    at AppContent (App.tsx:249:26)
+react-dom_client.js?v=bc36b920:14032 The above error occurred in the <AppContent> component:
+
+    at AppContent (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/App.tsx:59:42)
+    at AuthProvider (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/components/AuthProvider.tsx:21:32)
+    at Router (https://9c6e6b9a-9360-4575-8e31-a24b9544d9fd-00-tx7dk4rmztjr.worf.replit.dev/src/components/Router.tsx:24:26)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+react-dom_client.js?v=bc36b920:9129 Uncaught ReferenceError: Cannot access 'toggleAdminMode' before initialization
+    at AppContent (App.tsx:249:26)

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { X, Zap, TrendingUp, Calendar, DollarSign, AlertTriangle, CreditCard, ArrowUp } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { X, Zap, TrendingUp, Calendar, DollarSign, AlertTriangle, CreditCard, ArrowUp, Gift } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -528,27 +528,6 @@ export function TokenUsageModal({ isOpen, onClose, activePromotion, user }: Toke
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          height: 20px;
-          width: 20px;
-          border-radius: 50%;
-          background: #3B82F6;
-          cursor: pointer;
-          border: 2px solid #1F2937;
-        }
-
-        .slider::-moz-range-thumb {
-          height: 20px;
-          width: 20px;
-          border-radius: 50%;
-          background: #3B82F6;
-          cursor: pointer;
-          border: 2px solid #1F2937;
-        }
-      `}</style>
     </div>
   );
 }

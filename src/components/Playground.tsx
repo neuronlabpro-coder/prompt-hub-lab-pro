@@ -14,7 +14,7 @@ interface PlaygroundProps {
 }
 
 export function Playground({ isOpen, onClose, initialPrompt = '' }: PlaygroundProps) {
-  const { providers, loading: providersLoading } = useProviders();
+  const { providers } = useProviders();
   const [prompt, setPrompt] = useState(initialPrompt);
   const [selectedProvider, setSelectedProvider] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
@@ -304,7 +304,7 @@ export function Playground({ isOpen, onClose, initialPrompt = '' }: PlaygroundPr
               <CardContent className="space-y-2">
                 <div className="text-sm">
                   <span className="text-gray-400">Proveedor:</span>
-                  <span className="ml-2 font-medium capitalize">{model.provider}</span>
+                  <span className="ml-2 font-medium capitalize">{provider?.name || 'N/A'}</span>
                 </div>
                 <div className="text-sm">
                   <span className="text-gray-400">Input:</span>

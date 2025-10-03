@@ -79,6 +79,21 @@ function AppContent() {
   const [adminPromotions, setAdminPromotions] = useState<TokenPromotion[]>([]);
   const [adminOrgPlans, setAdminOrgPlans] = useState<OrganizationPlan[]>([]);
 
+  // Check if user is admin - MUST be defined before using in JSX
+  const isUserAdmin = user?.user_metadata?.role === 'superadmin' || user?.user_metadata?.role === 'admin';
+
+  // Admin mode toggle
+  const toggleAdminMode = () => {
+    if (isUserAdmin) {
+      setIsAdminMode(!isAdminMode);
+      if (!isAdminMode) {
+        toast.success('Modo Admin activado', 'Acceso al panel de administración');
+      }
+    } else {
+      toast.error('Acceso denegado', 'No tienes permisos de administrador');
+    }
+  };
+
   // Check for token usage warning
   React.useEffect(() => {
     if (user) {
@@ -534,21 +549,6 @@ function AppContent() {
     setIsAdminMode(false);
     setAdminView('dashboard');
     toast.info('Sesión admin cerrada', 'Has salido del panel de administración');
-  };
-
-  // Check if user is admin
-  const isUserAdmin = user?.user_metadata?.role === 'superadmin' || user?.user_metadata?.role === 'admin';
-
-  // Admin mode toggle (for demo purposes)
-  const toggleAdminMode = () => {
-    if (isUserAdmin) {
-      setIsAdminMode(!isAdminMode);
-      if (!isAdminMode) {
-        toast.success('Modo Admin activado', 'Acceso al panel de administración');
-      }
-    } else {
-      toast.error('Acceso denegado', 'No tienes permisos de administrador');
-    }
   };
 
   const handleSaveNewPrompt = (newPrompt: {
