@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Filter, TrendingUp, Clock, DollarSign, Star, CheckCircle, Tag } from 'lucide-react';
+import { ShoppingCart, Search, TrendingUp, CheckCircle, Tag } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
@@ -194,12 +194,16 @@ export function Marketplace() {
               </Button>
             </div>
 
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <option value="recent">Más Recientes</option>
-              <option value="popular">Más Populares</option>
-              <option value="price_low">Precio: Menor a Mayor</option>
-              <option value="price_high">Precio: Mayor a Menor</option>
-            </Select>
+            <Select 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value)}
+              options={[
+                { value: 'recent', label: 'Más Recientes' },
+                { value: 'popular', label: 'Más Populares' },
+                { value: 'price_low', label: 'Precio: Menor a Mayor' },
+                { value: 'price_high', label: 'Precio: Mayor a Menor' }
+              ]}
+            />
           </div>
         </CardContent>
       </Card>
