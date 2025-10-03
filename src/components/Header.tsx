@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, Building, Users, MessageSquare } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, Building, Users, MessageSquare, Phone } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -89,6 +89,18 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenP
               >
                 <PlayCircle className="h-4 w-4" />
                 Playground
+              </Button>
+
+              {/* WhatsApp Support Button */}
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 border-green-600 text-green-400 hover:bg-green-600 hover:text-white"
+                onClick={() => window.open('https://wa.me/34623979013', '_blank')}
+                title="Contactar por WhatsApp"
+                data-testid="button-whatsapp"
+              >
+                <Phone className="h-4 w-4" />
+                <span className="hidden sm:inline">WhatsApp</span>
               </Button>
 
               {/* Admin Button */}
