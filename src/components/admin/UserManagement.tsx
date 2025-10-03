@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Search, Filter, Edit, Trash2, Crown, Shield, Eye, Ban, CheckCircle, LogIn } from 'lucide-react';
+import { Users, Search, Edit, Trash2, Crown, Shield, Eye, Ban, LogIn } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -12,7 +12,7 @@ interface UserManagementProps {
   users: User[];
   onEditUser: (user: User) => void;
   onDeleteUser: (userId: string) => void;
-  onChangeRole: (userId: string, role: Role) => void;
+  onChangeRole?: (userId: string, role: Role) => void;
   onBanUser: (userId: string) => void;
   onAccessAsUser?: (userId: string) => void;
 }

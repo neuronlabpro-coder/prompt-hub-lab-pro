@@ -52,10 +52,45 @@ export type Provider = Tables['providers']['Row'] & {
   models: Tables['models']['Row'][];
 };
 export type Model = Tables['models']['Row'];
-export type Execution = Tables['executions']['Row'];
-export type TokenPrice = Tables['token_prices']['Row'];
-export type Coupon = Tables['coupons']['Row'];
-export type Affiliate = Tables['affiliates']['Row'];
+
+// TODO: Agregar estas tablas a la base de datos cuando sea necesario
+export interface Execution {
+  id: string;
+  user_id: string;
+  prompt_id: string;
+  provider_id: string;
+  model_id: string;
+  tokens_used: number;
+  cost: number;
+  created_at: string;
+}
+
+export interface TokenPrice {
+  id: string;
+  provider_id: string;
+  model_id: string;
+  input_price: number;
+  output_price: number;
+  created_at: string;
+}
+
+export interface Coupon {
+  id: string;
+  code: string;
+  discount_percent: number;
+  active: boolean;
+  created_at: string;
+  expires_at?: string;
+}
+
+export interface Affiliate {
+  id: string;
+  user_id: string;
+  commission_rate: number;
+  total_earned: number;
+  active: boolean;
+  created_at: string;
+}
 
 export type Role = 'superadmin' | 'admin' | 'editor' | 'viewer' | 'user';
 

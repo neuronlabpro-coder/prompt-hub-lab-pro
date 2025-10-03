@@ -15,7 +15,7 @@ export function TwoFactorAuth({ onSuccess }: TwoFactorAuthProps) {
   const [secret, setSecret] = useState<string | null>(null);
   const [verificationCode, setVerificationCode] = useState('');
   const [loading, setLoading] = useState(false);
-  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [, setIs2FAEnabled] = useState(false);
   const [step, setStep] = useState<'check' | 'enroll' | 'verify' | 'enabled'>('check');
   const { toast } = useToast();
 

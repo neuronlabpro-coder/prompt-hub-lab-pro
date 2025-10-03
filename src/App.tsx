@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { AuthProvider, useAuth } from './components/AuthProvider';
 import { LoginForm } from './components/LoginForm';
 import { LandingPage } from './components/LandingPage';
-import { Router, Route, useRouter } from './components/Router';
+import { Router, useRouter } from './components/Router';
 import { usePrompts, useCategories, useProviders } from './hooks/useSupabase';
 import { useAdminUsers, useAdminPlans } from './hooks/useAdminData';
 import { Dashboard } from './components/Dashboard';
@@ -34,17 +34,18 @@ import { TokenWarningModal } from './components/TokenWarningModal';
 import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
 import { ReferralSettings } from './components/admin/ReferralSettings';
-import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan } from './types';
+import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
-  const { toasts, addToast, removeToast, toast } = useToast();
-  const { prompts, loading: promptsLoading, executePrompt, improvePrompt, translatePrompt, incrementStat, toggleFavorite } = usePrompts();
+  const { toasts, removeToast, toast } = useToast();
+  const { prompts, loading: promptsLoading, improvePrompt, translatePrompt, incrementStat, toggleFavorite } = usePrompts();
   const { categories } = useCategories();
   const { providers } = useProviders();
   const { currentPath, navigate } = useRouter();
   
-  const [showLanding, setShowLanding] = useState(!user);
+  // Landing page is disabled for now - direct to login
+  // const [showLanding, setShowLanding] = useState(!user);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPlaygroundOpen, setIsPlaygroundOpen] = useState(false);
@@ -332,11 +333,11 @@ function AppContent() {
   };
 
   const handleAccessAsUser = (userId: string) => {
-    const user = adminUsers.find(u => u.id === userId);
-    if (user && currentSessionUser) {
+    const targetUser = adminUsers.find(u => u.id === userId);
+    if (targetUser && user) {
       sessionStorage.setItem('adminAccessingAs', userId);
-      sessionStorage.setItem('originalAdminId', currentSessionUser.id || '');
-      toast.success('Acceso como usuario', `Ahora estás viendo como ${user.name}`);
+      sessionStorage.setItem('originalAdminId', user.id || '');
+      toast.success('Acceso como usuario', `Ahora estás viendo como ${targetUser.name}`);
       navigate('/');
     }
   };
@@ -654,7 +655,7 @@ function AppContent() {
           return (
             <BillingReports
               users={adminUsers}
-              executions={mockExecutions}
+              executions={[]}
             />
           );
         case 'promotions':
