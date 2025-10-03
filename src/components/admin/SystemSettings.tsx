@@ -181,10 +181,23 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
 
   const renderApiSettings = () => (
     <div className="space-y-6">
+      <div className="bg-yellow-900/20 border border-yellow-600/50 rounded-lg p-4 mb-6">
+        <div className="flex items-start gap-3">
+          <Shield className="h-5 w-5 text-yellow-500 mt-0.5" />
+          <div className="flex-1">
+            <h4 className="text-sm font-semibold text-yellow-500 mb-1">Seguridad de API Keys</h4>
+            <p className="text-sm text-yellow-200/80">
+              Las claves API se almacenan de forma segura en variables de entorno del servidor y nunca se exponen al navegador. 
+              Los valores mostrados aquí son solo para configuración local. En producción, configura las claves directamente en Replit Secrets.
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             OpenAI API Key
+            <span className="ml-2 text-xs text-gray-500">(Solo backend - Nunca expuesta al cliente)</span>
           </label>
           <div className="flex gap-2">
             <Input
@@ -195,10 +208,14 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
                 api: { ...settings.api, openaiKey: e.target.value }
               })}
               className="flex-1"
+              placeholder="••••••••••••••••••••••••••••••••••••••••"
+              autoComplete="off"
+              data-testid="input-openai-key"
             />
             <Button
               variant="outline"
               onClick={() => handleTestConnection('OpenAI')}
+              data-testid="button-test-openai"
             >
               Probar
             </Button>
@@ -207,6 +224,7 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Anthropic API Key
+            <span className="ml-2 text-xs text-gray-500">(Solo backend - Nunca expuesta al cliente)</span>
           </label>
           <div className="flex gap-2">
             <Input
@@ -217,10 +235,14 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
                 api: { ...settings.api, anthropicKey: e.target.value }
               })}
               className="flex-1"
+              placeholder="••••••••••••••••••••••••••••••••••••••••"
+              autoComplete="off"
+              data-testid="input-anthropic-key"
             />
             <Button
               variant="outline"
               onClick={() => handleTestConnection('Anthropic')}
+              data-testid="button-test-anthropic"
             >
               Probar
             </Button>
@@ -229,6 +251,7 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Replicate API Key
+            <span className="ml-2 text-xs text-gray-500">(Solo backend - Nunca expuesta al cliente)</span>
           </label>
           <div className="flex gap-2">
             <Input
@@ -239,10 +262,14 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
                 api: { ...settings.api, replicateKey: e.target.value }
               })}
               className="flex-1"
+              placeholder="••••••••••••••••••••••••••••••••••••••••"
+              autoComplete="off"
+              data-testid="input-replicate-key"
             />
             <Button
               variant="outline"
               onClick={() => handleTestConnection('Replicate')}
+              data-testid="button-test-replicate"
             >
               Probar
             </Button>
@@ -327,6 +354,7 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             SMTP Contraseña
+            <span className="ml-2 text-xs text-gray-500">(Nunca expuesta al cliente)</span>
           </label>
           <Input
             type="password"
@@ -335,6 +363,9 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
               ...settings,
               email: { ...settings.email, smtpPassword: e.target.value }
             })}
+            placeholder="••••••••••••••••"
+            autoComplete="off"
+            data-testid="input-smtp-password"
           />
         </div>
         <div className="md:col-span-2">

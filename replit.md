@@ -63,6 +63,49 @@ All users (including admins and superadmins) have access to a complete profile p
 
 Preferred communication style: Simple, everyday language.
 
+# Security & Best Practices
+
+## API Keys & Secrets Protection
+
+**✅ Implemented Security Measures:**
+
+1. **Backend-Only Storage**
+   - All API keys stored in server environment variables (`process.env`)
+   - Keys NEVER sent to browser/frontend
+   - Used only in server-side routes (execute.js, improve.js, translate.js)
+
+2. **Error Message Sanitization**
+   - Error messages automatically redact sensitive information
+   - Patterns like "api_key", "token", "secret", "password" replaced with `***REDACTED***`
+   - Prevents accidental exposure through error logs
+
+3. **Admin Panel Security**
+   - API key inputs use `type="password"` to hide values visually
+   - Placeholder text shows masked characters: `••••••••`
+   - `autoComplete="off"` prevents browser password managers
+   - Warning banner explains keys are server-only
+   - Labels indicate "(Nunca expuesta al cliente)"
+
+4. **Frontend Variables**
+   - Only `VITE_` prefixed variables exposed to frontend
+   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are public by design
+   - Supabase anon key protected by Row Level Security (RLS)
+
+5. **No Sensitive Logging**
+   - Code audited to prevent `console.log` of secrets
+   - Only non-sensitive debugging information logged
+
+6. **Production Configuration**
+   - API keys configured in Replit Secrets (not in code)
+   - Supabase Function secrets configured via `supabase secrets set`
+   - Never commit `.env` files to repository
+
+**📄 Documentation:** See `docs/SECURITY.md` for complete security guide
+
+# User Preferences
+
+Preferred communication style: Simple, everyday language.
+
 # System Architecture
 
 ## Frontend Architecture

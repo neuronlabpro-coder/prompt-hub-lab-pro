@@ -69,9 +69,15 @@ if (process.env.NODE_ENV === 'production') {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
+  
+  // Never expose sensitive information in error messages
+  const sanitizedMessage = process.env.NODE_ENV === 'development' 
+    ? err.message.replace(/api[_-]?key|token|secret|password/gi, '***REDACTED***')
+    : 'Something went wrong';
+  
   res.status(500).json({ 
     error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+    message: sanitizedMessage
   });
 });
 
