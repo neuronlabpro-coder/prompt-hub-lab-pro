@@ -14,6 +14,8 @@ import translateRoutes from './routes/translate.js';
 import emailRoutes from './routes/email.js';
 import apiKeysRoutes from './routes/apiKeys.js';
 import newsletterRoutes from './routes/newsletter.js';
+import marketplaceRoutes from './routes/marketplace.js';
+import supportRoutes from './routes/support.js';
 
 dotenv.config();
 
@@ -55,6 +57,8 @@ app.use('/api/translate', translateRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/api-keys', apiKeysRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/marketplace', marketplaceRoutes);
+app.use('/api/support', supportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
