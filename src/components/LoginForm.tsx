@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/Card';
-import { Zap, Mail, Lock, AlertCircle } from 'lucide-react';
+import { Zap, Mail, Lock, AlertCircle, Github } from 'lucide-react';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -11,6 +11,22 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
+
+  const handleGitHubLogin = async () => {
+    try {
+      setError(null);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: window.location.origin,
+        }
+      });
+      
+      if (error) throw error;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Error al iniciar sesión con GitHub');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +85,28 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {/* GitHub OAuth Button */}
+          <Button
+            type="button"
+            onClick={handleGitHubLogin}
+            variant="outline"
+            className="w-full mb-4 bg-gray-800 border-gray-600 hover:bg-gray-700 text-white"
+            data-testid="button-github-login"
+          >
+            <Github className="h-5 w-5 mr-2" />
+            Continuar con GitHub
+          </Button>
+
+          {/* Separator */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-gray-800 text-gray-400">O continúa con email</span>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
