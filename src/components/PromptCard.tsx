@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Eye, Heart, Languages, Sparkles, ExternalLink, MoreVertical, Clock } from 'lucide-react';
 import { Prompt } from '../types';
-import { categories } from '../data/mockData';
+import { useCategories } from '../hooks/useSupabase';
 import { formatNumber, formatDate } from '../lib/utils';
 import { useToast } from '../hooks/useToast';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -28,6 +28,7 @@ export function PromptCard({
   onViewHistory,
 }: PromptCardProps) {
   const [showActions, setShowActions] = useState(false);
+  const { categories } = useCategories();
   const category = categories.find(c => c.id === prompt.category);
   const { toast } = useToast();
 

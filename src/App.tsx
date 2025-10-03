@@ -29,8 +29,6 @@ import { Pagination } from './components/Pagination';
 import { ImprovementPreviewModal } from './components/ImprovementPreviewModal';
 import { ToastContainer } from './components/ui/Toast';
 import { useToast } from './hooks/useToast';
-import { mockUsers, mockPlans, mockCoupons, mockAffiliates, mockExecutions, mockTokenPromotions } from './data/mockAdminData';
-import { mockOrganizationPlans } from './data/mockAdminData';
 import { TokenWarningModal } from './components/TokenWarningModal';
 import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
@@ -70,13 +68,13 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
-  // Admin data state
-  const [adminUsers, setAdminUsers] = useState<User[]>(mockUsers);
-  const [adminPlans, setAdminPlans] = useState<Plan[]>(mockPlans);
-  const [adminCoupons, setAdminCoupons] = useState<Coupon[]>(mockCoupons);
-  const [adminAffiliates, setAdminAffiliates] = useState<Affiliate[]>(mockAffiliates);
-  const [adminPromotions, setAdminPromotions] = useState<TokenPromotion[]>(mockTokenPromotions);
-  const [adminOrgPlans, setAdminOrgPlans] = useState<OrganizationPlan[]>(mockOrganizationPlans);
+  // Admin data state - Los datos se cargarán desde Supabase
+  const [adminUsers, setAdminUsers] = useState<User[]>([]);
+  const [adminPlans, setAdminPlans] = useState<Plan[]>([]);
+  const [adminCoupons, setAdminCoupons] = useState<Coupon[]>([]);
+  const [adminAffiliates, setAdminAffiliates] = useState<Affiliate[]>([]);
+  const [adminPromotions, setAdminPromotions] = useState<TokenPromotion[]>([]);
+  const [adminOrgPlans, setAdminOrgPlans] = useState<OrganizationPlan[]>([]);
 
   // Check for token usage warning
   React.useEffect(() => {
@@ -530,7 +528,7 @@ function AppContent() {
             <AdminDashboard
               users={adminUsers}
               prompts={prompts}
-              executions={mockExecutions}
+              executions={[]}
             />
           );
         case 'users':
@@ -702,65 +700,13 @@ function AppContent() {
             />
           );
         case 'emails':
-          return (
-            <EmailTemplates
-              templates={adminEmailTemplates}
-              onCreateTemplate={(template) => {
-                const newTemplate = {
-                  ...template,
-                  id: `template_${Date.now()}`,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                };
-                setAdminEmailTemplates(prev => [...prev, newTemplate]);
-              }}
-              onUpdateTemplate={(templateId, updates) => {
-                setAdminEmailTemplates(prev => prev.map(t => 
-                  t.id === templateId ? { ...t, ...updates, updated_at: new Date().toISOString() } : t
-                ));
-              }}
-              onDeleteTemplate={(templateId) => {
-                setAdminEmailTemplates(prev => prev.filter(t => t.id !== templateId));
-              }}
-              onTestTemplate={(templateId) => {
-                toast.info('Enviando email de prueba...', 'Verificando plantilla');
-                setTimeout(() => {
-                  toast.success('Email enviado', 'Plantilla probada exitosamente');
-                }, 2000);
-              }}
-            />
-          );
         case 'support':
-          return (
-            <SupportTickets
-              tickets={adminSupportTickets}
-              users={adminUsers}
-              onUpdateTicket={(ticketId, updates) => {
-                setAdminSupportTickets(prev => prev.map(t => 
-                  t.id === ticketId ? { ...t, ...updates, updated_at: new Date().toISOString() } : t
-                ));
-              }}
-              onAddResponse={(ticketId, response) => {
-                console.log('Add response:', { ticketId, response });
-                toast.success('Respuesta enviada', 'Email enviado al usuario');
-              }}
-            />
-          );
         case 'smtp':
           return (
-            <SMTPSettings
-              config={adminSMTPConfig}
-              onUpdateConfig={(config) => {
-                setAdminSMTPConfig(config);
-                toast.success('SMTP configurado', 'Configuración de email actualizada');
-              }}
-              onTestConnection={() => {
-                toast.info('Probando conexión SMTP...', 'Verificando configuración');
-                setTimeout(() => {
-                  toast.success('Conexión exitosa', 'SMTP configurado correctamente');
-                }, 2000);
-              }}
-            />
+            <div className="text-center py-12">
+              <h3 className="text-xl font-semibold text-white mb-4">Sección en desarrollo</h3>
+              <p className="text-gray-400">Esta funcionalidad estará disponible pronto</p>
+            </div>
           );
         default:
           return (
@@ -921,9 +867,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
   );
 }
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { X, Save, Wand2, Languages, Plus } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
+import { useCategories } from '../hooks/useSupabase';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Select } from './ui/Select';
 import { Badge } from './ui/Badge';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
-import { categories } from '../data/mockData';
 import { estimateTokens } from '../lib/utils';
 
 interface CreatePromptModalProps {
@@ -34,6 +34,7 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
   const [isGenerating, setIsGenerating] = useState(false);
   const [isTranslating, setIsTranslating] = useState(false);
   const { toast } = useToast();
+  const { categories } = useCategories();
 
   React.useEffect(() => {
     if (isOpen) {

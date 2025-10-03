@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Copy, Languages, Sparkles, ExternalLink, Eye, Heart, Clock } from 'lucide-react';
 import { Prompt } from '../types';
-import { categories } from '../data/mockData';
+import { useCategories } from '../hooks/useSupabase';
 import { formatNumber, formatDate, estimateTokens } from '../lib/utils';
 import { useToast } from '../hooks/useToast';
 import { Button } from './ui/Button';
@@ -31,6 +31,7 @@ export function PromptModal({
   const [activeTab, setActiveTab] = useState<'es' | 'en'>('es');
   const [localPrompt, setLocalPrompt] = useState<Prompt | null>(null);
   const { toast } = useToast();
+  const { categories } = useCategories();
 
   // Update local prompt when prop changes
   useEffect(() => {

@@ -1,7 +1,7 @@
 // Configuración de la aplicación PromptHub
 export const config = {
-  // Desactivar Supabase y usar backend local
-  DISABLE_SUPABASE: true,
+  // Usar Supabase como base de datos principal
+  DISABLE_SUPABASE: false,
   
   // URLs del backend
   API_BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -10,10 +10,10 @@ export const config = {
   ADMIN_ROUTE: '/admin/dashboard',
   
   // Configuración de autenticación
-  AUTH_ENABLED: false, // Por ahora deshabilitamos la auth hasta configurar el flujo completo
+  AUTH_ENABLED: true,
   
-  // Mock data para desarrollo
-  USE_MOCK_DATA: true,
+  // No usar mock data - usar datos reales de Supabase
+  USE_MOCK_DATA: false,
   
   // Configuración de Stripe (para el flujo de pago)
   STRIPE_PUBLISHABLE_KEY: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '',
