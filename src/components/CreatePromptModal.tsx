@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Save, Wand2, Languages, Plus } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
-import { useCategories } from '../hooks/useSupabase';
+import { useCategories, useSubcategories, useModels } from '../hooks/useSupabase';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Select } from './ui/Select';
@@ -17,6 +17,8 @@ interface CreatePromptModalProps {
     content_es: string;
     content_en: string;
     category: string;
+    subcategory_id?: string;
+    preferred_model_id?: string;
     tags: string[];
   }) => void;
 }
@@ -27,6 +29,8 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
   const [contentEs, setContentEs] = useState('');
   const [contentEn, setContentEn] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [showNewCategory, setShowNewCategory] = useState(false);
@@ -35,6 +39,8 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
   const [isTranslating, setIsTranslating] = useState(false);
   const { toast } = useToast();
   const { categories } = useCategories();
+  const { subcategories } = useSubcategories(selectedCategory);
+  const { models } = useModels();
 
   React.useEffect(() => {
     if (isOpen) {
@@ -118,6 +124,7 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
     } else {
       setShowNewCategory(false);
       setSelectedCategory(value);
+      setSelectedSubcategory(''); // Reset subcategory when category changes
     }
   };
 
@@ -144,6 +151,8 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
       content_es: contentEs.trim(),
       content_en: contentEn.trim() || contentEs.trim(), // Fallback to Spanish if English is empty
       category: selectedCategory,
+      subcategory_id: selectedSubcategory || undefined,
+      preferred_model_id: selectedModel || undefined,
       tags,
     });
 
@@ -151,6 +160,8 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
     setTitle('');
     setContentEs('');
     setContentEn('');
+    setSelectedSubcategory('');
+    setSelectedModel('');
     setTags([]);
     setTagInput('');
     onClose();
@@ -238,6 +249,43 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
                     onChange={(e) => handleCategoryChange(e.target.value)}
                   />
                 )}
+              </div>
+            </div>
+
+            {/* Subcategory and Model */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Subcategoría
+                </label>
+                <Select
+                  options={[
+                    { value: '', label: 'Sin subcategoría' },
+                    ...subcategories.map(sub => ({
+                      value: sub.id,
+                      label: sub.name,
+                    }))
+                  ]}
+                  value={selectedSubcategory}
+                  onChange={(e) => setSelectedSubcategory(e.target.value)}
+                  disabled={!selectedCategory || subcategories.length === 0}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Modelo Preferido
+                </label>
+                <Select
+                  options={[
+                    { value: '', label: 'Sin modelo preferido' },
+                    ...models.map(model => ({
+                      value: model.id,
+                      label: `${model.name} (${model.providers?.name || 'Unknown'})`,
+                    }))
+                  ]}
+                  value={selectedModel}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                />
               </div>
             </div>
 

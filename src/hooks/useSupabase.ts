@@ -223,3 +223,70 @@ export function useProviders() {
 
   return { providers: providersData, loading };
 }
+
+export function useSubcategories(categoryId?: string) {
+  const [subcategoriesData, setSubcategoriesData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (categoryId) {
+      fetchSubcategories();
+    } else {
+      setSubcategoriesData([]);
+      setLoading(false);
+    }
+  }, [categoryId]);
+
+  const fetchSubcategories = async () => {
+    if (!categoryId) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('subcategories')
+        .select('*')
+        .eq('category_id', categoryId)
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) throw error;
+      setSubcategoriesData(data || []);
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { subcategories: subcategoriesData, loading };
+}
+
+export function useModels() {
+  const [modelsData, setModelsData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchModels();
+  }, []);
+
+  const fetchModels = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('models')
+        .select(`
+          *,
+          providers:provider_id(id, name)
+        `)
+        .eq('enabled', true)
+        .order('name');
+
+      if (error) throw error;
+      setModelsData(data || []);
+    } catch (error) {
+      console.error('Error fetching models:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { models: modelsData, loading };
+}
