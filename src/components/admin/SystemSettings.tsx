@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, Save, RefreshCw, Database, Key, Shield, Globe, Mail, Bell } from 'lucide-react';
+import { Settings, Save, RefreshCw, Database, Key, Shield, Globe, Mail, Bell, Video, Users, Percent } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -16,6 +16,20 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
   const [activeTab, setActiveTab] = useState('general');
   
   const [settings, setSettings] = useState({
+    videoCompression: {
+      codec: 'libvpx-vp9',
+      audioCodec: 'libopus',
+      bitrate: '1000k',
+      crf: 30,
+      maxPreviewDuration: 8,
+    },
+    multitenantDiscounts: {
+      minUsers: 2,
+      tier1Users: 19,
+      tier1Discount: 10,
+      tier2Users: 20,
+      tier2Discount: 20,
+    },
     general: {
       siteName: 'PromptHub v2',
       siteDescription: 'Plataforma avanzada para gestión de prompts de IA',
@@ -56,6 +70,8 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
   const tabs = [
     { id: 'general', label: 'General', icon: Settings },
     { id: 'api', label: 'APIs', icon: Key },
+    { id: 'video', label: 'Video', icon: Video },
+    { id: 'multitenant', label: 'Descuentos', icon: Percent },
     { id: 'email', label: 'Email', icon: Mail },
     { id: 'security', label: 'Seguridad', icon: Shield },
     { id: 'notifications', label: 'Notificaciones', icon: Bell },
@@ -433,6 +449,206 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
     </div>
   );
 
+  const renderVideoSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4 mb-4">
+        <h4 className="font-medium text-blue-300 mb-2 flex items-center gap-2">
+          <Video className="h-4 w-4" />
+          Configuración de Compresión de Video
+        </h4>
+        <p className="text-sm text-gray-400">
+          Ajusta los parámetros de compresión para las previews de videos en prompts. Mayor compresión = menor calidad pero menos almacenamiento.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Codec de Video
+          </label>
+          <Input
+            value={settings.videoCompression.codec}
+            onChange={(e) => setSettings({
+              ...settings,
+              videoCompression: { ...settings.videoCompression, codec: e.target.value }
+            })}
+            placeholder="libvpx-vp9"
+          />
+          <p className="text-xs text-gray-500 mt-1">VP9 recomendado para mejor compresión</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Codec de Audio
+          </label>
+          <Input
+            value={settings.videoCompression.audioCodec}
+            onChange={(e) => setSettings({
+              ...settings,
+              videoCompression: { ...settings.videoCompression, audioCodec: e.target.value }
+            })}
+            placeholder="libopus"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Bitrate
+          </label>
+          <Input
+            value={settings.videoCompression.bitrate}
+            onChange={(e) => setSettings({
+              ...settings,
+              videoCompression: { ...settings.videoCompression, bitrate: e.target.value }
+            })}
+            placeholder="1000k"
+          />
+          <p className="text-xs text-gray-500 mt-1">Mayor valor = mejor calidad, más tamaño</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            CRF (Constant Rate Factor)
+          </label>
+          <Input
+            type="number"
+            min="0"
+            max="63"
+            value={settings.videoCompression.crf}
+            onChange={(e) => setSettings({
+              ...settings,
+              videoCompression: { ...settings.videoCompression, crf: parseInt(e.target.value) }
+            })}
+          />
+          <p className="text-xs text-gray-500 mt-1">0-63: menor = mejor calidad (recomendado: 25-35)</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Duración Máxima de Preview (segundos)
+          </label>
+          <Input
+            type="number"
+            min="1"
+            max="30"
+            value={settings.videoCompression.maxPreviewDuration}
+            onChange={(e) => setSettings({
+              ...settings,
+              videoCompression: { ...settings.videoCompression, maxPreviewDuration: parseInt(e.target.value) }
+            })}
+          />
+        </div>
+      </div>
+      <Button onClick={() => handleSave('videoCompression')} className="flex items-center gap-2">
+        <Save className="h-4 w-4" />
+        Guardar Configuración de Video
+      </Button>
+    </div>
+  );
+
+  const renderMultitenantSettings = () => (
+    <div className="space-y-6">
+      <div className="bg-green-900/20 border border-green-800 rounded-lg p-4 mb-4">
+        <h4 className="font-medium text-green-300 mb-2 flex items-center gap-2">
+          <Users className="h-4 w-4" />
+          Descuentos por Volumen
+        </h4>
+        <p className="text-sm text-gray-400 mb-3">
+          Configura los descuentos automáticos para planes multitenant según el número de usuarios.
+        </p>
+        <div className="space-y-1">
+          <p className="text-sm text-gray-300">
+            • {settings.multitenantDiscounts.minUsers}-{settings.multitenantDiscounts.tier1Users} usuarios: <span className="font-semibold text-green-400">{settings.multitenantDiscounts.tier1Discount}% descuento</span>
+          </p>
+          <p className="text-sm text-gray-300">
+            • {settings.multitenantDiscounts.tier2Users}+ usuarios: <span className="font-semibold text-green-400">{settings.multitenantDiscounts.tier2Discount}% descuento</span>
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            <Percent className="h-4 w-4 inline mr-1" />
+            Descuento Tier 1 (%)
+          </label>
+          <Input
+            type="number"
+            min="0"
+            max="100"
+            value={settings.multitenantDiscounts.tier1Discount}
+            onChange={(e) => setSettings({
+              ...settings,
+              multitenantDiscounts: { ...settings.multitenantDiscounts, tier1Discount: parseInt(e.target.value) }
+            })}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Aplicado de {settings.multitenantDiscounts.minUsers} a {settings.multitenantDiscounts.tier1Users} usuarios
+          </p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Usuarios Máximos Tier 1
+          </label>
+          <Input
+            type="number"
+            min="2"
+            value={settings.multitenantDiscounts.tier1Users}
+            onChange={(e) => setSettings({
+              ...settings,
+              multitenantDiscounts: { ...settings.multitenantDiscounts, tier1Users: parseInt(e.target.value) }
+            })}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            <Percent className="h-4 w-4 inline mr-1" />
+            Descuento Tier 2 (%)
+          </label>
+          <Input
+            type="number"
+            min="0"
+            max="100"
+            value={settings.multitenantDiscounts.tier2Discount}
+            onChange={(e) => setSettings({
+              ...settings,
+              multitenantDiscounts: { ...settings.multitenantDiscounts, tier2Discount: parseInt(e.target.value) }
+            })}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Aplicado a {settings.multitenantDiscounts.tier2Users}+ usuarios
+          </p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Usuarios Mínimos Tier 2
+          </label>
+          <Input
+            type="number"
+            min="2"
+            value={settings.multitenantDiscounts.tier2Users}
+            onChange={(e) => setSettings({
+              ...settings,
+              multitenantDiscounts: { ...settings.multitenantDiscounts, tier2Users: parseInt(e.target.value) }
+            })}
+          />
+        </div>
+      </div>
+      <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+        <h5 className="font-medium text-gray-200 mb-2">Ejemplo de Cálculo</h5>
+        <div className="space-y-1 text-sm">
+          <p className="text-gray-400">
+            <strong className="text-gray-200">Plan Multitenant a €29/usuario/mes:</strong>
+          </p>
+          <p className="text-gray-400">
+            • 15 usuarios: €29 × 15 × (1 - {settings.multitenantDiscounts.tier1Discount}%) = <span className="font-semibold text-green-400">€{(29 * 15 * (1 - settings.multitenantDiscounts.tier1Discount / 100)).toFixed(2)}/mes</span>
+          </p>
+          <p className="text-gray-400">
+            • 25 usuarios: €29 × 25 × (1 - {settings.multitenantDiscounts.tier2Discount}%) = <span className="font-semibold text-green-400">€{(29 * 25 * (1 - settings.multitenantDiscounts.tier2Discount / 100)).toFixed(2)}/mes</span>
+          </p>
+        </div>
+      </div>
+      <Button onClick={() => handleSave('multitenantDiscounts')} className="flex items-center gap-2">
+        <Save className="h-4 w-4" />
+        Guardar Configuración de Descuentos
+      </Button>
+    </div>
+  );
+
   const renderNotificationSettings = () => (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -558,6 +774,8 @@ export function SystemSettings({ onUpdateSettings }: SystemSettingsProps) {
         <CardContent className="p-6">
           {activeTab === 'general' && renderGeneralSettings()}
           {activeTab === 'api' && renderApiSettings()}
+          {activeTab === 'video' && renderVideoSettings()}
+          {activeTab === 'multitenant' && renderMultitenantSettings()}
           {activeTab === 'email' && renderEmailSettings()}
           {activeTab === 'security' && renderSecuritySettings()}
           {activeTab === 'notifications' && renderNotificationSettings()}

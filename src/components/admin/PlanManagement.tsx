@@ -23,6 +23,8 @@ export function PlanManagement({ plans, users, onCreatePlan, onUpdatePlan, onDel
     price: 0,
     tokens_included: 0,
     overage_price: 0,
+    storage_limit_mb: 1000,
+    active: true,
   });
 
   // Calculate plan statistics
@@ -59,6 +61,8 @@ export function PlanManagement({ plans, users, onCreatePlan, onUpdatePlan, onDel
       price: 0,
       tokens_included: 0,
       overage_price: 0,
+      storage_limit_mb: 1000,
+      active: true,
     });
   };
 
@@ -69,6 +73,8 @@ export function PlanManagement({ plans, users, onCreatePlan, onUpdatePlan, onDel
       price: plan.price,
       tokens_included: plan.tokens_included,
       overage_price: plan.overage_price,
+      storage_limit_mb: plan.storage_limit_mb || 1000,
+      active: plan.active,
     });
     setIsCreating(true);
   };
@@ -81,6 +87,8 @@ export function PlanManagement({ plans, users, onCreatePlan, onUpdatePlan, onDel
       price: 0,
       tokens_included: 0,
       overage_price: 0,
+      storage_limit_mb: 1000,
+      active: true,
     });
   };
 
@@ -174,6 +182,37 @@ export function PlanManagement({ plans, users, onCreatePlan, onUpdatePlan, onDel
                     placeholder="12.00"
                     required
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Límite de Almacenamiento (MB)
+                  </label>
+                  <Input
+                    type="number"
+                    value={formData.storage_limit_mb}
+                    onChange={(e) => setFormData({ ...formData, storage_limit_mb: parseInt(e.target.value) })}
+                    placeholder="1000"
+                    required
+                    data-testid="input-storage-limit"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Espacio para imágenes y videos de prompts
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Estado del Plan
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.active}
+                      onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                      className="rounded"
+                      data-testid="checkbox-plan-active"
+                    />
+                    <span className="text-sm text-gray-300">Plan activo</span>
+                  </label>
                 </div>
               </div>
               
