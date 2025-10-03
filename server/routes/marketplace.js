@@ -32,23 +32,15 @@ router.get('/prompts', async (req, res) => {
         content_en,
         type,
         tags,
-        media_preview_url,
         price,
         sales_count,
         created_at,
-        category_id,
-        categories (
-          id,
-          name,
-          icon,
-          color
-        )
+        category
       `)
-      .eq('is_for_sale', true)
-      .eq('is_public', true);
+      .eq('is_for_sale', true);
 
     if (category) {
-      query = query.eq('category_id', category);
+      query = query.eq('category', category);
     }
 
     if (search) {
@@ -84,7 +76,7 @@ router.get('/prompts/:id', async (req, res) => {
     const authHeader = req.headers.authorization;
     
     // Get prompt details
-    const { data: prompt, error: promptError } = await supabase
+    const { data: prompt, error: promptError} = await supabase
       .from('prompts')
       .select(`
         id,
@@ -93,18 +85,10 @@ router.get('/prompts/:id', async (req, res) => {
         content_en,
         type,
         tags,
-        media_url,
-        media_preview_url,
         price,
         sales_count,
         created_at,
-        category_id,
-        categories (
-          id,
-          name,
-          icon,
-          color
-        )
+        category
       `)
       .eq('id', id)
       .eq('is_for_sale', true)
@@ -251,12 +235,7 @@ router.get('/my-purchases', async (req, res) => {
           content_es,
           content_en,
           type,
-          media_preview_url,
-          categories (
-            name,
-            icon,
-            color
-          )
+          category
         )
       `)
       .eq('buyer_id', user.id)
