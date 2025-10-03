@@ -236,15 +236,18 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-gray-900">
         <Header 
-          user={user}
-          onCreatePrompt={() => {}}
-          onOpenPlayground={() => {}}
-          onOpenDashboard={() => {}}
-          onOpenAdminPanel={() => {}}
+          onNewPrompt={() => navigate('/')}
+          onOpenPlayground={() => setIsPlaygroundOpen(true)}
+          onOpenDashboard={() => {
+            navigate('/');
+            setCurrentView('dashboard');
+          }}
+          onOpenMarketplace={() => navigate('/marketplace')}
+          onOpenSupport={() => navigate('/soporte')}
           onOpenProfile={() => navigate('/profile')}
           currentView="marketplace"
-          onLogout={() => navigate('/login')}
-          isDemoUser={false}
+          onToggleAdmin={toggleAdminMode}
+          isAdmin={isUserAdmin}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Marketplace />
@@ -258,15 +261,18 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-gray-900">
         <Header 
-          user={user}
-          onCreatePrompt={() => {}}
-          onOpenPlayground={() => {}}
-          onOpenDashboard={() => {}}
-          onOpenAdminPanel={() => {}}
+          onNewPrompt={() => navigate('/')}
+          onOpenPlayground={() => setIsPlaygroundOpen(true)}
+          onOpenDashboard={() => {
+            navigate('/');
+            setCurrentView('dashboard');
+          }}
+          onOpenMarketplace={() => navigate('/marketplace')}
+          onOpenSupport={() => navigate('/soporte')}
           onOpenProfile={() => navigate('/profile')}
           currentView="soporte"
-          onLogout={() => navigate('/login')}
-          isDemoUser={false}
+          onToggleAdmin={toggleAdminMode}
+          isAdmin={isUserAdmin}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <SupportCenter />
@@ -804,6 +810,8 @@ function AppContent() {
         onNewPrompt={handleNewPrompt}
         onOpenPlayground={() => handleOpenPlayground()}
         onOpenDashboard={handleOpenDashboard}
+        onOpenMarketplace={() => navigate('/marketplace')}
+        onOpenSupport={() => navigate('/soporte')}
         onOpenProfile={handleOpenProfile}
         currentView={currentView}
         onToggleAdmin={toggleAdminMode}

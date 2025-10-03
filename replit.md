@@ -2,6 +2,35 @@
 
 PromptHub v2 is an advanced AI prompt management platform that enables users to create, test, optimize, and manage prompts across multiple AI models. The platform features a comprehensive prompt library, multi-model testing playground, analytics dashboard, and billing system based on token usage. It includes both user-facing features and a complete admin panel for managing users, plans, providers, and system settings.
 
+## Recent Updates (Oct 3, 2025)
+
+### Marketplace System ✅
+- Complete marketplace for selling prompts (PromptBase-style)
+- Tier-based discounts: Basic 10%, PRO 15%, Premium 20%
+- Stripe payment integration with checkout flow
+- Backend routes: `/api/marketplace/prompts`, `/api/marketplace/purchase`
+- Database tables: `prompt_purchases` with discount tracking
+- Frontend: `Marketplace.tsx` component with grid view and filters
+- Navigation: Marketplace button in Header (ShoppingCart icon)
+- Access: `/marketplace` route
+
+### Support Ticket System ✅
+- Integrated support center with ticket management
+- Categories: soporte, general, ventas, técnico, billing
+- Priority levels: low, medium, high, urgent
+- Status tracking: open, in_progress, waiting_response, resolved, closed
+- Backend routes: `/api/support/tickets`, `/api/support/respond`
+- Database tables: `support_tickets`, `support_responses` with conversation threading
+- Frontend: `SupportCenter.tsx` component for users
+- Navigation: Soporte button in Header (MessageCircle icon)
+- Access: `/soporte` route
+
+### Navigation & UI Updates
+- Updated `Header.tsx` with Marketplace and Soporte buttons
+- Added responsive navigation (icons + text, hidden on mobile)
+- Both routes integrated with existing authentication system
+- SQL updates applied via `marketplace-support-update.sql`
+
 ## Admin Configurable Features
 
 All system configurations can be edited from the Admin Panel without code changes:
