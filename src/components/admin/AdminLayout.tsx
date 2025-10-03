@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, BarChart3, Users, DollarSign, Bot, Ticket, TrendingUp, FileText, Settings, LogOut, Calculator, PieChart, Tag, Gift, Building } from 'lucide-react';
+import { Shield, BarChart3, Users, DollarSign, Bot, Ticket, TrendingUp, FileText, Settings, LogOut, Calculator, PieChart, Tag, Gift, Building, Mail, MessageSquare } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 
