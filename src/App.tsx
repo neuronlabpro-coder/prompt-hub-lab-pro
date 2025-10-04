@@ -45,10 +45,17 @@ import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
   const { toasts, removeToast, toast } = useToast();
-  const { prompts, loading: promptsLoading, improvePrompt, translatePrompt, incrementStat, toggleFavorite } = usePrompts();
+  const { currentPath, navigate } = useRouter();
+  
+  // Solo cargar prompts en páginas que los necesitan (no en marketplace/admin/soporte)
+  const shouldLoadPrompts = !currentPath.startsWith('/marketplace') && 
+                            !currentPath.startsWith('/admin') && 
+                            !currentPath.startsWith('/soporte') &&
+                            !currentPath.startsWith('/checkout');
+  
+  const { prompts, loading: promptsLoading, improvePrompt, translatePrompt, incrementStat, toggleFavorite } = usePrompts(shouldLoadPrompts);
   const { categories } = useCategories();
   const { providers } = useProviders();
-  const { currentPath, navigate } = useRouter();
   
   // Landing page is disabled for now - direct to login
   // const [showLanding, setShowLanding] = useState(!user);
@@ -137,7 +144,6 @@ function AppContent() {
   // Filter and sort prompts
   const filteredAndSortedPrompts = useMemo(() => {
     let filtered = prompts;
-    console.log('Filtering prompts, showFavoritesOnly:', showFavoritesOnly);
 
     // Search filter
     if (searchTerm) {
@@ -157,7 +163,6 @@ function AppContent() {
     // Favorites filter
     if (showFavoritesOnly) {
       filtered = filtered.filter(prompt => prompt.is_favorite);
-      console.log('Filtered favorites:', filtered.length);
     }
 
     // Sort

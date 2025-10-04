@@ -24,14 +24,18 @@ export function useSupabase() {
   return { user, loading };
 }
 
-export function usePrompts() {
+export function usePrompts(enabled: boolean = true) {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchPrompts();
-  }, []);
+    if (enabled) {
+      fetchPrompts();
+    } else {
+      setLoading(false);
+    }
+  }, [enabled]);
 
   const fetchPrompts = async () => {
     try {

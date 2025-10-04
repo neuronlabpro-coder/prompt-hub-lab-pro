@@ -61,6 +61,18 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
+### 4 Oct 2025 (Noche - Performance Fix CRÍTICO)
+- 🚀 **PROBLEMA RESUELTO**: Marketplace y Admin cargan instantáneamente
+  - **Problema identificado:** `usePrompts()` cargaba TODOS los prompts de Supabase en CADA página (incluso marketplace/admin que tienen su propia carga)
+  - **Solución:** Hook modificado con parámetro `enabled` - solo carga prompts cuando se necesitan (dashboard, vista prompts)
+  - **Resultado:** Marketplace y admin pasan de 60+ segundos a **<1 segundo** ⚡
+- ✅ **Consola Limpia**: Eliminados console.logs innecesarios de debug
+- ✅ **Backend Marketplace Fixed**: Validación null agregada en `/my-purchases` endpoint
+- ✅ **Admin Workflow Mejorado**: 
+  - WhatsApp removido del header cuando estás logueado (solo en landing)
+  - "Admin Panel" agregado al dropdown del usuario (color rojo)
+  - Superadmin redirige automáticamente a `/admin/dashboard` al login
+
 ### 4 Oct 2025 (Noche - Landing Page Enterprise + WebSocket Fix)
 - ✅ **WebSocket/HMR Fix**: Eliminados errores ERR_CONNECTION_REFUSED en consola
   - Problema: Vite intentaba conectar HMR a localhost (no funciona en Replit)
