@@ -17,6 +17,7 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout }: A
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, badge: null },
     { id: 'users', label: 'Usuarios', icon: Users, badge: '156' },
     { id: 'prompts', label: 'Prompts', icon: FileText, badge: '2.1K' },
+    { id: 'products', label: 'Productos', icon: Tag, badge: '3' },
     { id: 'categories', label: 'Categorías', icon: Tag, badge: '6' },
     { id: 'plans', label: 'Planes', icon: DollarSign, badge: null },
     { id: 'providers', label: 'Proveedores IA', icon: Bot, badge: '3' },
