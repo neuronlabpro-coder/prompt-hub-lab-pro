@@ -16,6 +16,7 @@ import apiKeysRoutes from './routes/apiKeys.js';
 import newsletterRoutes from './routes/newsletter.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import supportRoutes from './routes/support.js';
+import stripeRoutes from './routes/stripe.js';
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ app.use('/api/api-keys', apiKeysRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/stripe', stripeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

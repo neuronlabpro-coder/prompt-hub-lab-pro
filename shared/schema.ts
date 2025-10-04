@@ -13,6 +13,7 @@ export const emailTemplateTypeEnum = pgEnum('email_template_type', ['welcome', '
 export const supportCategoryEnum = pgEnum('support_category', ['billing', 'technical', 'feature_request', 'bug_report', 'general']);
 export const supportPriorityEnum = pgEnum('support_priority', ['low', 'medium', 'high', 'urgent']);
 export const supportStatusEnum = pgEnum('support_status', ['open', 'in_progress', 'waiting_response', 'resolved', 'closed']);
+export const orderStatusEnum = pgEnum('order_status', ['pending', 'processing', 'completed', 'failed', 'refunded']);
 
 // Users table
 export const users = pgTable('users', {
@@ -213,5 +214,44 @@ export const auditLogs = pgTable('audit_logs', {
   details: jsonb('details').default(sql`'{}'::jsonb`),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// Orders table (ecommerce)
+export const orders = pgTable('orders', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid('user_id').notNull().references(() => users.id),
+  status: orderStatusEnum('status').default('pending').notNull(),
+  subtotal: numeric('subtotal', { precision: 10, scale: 2 }).notNull(),
+  discount: numeric('discount', { precision: 10, scale: 2 }).default('0'),
+  total: numeric('total', { precision: 10, scale: 2 }).notNull(),
+  stripePaymentIntentId: text('stripe_payment_intent_id'),
+  stripeSessionId: text('stripe_session_id'),
+  paymentMethod: text('payment_method'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// Order items table
+export const orderItems = pgTable('order_items', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  orderId: uuid('order_id').notNull().references(() => orders.id, { onDelete: 'cascade' }),
+  promptId: uuid('prompt_id').notNull().references(() => prompts.id),
+  quantity: integer('quantity').default(1).notNull(),
+  price: numeric('price', { precision: 10, scale: 2 }).notNull(),
+  discount: numeric('discount', { precision: 10, scale: 2 }).default('0'),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// Downloads table (secure download links)
+export const downloads = pgTable('downloads', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid('user_id').notNull().references(() => users.id),
+  promptId: uuid('prompt_id').notNull().references(() => prompts.id),
+  orderId: uuid('order_id').references(() => orders.id),
+  downloadToken: text('download_token').unique().notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  downloadCount: integer('download_count').default(0),
+  maxDownloads: integer('max_downloads').default(5),
   createdAt: timestamp('created_at').defaultNow(),
 });
