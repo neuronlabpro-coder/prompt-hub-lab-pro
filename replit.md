@@ -61,19 +61,24 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
-### 4 Oct 2025 (Noche) - Stripe Integration Completa
+### 4 Oct 2025 (Noche) - Sistema Completo con .env
+- ✅ **Configuración .env Completa**: Sistema portátil para Replit y Self-Host
+  - Archivo .env creado con todas las claves configuradas
+  - Workflow Backend actualizado: `node --env-file=.env -r tsx server/index.js`
+  - Variables cargadas correctamente antes de imports
+  - Sin warnings de Stripe ✅
 - ✅ **Stripe Integration 100%**: Sistema de pagos completamente implementado
   - Tablas DB: orders, order_items, downloads
   - Backend routes: create-payment-intent, webhook, orders, download
   - Checkout page completa con Stripe Elements
   - Sistema de descargas seguras con tokens (30 días, 5 descargas max)
-- ✅ **Documentación de Setup**:
-  - STRIPE_SETUP.md con instrucciones completas
-  - URL de webhook para configurar
-  - Tarjetas de test de Stripe
-  - Flujo completo de testing
+- ✅ **React Warning Fixed**: Navigate() movido a useEffect (no más warnings en consola)
+- ✅ **Claves Configuradas**:
+  - Supabase (URL, anon key, database URL)
+  - Stripe (public, secret, webhook secret)
+  - OpenAI, Anthropic, OpenRouter (opcional: Google Gemini)
 
-**PENDIENTE USER**: Configurar STRIPE_WEBHOOK_SECRET en Replit Secrets (ver STRIPE_SETUP.md)
+**ESTADO**: Sistema 100% funcional en Replit y listo para self-host
 
 ### 4 Oct 2025 (Tarde) - Sistema de Login Funcional + Documentación
 - ✅ **Test Authentication System**: Login funcional sin Supabase

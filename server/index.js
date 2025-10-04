@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+// Load environment variables FIRST
+dotenv.config();
+
 // API routes
 import promptRoutes from './routes/prompts.js';
 import authRoutes from './routes/auth.js';
@@ -17,8 +20,6 @@ import newsletterRoutes from './routes/newsletter.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import supportRoutes from './routes/support.js';
 import stripeRoutes from './routes/stripe.js';
-
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

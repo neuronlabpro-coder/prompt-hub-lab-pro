@@ -299,11 +299,17 @@ function AppContent() {
     );
   }
 
+  // Redirect to login if trying to access checkout without auth
+  React.useEffect(() => {
+    if (currentPath === '/checkout' && !user && !authLoading) {
+      navigate('/login');
+    }
+  }, [currentPath, user, authLoading, navigate]);
+
   // Show checkout page
   if (currentPath === '/checkout') {
     if (!user) {
-      navigate('/login');
-      return null;
+      return null; // Will redirect via useEffect
     }
     return <Checkout />;
   }
