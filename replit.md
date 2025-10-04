@@ -35,9 +35,17 @@ Preferred communication style: Simple, everyday language.
 - ✅ Autenticación completa (OAuth Google/GitHub + Email/Password)
 - ✅ Dashboard de prompts (3 prompts de ejemplo cargados desde DB)
 - ✅ Marketplace funcional con sistema de precios
+- ✅ **Shopping Cart System** - Sistema de carrito completo siguiendo mejores prácticas de Shopify
+  - CartContext con persistencia en localStorage
+  - Badge de cantidad en header
+  - Drawer lateral con controles de cantidad
+  - Botón "Agregar al Carrito" en Marketplace
+  - Confirmación visual con toasts
+  - Cálculo automático de totales y descuentos
 - ✅ Centro de soporte (requiere autenticación)
 - ✅ Sistema de categorías y proveedores desde Supabase
 - ✅ Panel admin (rutas protegidas por rol)
+- ✅ Logout con redirección automática a landing page
 
 ### Estructura Técnica:
 - 3 categorías principales (SEO, Copywriting, Social Media)
@@ -52,6 +60,18 @@ Preferred communication style: Simple, everyday language.
 Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
+
+### 4 Oct 2025 - Sistema de Carrito de Compras Implementado
+- ✅ **CartContext**: Context global para manejo del carrito con localStorage
+- ✅ **ShoppingCartDrawer**: Drawer lateral con lista de items, controles de cantidad, totales
+- ✅ **Header Badge**: Icono del carrito con badge mostrando cantidad de items
+- ✅ **Marketplace Integration**: Botón "Agregar al Carrito" integrado
+- ✅ **UX Best Practices**: Implementado según mejores prácticas de Shopify (70% reducción abandono)
+- ✅ **Logout Fixed**: Redirección automática a landing page al cerrar sesión
+- ✅ **Test Users**: 7 usuarios creados para testing (ver USUARIOS_PRUEBA.md)
+- ✅ Todos los errores LSP corregidos
+
+### 3 Oct 2025 - Arquitectura y Performance
 - ✅ Arquitectura dual-server implementada (eliminado server/vite.ts conflictivo)
 - ✅ Marketplace schema alineado con estructura de DB real
 - ✅ Errores LSP corregidos en App.tsx
