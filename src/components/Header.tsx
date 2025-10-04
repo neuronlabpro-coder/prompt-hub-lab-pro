@@ -90,8 +90,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 <span className="hidden lg:inline">{currentView === 'prompts' ? 'Prompts' : 'Nuevo'}</span>
               </Button>
 
-              {/* MARKETPLACE DESHABILITADO TEMPORALMENTE - Bugs en backend */}
-              {false && onOpenMarketplace && (
+              {onOpenMarketplace && (
                 <Button
                   onClick={onOpenMarketplace}
                   variant={currentView === 'marketplace' ? 'default' : 'outline'}
@@ -104,8 +103,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 </Button>
               )}
 
-              {/* SOPORTE DESHABILITADO TEMPORALMENTE - Bugs en backend */}
-              {false && onOpenSupport && (
+              {onOpenSupport && (
                 <Button
                   onClick={onOpenSupport}
                   variant={currentView === 'soporte' ? 'default' : 'outline'}
@@ -118,27 +116,24 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 </Button>
               )}
 
-              {/* CARRITO DESHABILITADO TEMPORALMENTE - Depende de marketplace */}
-              {false && (
-                <Button
-                  onClick={() => setIsCartOpen(true)}
-                  variant="outline"
-                  className="flex items-center gap-2 relative"
-                  size="sm"
-                  data-testid="button-cart"
-                >
-                  <ShoppingCart className="h-4 w-4" />
-                  {cartItemCount > 0 && (
-                    <Badge 
-                      className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-blue-600 text-white"
-                      data-testid="cart-badge-count"
-                    >
-                      {cartItemCount}
-                    </Badge>
-                  )}
-                  <span className="hidden lg:inline">Carrito</span>
-                </Button>
-              )}
+              <Button
+                onClick={() => setIsCartOpen(true)}
+                variant="outline"
+                className="flex items-center gap-2 relative"
+                size="sm"
+                data-testid="button-cart"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                {cartItemCount > 0 && (
+                  <Badge 
+                    className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-blue-600 text-white"
+                    data-testid="cart-badge-count"
+                  >
+                    {cartItemCount}
+                  </Badge>
+                )}
+                <span className="hidden lg:inline">Carrito</span>
+              </Button>
               
               <Button
                 onClick={onOpenPlayground}
