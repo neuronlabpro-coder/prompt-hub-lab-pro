@@ -33,7 +33,11 @@ router.get('/prompts', async (req, res) => {
         type,
         tags,
         created_at,
-        category
+        category,
+        price,
+        sales_count,
+        is_for_sale,
+        discount_eligible
       `);
 
     if (category) {
@@ -59,12 +63,14 @@ router.get('/prompts', async (req, res) => {
 
     if (error) throw error;
 
-    // Add default price and sales_count for marketplace display
-    const enrichedData = data.map(prompt => ({
-      ...prompt,
-      price: 0,
-      sales_count: 0
-    }));
+    // Filter only prompts for sale and add defaults for missing fields
+    const enrichedData = (data || [])
+      .filter(prompt => prompt.is_for_sale)
+      .map(prompt => ({
+        ...prompt,
+        price: prompt.price || 0,
+        sales_count: prompt.sales_count || 0
+      }));
 
     res.json({ success: true, data: enrichedData });
   } catch (error) {
@@ -90,7 +96,11 @@ router.get('/prompts/:id', async (req, res) => {
         type,
         tags,
         created_at,
-        category
+        category,
+        price,
+        sales_count,
+        is_for_sale,
+        discount_eligible
       `)
       .eq('id', id)
       .single();
@@ -98,7 +108,7 @@ router.get('/prompts/:id', async (req, res) => {
     if (promptError) throw promptError;
 
     let userDiscount = 0;
-    const basePrice = 0; // Default price since column doesn't exist
+    const basePrice = prompt.price || 0;
     
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');

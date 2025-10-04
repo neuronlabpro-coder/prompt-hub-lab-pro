@@ -61,6 +61,23 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
+### 4 Oct 2025 (Noche - Auditoría Completa)
+- ⚠️ **CRÍTICO - MIGRACIÓN REQUERIDA**: Marketplace NO funciona
+  - Schema Supabase desactualizado - falta columnas: price, sales_count, is_for_sale, discount_eligible
+  - Error: `column prompts.price does not exist`
+  - ✅ Migración SQL creada: `supabase/migrations/001_add_marketplace_fields.sql`
+  - ✅ Backend actualizado para usar precios reales de DB
+  - 📋 Ver `MIGRATION_REQUIRED.md` para instrucciones completas
+  - **Acción requerida**: Ejecutar migración en Supabase SQL Editor
+- ✅ **Vite Workflow Arreglado**: Comando actualizado a `./node_modules/.bin/vite --host 0.0.0.0 --port 5000`
+- ✅ **LSP Errors Fixed**: Corregido TokenPromotion type (agregado updated_at)
+- ✅ **Auditoría Sistema Completa**:
+  - Landing page funcional ✅
+  - Login page funcional ✅
+  - Test auth configurado (7 usuarios) ✅
+  - Marketplace código actualizado ✅ (requiere migración DB)
+  - Database local vs Supabase identificado y documentado ✅
+
 ### 4 Oct 2025 (Noche) - Sistema Completo con .env
 - ✅ **Configuración .env Completa**: Sistema portátil para Replit y Self-Host
   - Archivo .env creado con todas las claves configuradas
