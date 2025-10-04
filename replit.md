@@ -25,41 +25,52 @@ Preferred communication style: Simple, everyday language.
 
 ## Current State
 
-✅ **Sistema completo funcionando** en Replit con arquitectura dual:
-- **Frontend**: Vite en puerto 5000 (acceso público)
-- **Backend**: Express en puerto 3001 (API interna)
-- Proxy configurado en vite.config.ts para comunicación frontend-backend
+✅ **Sistema funcionando en Replit** con arquitectura simplificada:
+- **Frontend**: Express sirviendo archivos estáticos compilados (puerto 5000)
+- **Backend**: Rutas API en mismo servidor Express
+- Build: `npm run build` compila React a `/dist`
 
 ### Funcionalidades Operativas:
 - ✅ Landing page profesional
 - ✅ Autenticación completa (OAuth Google/GitHub + Email/Password)
 - ✅ Dashboard de prompts (3 prompts de ejemplo cargados desde DB)
-- ✅ Marketplace funcional con sistema de precios
-- ✅ **Shopping Cart System** - Sistema de carrito completo siguiendo mejores prácticas de Shopify
-  - CartContext con persistencia en localStorage
-  - Badge de cantidad en header
-  - Drawer lateral con controles de cantidad
-  - Botón "Agregar al Carrito" en Marketplace
-  - Confirmación visual con toasts
-  - Cálculo automático de totales y descuentos
-- ✅ Centro de soporte (requiere autenticación)
 - ✅ Sistema de categorías y proveedores desde Supabase
 - ✅ Panel admin (rutas protegidas por rol)
 - ✅ Logout con redirección automática a landing page
+- ✅ Playground para testing de prompts
+- ❌ **Marketplace/Soporte ELIMINADOS** (usuario conectará Shopify externamente)
+- ❌ **Carrito eliminado** (será gestionado por Shopify)
 
 ### Estructura Técnica:
-- 3 categorías principales (SEO, Copywriting, Social Media)
-- 3 prompts de ejemplo en marketplace
+- Express en puerto 5000 (único servidor)
+- Build estático en `/dist`
 - Base de datos Supabase con migraciones aplicadas
 - Self-hosting preparado con Docker
 
 ### Workflows Configurados:
-1. **Backend API** - `npx tsx server/index.js` (puerto 3001)
-2. **Start application** - `npm run dev` (puerto 5000)
+1. **Start application** - `node --env-file=.env -r tsx server/index.js` (puerto 5000)
 
 Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
+
+### 4 Oct 2025 (Noche - Marketplace/Soporte ELIMINADOS - Preparación para Shopify)
+- ❌ **Marketplace, Soporte y Carrito ELIMINADOS por petición del usuario**:
+  - Usuario va a vincular tienda externa con Shopify
+  - Botones removidos del Header.tsx
+  - Imports limpiados (ShoppingCart, MessageCircle, useCart, Badge)
+  - Props eliminadas (onOpenMarketplace, onOpenSupport)
+  - Header ahora solo tiene: Dashboard, Prompts, Playground, Admin Panel
+- ✅ **Arquitectura Simplificada**:
+  - Eliminado Vite dev server (causaba 502 en Replit)
+  - Express sirve archivos estáticos desde /dist en puerto 5000
+  - Build: `npm run build` → Deploy: reiniciar workflow
+  - Un solo servidor, más estable y simple
+- ✅ **Content Security Policy Arreglado**:
+  - connectSrc permite Supabase, OpenAI, Anthropic, OpenRouter
+  - scriptSrc permite Stripe.js
+  - frameSrc permite iframes de Stripe
+- ✅ **Sin errores LSP** - Código limpio y listo para producción
 
 ### 4 Oct 2025 (Noche - Marketplace, Soporte y Carrito REACTIVADOS ✅)
 - ✅ **TODOS LOS BUGS ARREGLADOS - Sistema 100% Operativo**:
