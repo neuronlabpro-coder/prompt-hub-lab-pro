@@ -34,7 +34,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
+args = "./node_modules/.bin/vite --host 0.0.0.0 --port 5000"
 waitForPort = 5000
 
 [[workflows.workflow]]
@@ -58,5 +58,5 @@ localPort = 3001
 externalPort = 3001
 
 [[ports]]
-localPort = 33935
+localPort = 42533
 externalPort = 80
