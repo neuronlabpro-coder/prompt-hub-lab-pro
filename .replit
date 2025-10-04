@@ -19,23 +19,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Start application"
+args = "Backend API"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Backend API"
-
-[[workflows.workflow]]
-name = "Start application"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev -- --host 0.0.0.0 --port 5000"
-waitForPort = 5000
+args = "Start application"
 
 [[workflows.workflow]]
 name = "Backend API"
@@ -49,6 +37,18 @@ task = "shell.exec"
 args = "node --env-file=.env -r tsx server/index.js"
 waitForPort = 3001
 
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev -- --host 0.0.0.0 --port 5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [agent]
 integrations = ["javascript_database:1.0.0"]
 expertMode = true
@@ -56,3 +56,11 @@ expertMode = true
 [[ports]]
 localPort = 3001
 externalPort = 3001
+
+[[ports]]
+localPort = 40023
+externalPort = 80
+
+[[ports]]
+localPort = 5000
+externalPort = 80
