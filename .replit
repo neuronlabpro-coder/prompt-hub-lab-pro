@@ -30,7 +30,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bash -c './node_modules/.bin/vite --host 0.0.0.0 --port 5000 & node --env-file=.env -r tsx server/index.js & wait'"
+args = "node --env-file=.env -r tsx server/index.js"
 waitForPort = 5000
 
 [agent]
@@ -42,5 +42,9 @@ localPort = 3001
 externalPort = 3001
 
 [[ports]]
-localPort = 43943
+localPort = 46421
+externalPort = 80
+
+[[ports]]
+localPort = 5000
 externalPort = 80

@@ -25,7 +25,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(helmet({
@@ -33,9 +33,11 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
+      connectSrc: ["'self'", "https://*.supabase.co", "https://api.openai.com", "https://api.anthropic.com", "https://openrouter.ai"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://js.stripe.com"],
       imgSrc: ["'self'", "data:", "https:"],
+      frameSrc: ["'self'", "https://js.stripe.com"],
     },
   },
 }));
@@ -68,14 +70,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(join(__dirname, '../dist')));
-  
-  app.get('*', (req, res) => {
+// Serve static files from dist folder
+app.use(express.static(join(__dirname, '../dist')));
+
+// Catch-all route to serve index.html for SPA routing
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api')) {
     res.sendFile(join(__dirname, '../dist/index.html'));
-  });
-}
+  } else {
+    next();
+  }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
