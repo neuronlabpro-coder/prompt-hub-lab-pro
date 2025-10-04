@@ -54,6 +54,24 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
+### 4 Oct 2025 (Noche - ECOMMERCE SIMPLE IMPLEMENTADO ✅)
+- ✅ **Sistema de Ecommerce COMPLETO y FUNCIONANDO**:
+  - Admin: ProductManagement para crear productos (categoría, precio, imagen/video, activar/desactivar venta)
+  - Marketplace: Catálogo visual de prompts en venta (/marketplace)
+  - ProductDetail: Página detalle con botón comprar (/product/:id)
+  - MyPurchasedPrompts: Prompts comprados del usuario (/my-prompts) con scroll y copiar
+  - Descuentos por plan: Configurable desde admin (10%, 15%, 20%)
+  - Backend Stripe: Payment intents, webhooks, orders system completo
+- ⚠️ **IMPORTANTE - Configuración Puerto en .replit**:
+  - **PROBLEMA CRÍTICO**: El archivo `.replit` a veces se regenera automáticamente con puerto 3001
+  - **SÍNTOMA**: Preview muestra "Running" en pantalla negra aunque servidor funciona
+  - **SOLUCIÓN**: Editar `.replit` manualmente y cambiar `[[ports]]` a `localPort = 5000` y `externalPort = 80`
+  - **CAUSA**: Cuando se reconfiguran workflows, Replit puede resetear configuración de puertos
+  - **PREVENCIÓN**: Después de tocar workflows, verificar que `.replit` tenga puerto 5000
+- ✅ **CORS Arreglado**: Configurado `origin: true` para funcionar en Replit
+- ✅ **Build Completo**: Frontend compilado en /dist y funcionando
+- ✅ **Sin errores LSP**: Código limpio y listo
+
 ### 4 Oct 2025 (Noche - Marketplace/Soporte ELIMINADOS - Preparación para Shopify)
 - ❌ **Marketplace, Soporte y Carrito ELIMINADOS por petición del usuario**:
   - Usuario va a vincular tienda externa con Shopify
