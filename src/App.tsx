@@ -519,11 +519,13 @@ function AppContent() {
     toast.success('Afiliado actualizado', 'Los cambios han sido guardados');
   };
 
-  const handleCreatePromotion = (promotion: Omit<TokenPromotion, 'id' | 'created_at'>) => {
+  const handleCreatePromotion = (promotion: Omit<TokenPromotion, 'id' | 'created_at' | 'updated_at'>) => {
+    const now = new Date().toISOString();
     const newPromotion: TokenPromotion = {
       ...promotion,
       id: `promo_${Date.now()}`,
-      created_at: new Date().toISOString(),
+      created_at: now,
+      updated_at: now,
     };
     setAdminPromotions(prev => [...prev, newPromotion]);
     toast.success('Promoción creada', `"${promotion.name}" creada exitosamente`);
