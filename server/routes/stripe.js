@@ -227,6 +227,57 @@ router.get('/orders/:userId', async (req, res) => {
   }
 });
 
+// GET /api/stripe/purchased-prompts/:userId - Get purchased prompts for user
+router.get('/purchased-prompts/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select(`
+        id,
+        created_at,
+        order_items (
+          prompts (
+            id,
+            title,
+            content_es,
+            content_en,
+            category,
+            tags,
+            media_url,
+            media_type
+          )
+        )
+      `)
+      .eq('user_id', userId)
+      .eq('status', 'completed')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    // Extract unique prompts from all orders
+    const promptsMap = new Map();
+    orders?.forEach(order => {
+      order.order_items?.forEach(item => {
+        if (item.prompts && !promptsMap.has(item.prompts.id)) {
+          promptsMap.set(item.prompts.id, {
+            ...item.prompts,
+            purchasedAt: order.created_at
+          });
+        }
+      });
+    });
+
+    const purchasedPrompts = Array.from(promptsMap.values());
+
+    res.json({ prompts: purchasedPrompts });
+  } catch (error) {
+    console.error('Error fetching purchased prompts:', error);
+    res.status(500).json({ error: 'Error fetching purchased prompts' });
+  }
+});
+
 // GET /api/stripe/download/:token - Download prompt with token
 router.get('/download/:token', async (req, res) => {
   try {
