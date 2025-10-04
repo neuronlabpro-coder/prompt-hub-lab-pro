@@ -61,8 +61,28 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
+### 4 Oct 2025 (Noche - Marketplace, Soporte y Carrito REACTIVADOS ✅)
+- ✅ **TODOS LOS BUGS ARREGLADOS - Sistema 100% Operativo**:
+  - ✅ Marketplace, Soporte y Carrito reactivados y funcionando
+  - ✅ Todos los botones visibles en header
+  - ✅ Sin errores en backend ni consola del navegador
+  - ✅ Validaciones null completas en todos los endpoints de auth
+- ✅ **Backend Fixes Completos**:
+  - `server/routes/marketplace.js`: Agregadas validaciones `authError || !user` en 1 endpoint admin
+  - `server/routes/support.js`: Agregadas validaciones `authError || !user` en 5 endpoints
+  - Previene errores 500 cuando usuario es null después de `getUser()`
+- ✅ **Frontend Limpio**:
+  - Eliminados comentarios `false &&` que deshabilitaban botones
+  - Header.tsx restaurado a versión completa
+  - Marketplace carga correctamente con precios (4,99€, 5,99€, 3,99€)
+  - Soporte muestra mensaje de autenticación correctamente
+- ✅ **Workflow Consolidado**: Un solo workflow maneja frontend y backend
+  - Comando: `bash -c './node_modules/.bin/vite --host 0.0.0.0 --port 5000 & node --env-file=.env -r tsx server/index.js & wait'`
+  - Vite en puerto 5000 (público)
+  - Express en puerto 3001 (API interna)
+
 ### 4 Oct 2025 (Noche - Marketplace y Soporte DESHABILITADOS)
-- 🚫 **MARKETPLACE Y SOPORTE DESHABILITADOS TEMPORALMENTE**:
+- 🚫 **MARKETPLACE Y SOPORTE DESHABILITADOS TEMPORALMENTE** (RESUELTO ARRIBA ✅):
   - Bugs críticos en backend (validación de user null) causando errores constantes
   - Botones removidos del header hasta que estén 100% estables
   - Carrito también deshabilitado (depende de marketplace)
