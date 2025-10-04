@@ -36,10 +36,14 @@ import { TokenWarningModal } from './components/TokenWarningModal';
 import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
 import { ReferralSettings } from './components/admin/ReferralSettings';
+import { ProductManagement } from './components/admin/ProductManagement';
 import { UserProfile } from './components/UserProfile';
 import { Marketplace } from './components/Marketplace';
 import { SupportCenter } from './components/SupportCenter';
 import Checkout from './pages/Checkout';
+import MarketplacePage from './pages/MarketplacePage';
+import ProductDetail from './pages/ProductDetail';
+import MyPurchasedPrompts from './pages/MyPurchasedPrompts';
 import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
 function AppContent() {
@@ -633,6 +637,8 @@ function AppContent() {
               onDeletePlan={handleDeletePlan}
             />
           );
+        case 'products':
+          return <ProductManagement />;
         case 'prompts':
           return (
             <PromptManagement
@@ -816,6 +822,68 @@ function AppContent() {
     { id: 'all', name: 'Todas las categorías' },
     ...categories,
   ];
+
+  // Render specific pages based on current path
+  if (currentPath === '/marketplace') {
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <Header 
+          onNewPrompt={handleNewPrompt}
+          onOpenPlayground={() => handleOpenPlayground()}
+          onOpenDashboard={handleOpenDashboard}
+          onOpenMarketplace={() => navigate('/marketplace')}
+          onOpenSupport={() => navigate('/soporte')}
+          onOpenProfile={handleOpenProfile}
+          currentView={currentView}
+          onToggleAdmin={toggleAdminMode}
+          isAdmin={isUserAdmin}
+        />
+        <MarketplacePage />
+        <ToastContainer toasts={toasts} onRemove={removeToast} />
+      </div>
+    );
+  }
+
+  if (currentPath.startsWith('/product/')) {
+    const productId = currentPath.split('/')[2];
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <Header 
+          onNewPrompt={handleNewPrompt}
+          onOpenPlayground={() => handleOpenPlayground()}
+          onOpenDashboard={handleOpenDashboard}
+          onOpenMarketplace={() => navigate('/marketplace')}
+          onOpenSupport={() => navigate('/soporte')}
+          onOpenProfile={handleOpenProfile}
+          currentView={currentView}
+          onToggleAdmin={toggleAdminMode}
+          isAdmin={isUserAdmin}
+        />
+        <ProductDetail productId={productId} />
+        <ToastContainer toasts={toasts} onRemove={removeToast} />
+      </div>
+    );
+  }
+
+  if (currentPath === '/my-prompts') {
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <Header 
+          onNewPrompt={handleNewPrompt}
+          onOpenPlayground={() => handleOpenPlayground()}
+          onOpenDashboard={handleOpenDashboard}
+          onOpenMarketplace={() => navigate('/marketplace')}
+          onOpenSupport={() => navigate('/soporte')}
+          onOpenProfile={handleOpenProfile}
+          currentView={currentView}
+          onToggleAdmin={toggleAdminMode}
+          isAdmin={isUserAdmin}
+        />
+        <MyPurchasedPrompts />
+        <ToastContainer toasts={toasts} onRemove={removeToast} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900">

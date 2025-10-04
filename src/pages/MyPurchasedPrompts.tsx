@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ShoppingBag, Copy, Check, Download } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { useToast } from '@/hooks/use-toast';
+import { ShoppingBag, Copy, Check } from 'lucide-react';
+import { useAuth } from '../components/AuthProvider';
+import { Button } from '../components/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import { useToast } from '../hooks/useToast';
 
 interface PurchasedPrompt {
   id: string;
@@ -37,11 +37,7 @@ export default function MyPurchasedPrompts() {
       setPrompts(data.prompts || []);
     } catch (error) {
       console.error('Error fetching purchased prompts:', error);
-      toast({
-        title: 'Error',
-        description: 'No se pudieron cargar tus prompts comprados',
-        variant: 'destructive',
-      });
+      toast.error('Error', 'No se pudieron cargar tus prompts comprados');
     } finally {
       setLoading(false);
     }
@@ -52,16 +48,9 @@ export default function MyPurchasedPrompts() {
       await navigator.clipboard.writeText(text);
       setCopiedId(promptId);
       setTimeout(() => setCopiedId(null), 2000);
-      toast({
-        title: 'Copiado',
-        description: 'Prompt copiado al portapapeles',
-      });
+      toast.success('Copiado', 'Prompt copiado al portapapeles');
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudo copiar el prompt',
-        variant: 'destructive',
-      });
+      toast.error('Error', 'No se pudo copiar el prompt');
     }
   };
 
