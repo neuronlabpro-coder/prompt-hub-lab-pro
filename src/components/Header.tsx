@@ -234,9 +234,12 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                       )}
                       <button
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
-                        onClick={() => {
-                          signOut();
+                        onClick={async () => {
+                          await signOut();
+                          setShowUserMenu(false);
+                          window.location.href = '/';
                         }}
+                        data-testid="button-logout"
                       >
                         <LogOut className="h-4 w-4" />
                         Cerrar sesión
