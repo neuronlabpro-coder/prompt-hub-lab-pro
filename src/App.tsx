@@ -74,9 +74,12 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
-  // Admin data state - Cargar desde Supabase
-  const { users: adminUsers, reload: reloadUsers } = useAdminUsers();
-  const { plans: adminPlans, reload: reloadPlans } = useAdminPlans();
+  // Admin data state - TEMPORALMENTE DESHABILITADO (Supabase tables not ready)
+  // TODO: Re-enable when Supabase migration is executed
+  const adminUsers: any[] = [];
+  const reloadUsers = () => Promise.resolve();
+  const adminPlans: Plan[] = [];
+  const reloadPlans = () => Promise.resolve();
   const [adminCoupons, setAdminCoupons] = useState<Coupon[]>([]);
   const [adminAffiliates, setAdminAffiliates] = useState<Affiliate[]>([]);
   const [adminPromotions, setAdminPromotions] = useState<TokenPromotion[]>([]);
@@ -202,6 +205,13 @@ function AppContent() {
     }
   }, [currentPath, user, authLoading, navigate]);
 
+  // Redirect to login if trying to access checkout without auth
+  React.useEffect(() => {
+    if (currentPath === '/checkout' && !user && !authLoading) {
+      navigate('/login');
+    }
+  }, [currentPath, user, authLoading, navigate]);
+
   // Show login form if not authenticated
   if (authLoading) {
     return (
@@ -298,13 +308,6 @@ function AppContent() {
       </div>
     );
   }
-
-  // Redirect to login if trying to access checkout without auth
-  React.useEffect(() => {
-    if (currentPath === '/checkout' && !user && !authLoading) {
-      navigate('/login');
-    }
-  }, [currentPath, user, authLoading, navigate]);
 
   // Show checkout page
   if (currentPath === '/checkout') {
