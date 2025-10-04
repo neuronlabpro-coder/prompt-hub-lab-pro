@@ -239,24 +239,168 @@ export function LoginForm() {
 
           {/* Test Users Helper - Solo en modo desarrollo */}
           {isTestMode() && (
-            <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-              <div className="flex items-start gap-2">
+            <div className="mt-4 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+              <div className="flex items-start gap-2 mb-3">
                 <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                <div className="text-xs text-blue-300">
-                  <p className="font-semibold mb-1">Modo Prueba Activado</p>
-                  <p className="mb-2">Credenciales de prueba:</p>
-                  <div className="space-y-1 font-mono">
-                    <div>
-                      <span className="text-blue-400">Superadmin:</span> superadmin@prompthub.com / Admin123!
-                    </div>
-                    <div>
-                      <span className="text-blue-400">Usuario Pro:</span> usuario.pro@test.com / Pro123!
-                    </div>
-                  </div>
-                  <p className="mt-2 text-blue-400">
-                    Ver USUARIOS_PRUEBA.md para más usuarios
-                  </p>
+                <div className="text-sm text-blue-300 font-semibold">
+                  Modo Prueba - Login Rápido
                 </div>
+              </div>
+              
+              <div className="space-y-2">
+                {/* Superadmin */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('superadmin@prompthub.com');
+                    setPassword('Admin123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('superadmin@prompthub.com', 'Admin123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/admin/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 rounded text-sm text-red-300 transition-colors"
+                  data-testid="quick-login-superadmin"
+                >
+                  <span className="font-medium">🛡️ Superadmin</span>
+                  <span className="text-xs opacity-75">Admin123!</span>
+                </button>
+
+                {/* Usuario Pro */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('usuario.pro@test.com');
+                    setPassword('Pro123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('usuario.pro@test.com', 'Pro123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/50 rounded text-sm text-purple-300 transition-colors"
+                  data-testid="quick-login-pro"
+                >
+                  <span className="font-medium">👤 Usuario Pro</span>
+                  <span className="text-xs opacity-75">Pro123!</span>
+                </button>
+
+                {/* Usuario Starter */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('usuario.free@test.com');
+                    setPassword('Starter123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('usuario.free@test.com', 'Starter123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-green-600/20 hover:bg-green-600/30 border border-green-500/50 rounded text-sm text-green-300 transition-colors"
+                  data-testid="quick-login-starter"
+                >
+                  <span className="font-medium">🌱 Usuario Starter</span>
+                  <span className="text-xs opacity-75">Starter123!</span>
+                </button>
+
+                {/* Usuario Enterprise */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('usuario.enterprise@test.com');
+                    setPassword('Enterprise123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('usuario.enterprise@test.com', 'Enterprise123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-500/50 rounded text-sm text-yellow-300 transition-colors"
+                  data-testid="quick-login-enterprise"
+                >
+                  <span className="font-medium">💼 Usuario Enterprise</span>
+                  <span className="text-xs opacity-75">Enterprise123!</span>
+                </button>
+
+                {/* Empresa 1 */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('empresa1@corp.com');
+                    setPassword('Empresa123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('empresa1@corp.com', 'Empresa123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded text-sm text-blue-300 transition-colors"
+                  data-testid="quick-login-empresa1"
+                >
+                  <span className="font-medium">🏢 Admin Empresa 1</span>
+                  <span className="text-xs opacity-75">Empresa123!</span>
+                </button>
+
+                {/* Empresa 2 */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('empresa2@corp.com');
+                    setPassword('Empresa123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('empresa2@corp.com', 'Empresa123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded text-sm text-blue-300 transition-colors"
+                  data-testid="quick-login-empresa2"
+                >
+                  <span className="font-medium">🏢 Admin Empresa 2</span>
+                  <span className="text-xs opacity-75">Empresa123!</span>
+                </button>
+
+                {/* Empresa 3 */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail('empresa3@corp.com');
+                    setPassword('Empresa123!');
+                    setError(null);
+                    setLoading(true);
+                    const testAuth = authenticateTestUser('empresa3@corp.com', 'Empresa123!');
+                    if (testAuth) {
+                      localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+                      window.location.href = '/dashboard';
+                    }
+                    setLoading(false);
+                  }}
+                  className="w-full flex items-center justify-between px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 rounded text-sm text-blue-300 transition-colors"
+                  data-testid="quick-login-empresa3"
+                >
+                  <span className="font-medium">🏢 Admin Empresa 3</span>
+                  <span className="text-xs opacity-75">Empresa123!</span>
+                </button>
               </div>
             </div>
           )}
