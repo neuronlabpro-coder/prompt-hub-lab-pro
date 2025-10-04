@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuth } from './AuthProvider';
-import { useLocation } from './Router';
+import { useRouter } from './Router';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ export function ProtectedRoute({
   redirectTo = '/login'
 }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
-  const [, navigate] = useLocation();
+  const { navigate } = useRouter();
 
   useEffect(() => {
     if (loading) return;
