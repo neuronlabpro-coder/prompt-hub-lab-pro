@@ -90,7 +90,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 <span className="hidden lg:inline">{currentView === 'prompts' ? 'Prompts' : 'Nuevo'}</span>
               </Button>
 
-              {onOpenMarketplace && (
+              {false && onOpenMarketplace && (
                 <Button
                   onClick={onOpenMarketplace}
                   variant={currentView === 'marketplace' ? 'default' : 'outline'}
