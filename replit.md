@@ -61,11 +61,12 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
-### 4 Oct 2025 (Noche - Performance Fix CRÍTICO)
-- 🚀 **PROBLEMA RESUELTO**: Marketplace y Admin cargan instantáneamente
-  - **Problema identificado:** `usePrompts()` cargaba TODOS los prompts de Supabase en CADA página (incluso marketplace/admin que tienen su propia carga)
-  - **Solución:** Hook modificado con parámetro `enabled` - solo carga prompts cuando se necesitan (dashboard, vista prompts)
-  - **Resultado:** Marketplace y admin pasan de 60+ segundos a **<1 segundo** ⚡
+### 4 Oct 2025 (Noche - Fixes y Optimizaciones)
+- ⚠️ **Performance Issue Detectado y Revertido**: 
+  - **Problema:** `usePrompts()` carga todos los prompts en cada página, causando lentitud en marketplace/admin
+  - **Intento de fix:** Parámetro `enabled` en hook - causó crash de aplicación (hooks violation)
+  - **Estado:** Revertido a versión estable - investigar solución alternativa
+  - **Nota:** El problema de lentitud persiste, pendiente de optimización
 - ✅ **Consola Limpia**: Eliminados console.logs innecesarios de debug
 - ✅ **Backend Marketplace Fixed**: Validación null agregada en `/my-purchases` endpoint
 - ✅ **Admin Workflow Mejorado**: 
