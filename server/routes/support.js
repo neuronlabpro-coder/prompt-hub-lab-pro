@@ -74,9 +74,9 @@ router.get('/tickets/my', async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
-    if (!user) {
+    if (authError || !user) {
       return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
     }
 
@@ -126,7 +126,11 @@ router.get('/tickets/:id', async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
 
     // Get ticket
     const { data: ticket, error: ticketError } = await supabase
@@ -217,7 +221,11 @@ router.post('/tickets/:id/reply', async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
 
     // Get ticket and check permissions
     const { data: ticket } = await supabase
@@ -298,7 +306,11 @@ router.get('/admin/tickets', async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
 
     const { data: userData } = await supabase
       .from('users')
@@ -361,7 +373,11 @@ router.patch('/admin/tickets/:id', async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
 
     const { data: userData } = await supabase
       .from('users')

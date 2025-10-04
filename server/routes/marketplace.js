@@ -280,7 +280,11 @@ router.post('/admin/set-for-sale', async (req, res) => {
 
     // TODO: Add admin auth middleware
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
 
     const { data: userData } = await supabase
       .from('users')
