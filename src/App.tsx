@@ -7,6 +7,8 @@ import { usePrompts, useCategories, useProviders } from './hooks/useSupabase';
 import { useAdminUsers, useAdminPlans } from './hooks/useAdminData';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
+import { CartProvider } from './contexts/CartContext';
+import { ShoppingCartDrawer } from './components/ShoppingCartDrawer';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { UserManagement } from './components/admin/UserManagement';
@@ -923,6 +925,8 @@ function AppContent() {
       />
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
+      
+      <ShoppingCartDrawer />
     </div>
   );
 }
@@ -931,7 +935,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppContent />
+        <CartProvider>
+          <AppContent />
+        </CartProvider>
       </AuthProvider>
     </Router>
   );

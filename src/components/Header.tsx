@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, Building, Users, MessageSquare, Phone, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useAuth } from './AuthProvider';
+import { useCart } from '../contexts/CartContext';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { TokenUsageModal } from './TokenUsageModal';
@@ -19,8 +20,11 @@ interface HeaderProps {
 
 export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
   const { user: authUser, signOut } = useAuth();
+  const { getTotalItems, setIsCartOpen } = useCart();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
+  
+  const cartItemCount = getTotalItems();
 
   // User data from Supabase auth
   const user = {
@@ -111,6 +115,26 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                   <span className="hidden lg:inline">Soporte</span>
                 </Button>
               )}
+
+              {/* Shopping Cart Button */}
+              <Button
+                onClick={() => setIsCartOpen(true)}
+                variant="outline"
+                className="flex items-center gap-2 relative"
+                size="sm"
+                data-testid="button-cart"
+              >
+                <ShoppingCart className="h-4 w-4" />
+                {cartItemCount > 0 && (
+                  <Badge 
+                    className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-blue-600 text-white"
+                    data-testid="cart-badge-count"
+                  >
+                    {cartItemCount}
+                  </Badge>
+                )}
+                <span className="hidden lg:inline">Carrito</span>
+              </Button>
               
               <Button
                 onClick={onOpenPlayground}
