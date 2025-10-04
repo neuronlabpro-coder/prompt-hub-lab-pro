@@ -39,6 +39,7 @@ import { ReferralSettings } from './components/admin/ReferralSettings';
 import { UserProfile } from './components/UserProfile';
 import { Marketplace } from './components/Marketplace';
 import { SupportCenter } from './components/SupportCenter';
+import Checkout from './pages/Checkout';
 import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
 function AppContent() {
@@ -296,6 +297,15 @@ function AppContent() {
         </div>
       </div>
     );
+  }
+
+  // Show checkout page
+  if (currentPath === '/checkout') {
+    if (!user) {
+      navigate('/login');
+      return null;
+    }
+    return <Checkout />;
   }
 
   if (promptsLoading) {
