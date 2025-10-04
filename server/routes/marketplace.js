@@ -234,7 +234,11 @@ router.get('/my-purchases', async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user } } = await supabase.auth.getUser(token);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
 
     const { data, error } = await supabase
       .from('prompt_purchases')

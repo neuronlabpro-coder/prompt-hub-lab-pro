@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, Building, Users, MessageSquare, Phone, ShoppingCart, MessageCircle } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { useCart } from '../contexts/CartContext';
 import { Button } from './ui/Button';
@@ -146,18 +146,6 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 <span className="hidden lg:inline">Playground</span>
               </Button>
 
-              {/* WhatsApp Support Button */}
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 border-green-600 text-green-400 hover:bg-green-600 hover:text-white"
-                onClick={() => window.open('https://wa.me/34623979013', '_blank')}
-                title="Contactar por WhatsApp"
-                data-testid="button-whatsapp"
-              >
-                <Phone className="h-4 w-4" />
-                <span className="hidden sm:inline">WhatsApp</span>
-              </Button>
-
               {/* Admin Button */}
               {isAdmin && onToggleAdmin && (
                 <Button
@@ -254,6 +242,19 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                         >
                           <Settings className="h-4 w-4" />
                           Mi Perfil
+                        </button>
+                      )}
+                      {isAdmin && (
+                        <button
+                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-red-400"
+                          onClick={() => {
+                            window.location.href = '/admin/dashboard';
+                            setShowUserMenu(false);
+                          }}
+                          data-testid="button-admin-panel"
+                        >
+                          <Shield className="h-4 w-4" />
+                          Admin Panel
                         </button>
                       )}
                       <button

@@ -58,7 +58,14 @@ export function LoginForm() {
         if (testAuth) {
           // Simular sesión de Supabase con usuario de prueba
           localStorage.setItem('test-session', JSON.stringify(testAuth.session));
-          window.location.reload(); // Recargar para aplicar sesión
+          
+          // Redirigir según el rol del usuario
+          const role = testAuth.session.user.user_metadata?.role;
+          if (role === 'superadmin') {
+            window.location.href = '/admin/dashboard';
+          } else {
+            window.location.href = '/dashboard';
+          }
           return;
         } else {
           throw new Error('Credenciales incorrectas. Usa uno de los usuarios de prueba.');
