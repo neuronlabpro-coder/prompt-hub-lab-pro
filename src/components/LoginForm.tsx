@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { authenticateTestUser, isTestMode } from '../lib/testAuth';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/Card';
-import { Zap, Mail, Lock, AlertCircle, Github } from 'lucide-react';
+import { Zap, Mail, Lock, AlertCircle, Github, Info } from 'lucide-react';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -50,13 +51,28 @@ export function LoginForm() {
     setError(null);
 
     try {
+      // MODO DE PRUEBA: Autenticación local para testing
+      if (isTestMode()) {
+        const testAuth = authenticateTestUser(email, password);
+        
+        if (testAuth) {
+          // Simular sesión de Supabase con usuario de prueba
+          localStorage.setItem('test-session', JSON.stringify(testAuth.session));
+          window.location.reload(); // Recargar para aplicar sesión
+          return;
+        } else {
+          throw new Error('Credenciales incorrectas. Usa uno de los usuarios de prueba.');
+        }
+      }
+
+      // MODO PRODUCCIÓN: Autenticación real con Supabase
       if (isSignUp) {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
-              name: email.split('@')[0], // Use email prefix as default name
+              name: email.split('@')[0],
             }
           }
         });
@@ -213,6 +229,30 @@ export function LoginForm() {
               </button>
             </div>
           </form>
+
+          {/* Test Users Helper - Solo en modo desarrollo */}
+          {isTestMode() && (
+            <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+              <div className="flex items-start gap-2">
+                <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-blue-300">
+                  <p className="font-semibold mb-1">Modo Prueba Activado</p>
+                  <p className="mb-2">Credenciales de prueba:</p>
+                  <div className="space-y-1 font-mono">
+                    <div>
+                      <span className="text-blue-400">Superadmin:</span> superadmin@prompthub.com / Admin123!
+                    </div>
+                    <div>
+                      <span className="text-blue-400">Usuario Pro:</span> usuario.pro@test.com / Pro123!
+                    </div>
+                  </div>
+                  <p className="mt-2 text-blue-400">
+                    Ver USUARIOS_PRUEBA.md para más usuarios
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

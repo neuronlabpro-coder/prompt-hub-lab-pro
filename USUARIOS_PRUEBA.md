@@ -1,60 +1,117 @@
 # Usuarios de Prueba - PromptHub
 
-## 🔑 Credenciales de Acceso
+## 🔑 CREDENCIALES DE ACCESO (MODO PRUEBA)
 
-### Superadmin
-- **Email**: superadmin@prompthub.com
+### 🔴 IMPORTANTE: Sistema de Prueba Activado
+El sistema está en **modo de prueba** y NO requiere Supabase. Usa estas credenciales directamente:
+
+---
+
+### 👑 Superadmin
+- **Email**: `superadmin@prompthub.com`
+- **Password**: `Admin123!`
 - **Rol**: Superadmin
 - **Plan**: Enterprise
-- **Tokens**: 0 / 5,000,000
+- **Acceso**: Panel admin completo
 
-### Usuarios con Planes Diferentes
+---
 
-#### Usuario Plan Starter
-- **Email**: usuario.free@test.com
+### 👤 Usuarios con Planes Diferentes
+
+#### 🆓 Usuario Plan Starter
+- **Email**: `usuario.free@test.com`
+- **Password**: `Starter123!`
 - **Rol**: User
 - **Plan**: Starter
-- **Tokens**: 5,000 / 50,000
+- **Descuento**: 0%
 
-#### Usuario Plan Pro
-- **Email**: usuario.pro@test.com
+#### 💼 Usuario Plan Pro
+- **Email**: `usuario.pro@test.com`
+- **Password**: `Pro123!`
 - **Rol**: User
 - **Plan**: Pro
-- **Tokens**: 25,000 / 200,000
+- **Descuento**: 10%
 
-#### Usuario Plan Enterprise
-- **Email**: usuario.enterprise@test.com
+#### 🚀 Usuario Plan Enterprise
+- **Email**: `usuario.enterprise@test.com`
+- **Password**: `Enterprise123!`
 - **Rol**: User
 - **Plan**: Enterprise
-- **Tokens**: 150,000 / 1,000,000
+- **Descuento**: 20%
 
-### Usuarios Multitenant / Empresa
+---
+
+### 🏢 Usuarios Multitenant / Empresa
 
 #### Empresa 1
-- **Email**: empresa1@corp.com
+- **Email**: `empresa1@corp.com`
+- **Password**: `Empresa123!`
 - **Rol**: Admin
 - **Plan**: Enterprise
-- **Tokens**: 100,000 / 2,000,000
 
 #### Empresa 2
-- **Email**: empresa2@corp.com
+- **Email**: `empresa2@corp.com`
+- **Password**: `Empresa123!`
 - **Rol**: Admin
 - **Plan**: Enterprise
-- **Tokens**: 200,000 / 2,000,000
 
 #### Empresa 3
-- **Email**: empresa3@corp.com
+- **Email**: `empresa3@corp.com`
+- **Password**: `Empresa123!`
 - **Rol**: Admin
 - **Plan**: Enterprise
-- **Tokens**: 50,000 / 2,000,000
 
-## 📝 Nota sobre autenticación
+---
 
-Estos usuarios están creados en la tabla `users` de la base de datos local.
+## 📝 Instrucciones de Login
 
-Para autenticarse con Supabase Auth, necesitas crear las cuentas en Supabase:
-1. Ir a `/register` o `/login`
-2. Crear cuenta con Google/GitHub OAuth
-3. O usar Email/Password si está configurado
+### Opción 1: Login Rápido (Modo Prueba) ✅ RECOMENDADO
 
-Los datos de la tabla `users` se vincularán automáticamente cuando te autentiques con el mismo email.
+1. Ve a la página de login
+2. Introduce el **email** de cualquier usuario de arriba
+3. Introduce la **password** correspondiente
+4. Click en "Iniciar sesión"
+5. ¡Listo! Ya estás dentro
+
+### Opción 2: OAuth (Google/GitHub)
+
+- Requiere configurar OAuth en Supabase
+- No disponible en modo prueba
+
+---
+
+## 🔧 Cómo Funciona
+
+- **Modo Desarrollo**: Autenticación local simulada (NO requiere Supabase)
+- **Modo Producción**: Autenticación real con Supabase Auth
+- **Cambiar modo**: En desarrollo siempre usa autenticación local
+
+---
+
+## 🎯 Testing Rápido
+
+**Caso 1: Probar como usuario normal**
+```
+Email: usuario.pro@test.com
+Password: Pro123!
+```
+
+**Caso 2: Probar panel admin**
+```
+Email: superadmin@prompthub.com
+Password: Admin123!
+```
+
+**Caso 3: Probar descuentos**
+- Starter (0%): `usuario.free@test.com` / `Starter123!`
+- Pro (10%): `usuario.pro@test.com` / `Pro123!`
+- Enterprise (20%): `usuario.enterprise@test.com` / `Enterprise123!`
+
+---
+
+## ⚠️ Notas Importantes
+
+- **Todas las contraseñas terminan en `123!`** (fácil de recordar)
+- **Modo prueba** solo funciona en desarrollo (puerto 5000)
+- **Sesión persiste** en localStorage hasta que cierres sesión
+- **No requiere verificación** de email

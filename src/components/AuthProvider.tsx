@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
+import { isTestMode } from '../lib/testAuth';
 
 interface AuthContextType {
   user: User | null;
@@ -15,13 +16,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
+    // MODO DE PRUEBA: Cargar sesión local
+    if (isTestMode()) {
+      const testSession = localStorage.getItem('test-session');
+      if (testSession) {
+        try {
+          const session = JSON.parse(testSession);
+          setUser(session.user as User);
+        } catch (e) {
+          console.error('Error loading test session:', e);
+        }
+      }
+      setLoading(false);
+      return;
+    }
+
+    // MODO PRODUCCIÓN: Usar Supabase Auth
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
@@ -31,7 +46,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (isTestMode()) {
+      localStorage.removeItem('test-session');
+      setUser(null);
+    } else {
+      await supabase.auth.signOut();
+    }
   };
 
   return (
