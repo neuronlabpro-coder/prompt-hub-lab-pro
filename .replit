@@ -25,13 +25,13 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node --env-file=.env -r tsx server/index.js"
 waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [agent]
 integrations = ["javascript_database:1.0.0"]
@@ -42,5 +42,5 @@ localPort = 3001
 externalPort = 3001
 
 [[ports]]
-localPort = 45757
+localPort = 35557
 externalPort = 80
