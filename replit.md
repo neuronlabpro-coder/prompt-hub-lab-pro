@@ -61,7 +61,11 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
-### 4 Oct 2025 (Noche - Landing Page Enterprise)
+### 4 Oct 2025 (Noche - Landing Page Enterprise + WebSocket Fix)
+- ✅ **WebSocket/HMR Fix**: Eliminados errores ERR_CONNECTION_REFUSED en consola
+  - Problema: Vite intentaba conectar HMR a localhost (no funciona en Replit)
+  - Solución: Deshabilitado HMR en vite.config.ts (hmr: false)
+  - Consola ahora limpia sin errores de WebSocket
 - ✅ **Landing Page Enterprise Completa**: Diseño profesional con imágenes que generan confianza
   - Hero section con imagen de fondo profesional (team collaboration)
   - Sección "Trusted by Companies" con imagen empresas (1,200+ empresas globales)
