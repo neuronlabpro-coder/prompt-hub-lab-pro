@@ -61,6 +61,21 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
+### 4 Oct 2025 (Noche - Landing Page Enterprise)
+- ✅ **Landing Page Enterprise Completa**: Diseño profesional con imágenes que generan confianza
+  - Hero section con imagen de fondo profesional (team collaboration)
+  - Sección "Trusted by Companies" con imagen empresas (1,200+ empresas globales)
+  - Dashboard Analytics preview con imagen dashboard real
+  - Trust badges: SOC 2, GDPR, 99.9% Uptime, Soporte 24/7
+  - 6 imágenes stock profesionales integradas desde attached_assets/
+- ✅ **Footer Completo**: TODOS los enlaces funcionando
+  - Producto: Marketplace (/marketplace), API Docs, Seguridad
+  - Recursos: Dashboard (/dashboard), Panel Admin (/admin/dashboard), Docs (/docs-site/*)
+  - Empresa: Centro de Soporte (/soporte), WhatsApp, Email, GitHub
+- ✅ **Dashboard Bug Fixed**: Hooks violation arreglado (dashboard ahora carga correctamente)
+  - Problema: useEffect después de return causaba pantalla azul infinita
+  - Solución: Movido hooks antes de returns (React Rules of Hooks)
+
 ### 4 Oct 2025 (Noche - Auditoría Completa)
 - ⚠️ **CRÍTICO - MIGRACIÓN REQUERIDA**: Marketplace NO funciona
   - Schema Supabase desactualizado - falta columnas: price, sales_count, is_for_sale, discount_eligible
