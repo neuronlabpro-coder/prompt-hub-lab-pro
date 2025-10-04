@@ -27,13 +27,21 @@ import {
   MessageCircle,
   Github,
   Twitter,
-  Linkedin
+  Linkedin,
+  ShoppingBag,
+  LayoutDashboard
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Badge } from './ui/Badge';
 import { formatCurrency } from '../lib/utils';
 import { NewsletterForm } from './NewsletterForm';
+
+// Import stock images
+import heroImage from '@assets/stock_images/professional_busines_6e261506.jpg';
+import teamCollabImage from '@assets/stock_images/professional_busines_d6e377eb.jpg';
+import workspaceImage from '@assets/stock_images/modern_office_worksp_1c18d5e5.jpg';
+import dashboardImage from '@assets/stock_images/analytics_dashboard__f3bcfd7e.jpg';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -253,7 +261,16 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
+        {/* Hero Background Image */}
+        <div className="absolute inset-0 opacity-10">
+          <img 
+            src={heroImage} 
+            alt="Professional team" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900/95 to-gray-900" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-purple-900/30" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-6">
@@ -315,6 +332,26 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-blue-400" />
                 <span>Soporte 24/7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted By Section */}
+      <section className="py-12 bg-gray-800/30 border-y border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <p className="text-gray-400 text-sm uppercase tracking-wide mb-4">Empresas que confían en PromptHub</p>
+            <div className="relative h-32 rounded-lg overflow-hidden">
+              <img 
+                src={teamCollabImage} 
+                alt="Professional team collaboration" 
+                className="w-full h-full object-cover opacity-40"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-transparent to-gray-900" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p className="text-2xl font-semibold text-white">1,200+ Empresas Globales</p>
               </div>
             </div>
           </div>
@@ -554,53 +591,42 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
         </div>
       </section>
 
-      {/* Demo Section */}
+      {/* Demo Section with Analytics Dashboard Image */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Ve PromptHub en
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> Acción</span>
+              Dashboard Analytics
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> Avanzado</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Descubre cómo PromptHub puede transformar tu flujo de trabajo con IA
+              Visualiza métricas en tiempo real, ROI, y estadísticas completas de tus prompts
             </p>
           </div>
 
-          <div className="relative max-w-4xl mx-auto">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-1 rounded-2xl">
-              <div className="bg-gray-900 rounded-xl p-8 text-center">
-                <div className="bg-gray-800 rounded-lg p-6 mb-6">
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <Play className="h-8 w-8 text-blue-400" />
-                    <span className="text-xl font-semibold">Demo Interactiva</span>
+          <div className="relative max-w-5xl mx-auto">
+            {/* Dashboard Preview Image */}
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <img 
+                src={dashboardImage} 
+                alt="PromptHub Analytics Dashboard" 
+                className="w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Analytics en Tiempo Real</h3>
+                    <p className="text-gray-300">Métricas detalladas, series temporales, y reportes personalizables</p>
                   </div>
-                  <p className="text-gray-400 mb-6">
-                    Ve cómo crear, optimizar y gestionar prompts en menos de 5 minutos
-                  </p>
                   <Button 
                     onClick={onGetStarted}
                     size="lg"
                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                   >
-                    <Play className="h-5 w-5 mr-2" />
-                    Ver Demo Ahora
+                    <BarChart3 className="h-5 w-5 mr-2" />
+                    Ver Dashboard
                   </Button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <CheckCircle className="h-4 w-4 text-green-400" />
-                    <span>Sin registro requerido</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <CheckCircle className="h-4 w-4 text-green-400" />
-                    <span>Demo completa en 5 min</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <CheckCircle className="h-4 w-4 text-green-400" />
-                    <span>Datos reales incluidos</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -775,12 +801,15 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li><a href="#features" className="hover:text-white transition-colors">Características</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">Precios</a></li>
-                <li><a href="/docs-site/docs/api/overview" target="_blank" className="hover:text-white transition-colors flex items-center gap-1">
+                <li><a href="/marketplace" className="hover:text-white transition-colors flex items-center gap-1">
+                  <ShoppingBag className="h-3 w-3" />
+                  Marketplace
+                </a></li>
+                <li><a href="/docs-site/docs/api/overview" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
                   <Code className="h-3 w-3" />
                   API Docs
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integraciones</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Seguridad</a></li>
+                <li><a href="/docs-site/docs/intro#security" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Seguridad</a></li>
               </ul>
             </div>
             
@@ -788,17 +817,20 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
             <div>
               <h3 className="font-semibold mb-4 text-white">Recursos</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="/docs-site/docs/intro" target="_blank" className="hover:text-white transition-colors flex items-center gap-1">
+                <li><a href="/docs-site/docs/intro" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
                   <BookOpen className="h-3 w-3" />
                   Documentación
                 </a></li>
-                <li><a href="/docs-site/docs/getting-started" target="_blank" className="hover:text-white transition-colors">Guía de Inicio</a></li>
-                <li><a href="/docs-site/blog" target="_blank" className="hover:text-white transition-colors flex items-center gap-1">
+                <li><a href="/docs-site/docs/getting-started" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Guía de Inicio</a></li>
+                <li><a href="/docs-site/blog" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
                   <FileText className="h-3 w-3" />
                   Blog
                 </a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Casos de Éxito</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Webinars</a></li>
+                <li><a href="/dashboard" className="hover:text-white transition-colors flex items-center gap-1">
+                  <LayoutDashboard className="h-3 w-3" />
+                  Dashboard
+                </a></li>
+                <li><a href="/admin/dashboard" className="hover:text-white transition-colors">Panel Admin</a></li>
               </ul>
             </div>
             
@@ -806,11 +838,20 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
             <div>
               <h3 className="font-semibold mb-4 text-white">Empresa</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Sobre Nosotros</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Carreras</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Prensa</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Partners</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contacto</a></li>
+                <li><a href="/soporte" className="hover:text-white transition-colors">Centro de Soporte</a></li>
+                <li><a href="/docs-site/docs/intro#about" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Sobre Nosotros</a></li>
+                <li><a href="https://github.com/prompthub-v2" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
+                  <Github className="h-3 w-3" />
+                  Open Source
+                </a></li>
+                <li><a href="mailto:contact@prompthub.io" className="hover:text-white transition-colors flex items-center gap-1">
+                  <Mail className="h-3 w-3" />
+                  Contacto
+                </a></li>
+                <li><a href="https://wa.me/34623979013" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1">
+                  <MessageCircle className="h-3 w-3" />
+                  WhatsApp
+                </a></li>
               </ul>
             </div>
           </div>
