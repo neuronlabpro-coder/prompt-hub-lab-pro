@@ -61,18 +61,21 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
-### 4 Oct 2025 (Noche - Fixes y Optimizaciones)
+### 4 Oct 2025 (Noche - Marketplace y Soporte DESHABILITADOS)
+- 🚫 **MARKETPLACE Y SOPORTE DESHABILITADOS TEMPORALMENTE**:
+  - Bugs críticos en backend (validación de user null) causando errores constantes
+  - Botones removidos del header hasta que estén 100% estables
+  - Carrito también deshabilitado (depende de marketplace)
+  - **Funcionalidades operativas:** Dashboard, Prompts, Playground, Admin Panel
+- ✅ **Support.js Fixed**: Validación null agregada en endpoint `/tickets/my`
 - ⚠️ **Performance Issue Detectado y Revertido**: 
-  - **Problema:** `usePrompts()` carga todos los prompts en cada página, causando lentitud en marketplace/admin
-  - **Intento de fix:** Parámetro `enabled` en hook - causó crash de aplicación (hooks violation)
-  - **Estado:** Revertido a versión estable - investigar solución alternativa
-  - **Nota:** El problema de lentitud persiste, pendiente de optimización
+  - **Problema:** `usePrompts()` carga todos los prompts en cada página
+  - **Intento de fix:** Parámetro `enabled` en hook - causó crash (hooks violation)
+  - **Estado:** Revertido a versión estable
 - ✅ **Consola Limpia**: Eliminados console.logs innecesarios de debug
-- ✅ **Backend Marketplace Fixed**: Validación null agregada en `/my-purchases` endpoint
 - ✅ **Admin Workflow Mejorado**: 
   - WhatsApp removido del header cuando estás logueado (solo en landing)
   - "Admin Panel" agregado al dropdown del usuario (color rojo)
-  - Superadmin redirige automáticamente a `/admin/dashboard` al login
 
 ### 4 Oct 2025 (Noche - Landing Page Enterprise + WebSocket Fix)
 - ✅ **WebSocket/HMR Fix**: Eliminados errores ERR_CONNECTION_REFUSED en consola

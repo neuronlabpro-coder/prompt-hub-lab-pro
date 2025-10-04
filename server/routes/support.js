@@ -76,6 +76,10 @@ router.get('/tickets/my', async (req, res) => {
     const token = authHeader.replace('Bearer ', '');
     const { data: { user } } = await supabase.auth.getUser(token);
 
+    if (!user) {
+      return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+    }
+
     let query = supabase
       .from('support_tickets')
       .select(`
