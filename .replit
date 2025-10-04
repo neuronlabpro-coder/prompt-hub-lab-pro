@@ -25,13 +25,13 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "bash -c './node_modules/.bin/vite --host 0.0.0.0 --port 5000 & node --env-file=.env -r tsx server/index.js & wait'"
 waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
 
 [agent]
 integrations = ["javascript_database:1.0.0"]
@@ -42,5 +42,5 @@ localPort = 3001
 externalPort = 3001
 
 [[ports]]
-localPort = 40433
+localPort = 38831
 externalPort = 80
