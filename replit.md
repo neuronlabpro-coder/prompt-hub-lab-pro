@@ -61,15 +61,28 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
-### 4 Oct 2025 - Sistema de Carrito de Compras Implementado
+### 4 Oct 2025 (Tarde) - Sistema de Login Funcional + Documentación
+- ✅ **Test Authentication System**: Login funcional sin Supabase
+  - 7 usuarios de prueba con contraseñas claras (Admin123!, Pro123!, etc.)
+  - Panel de ayuda visible en página de login
+  - Modo desarrollo automático (no requiere OAuth)
+- ✅ **ProtectedRoute Component**: Redirecciones automáticas
+  - Redirect a /login si no autenticado
+  - Redirect a / si sin permisos admin
+- ✅ **Documentación Completa**:
+  - USUARIOS_PRUEBA.md con todas las credenciales
+  - ESTADO_ACTUAL.md con progreso y plan de acción
+  - ANALISIS_ECOMMERCE.md con gap analysis
+
+**BLOQUEANTE**: Esperando claves VITE_STRIPE_PUBLIC_KEY y STRIPE_SECRET_KEY
+
+### 4 Oct 2025 (Mañana) - Sistema de Carrito Completo
 - ✅ **CartContext**: Context global para manejo del carrito con localStorage
 - ✅ **ShoppingCartDrawer**: Drawer lateral con lista de items, controles de cantidad, totales
 - ✅ **Header Badge**: Icono del carrito con badge mostrando cantidad de items
 - ✅ **Marketplace Integration**: Botón "Agregar al Carrito" integrado
 - ✅ **UX Best Practices**: Implementado según mejores prácticas de Shopify (70% reducción abandono)
 - ✅ **Logout Fixed**: Redirección automática a landing page al cerrar sesión
-- ✅ **Test Users**: 7 usuarios creados para testing (ver USUARIOS_PRUEBA.md)
-- ✅ Todos los errores LSP corregidos
 
 ### 3 Oct 2025 - Arquitectura y Performance
 - ✅ Arquitectura dual-server implementada (eliminado server/vite.ts conflictivo)
