@@ -7,6 +7,7 @@ import { Badge } from './ui/Badge';
 import { Select } from './ui/Select';
 import { useToast } from '../hooks/useToast';
 import { useAuth } from './AuthProvider';
+import { useCart } from '../contexts/CartContext';
 import { formatCurrency } from '../lib/utils';
 
 interface MarketplacePrompt {
@@ -33,6 +34,7 @@ interface PromptDetails extends MarketplacePrompt {
 export function Marketplace() {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { addItem } = useCart();
   const [prompts, setPrompts] = useState<MarketplacePrompt[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -354,24 +356,44 @@ export function Marketplace() {
                     Ya compraste este prompt
                   </Button>
                 ) : (
-                  <Button
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                    onClick={handlePurchase}
-                    disabled={purchasing || !user}
-                    data-testid="button-purchase-prompt"
-                  >
-                    {purchasing ? (
-                      <>
-                        <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                        Procesando...
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingCart className="h-4 w-4 mr-2" />
-                        {user ? 'Comprar Ahora' : 'Inicia sesión para comprar'}
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button
+                      className="flex-1"
+                      variant="outline"
+                      onClick={() => {
+                        addItem({
+                          id: selectedPrompt.id,
+                          title: selectedPrompt.title,
+                          price: selectedPrompt.price,
+                          category: selectedPrompt.categories?.name,
+                          discount_percent: selectedPrompt.discount_percent,
+                          final_price: selectedPrompt.final_price,
+                        });
+                        toast.success('Agregado al carrito', `${selectedPrompt.title} se agregó correctamente`);
+                      }}
+                      data-testid="button-add-to-cart"
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Agregar al Carrito
+                    </Button>
+                    <Button
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      onClick={handlePurchase}
+                      disabled={purchasing || !user}
+                      data-testid="button-purchase-prompt"
+                    >
+                      {purchasing ? (
+                        <>
+                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Procesando...
+                        </>
+                      ) : (
+                        <>
+                          {user ? 'Comprar Ahora' : 'Inicia sesión'}
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 )}
               </div>
 
