@@ -151,15 +151,14 @@ export default function Subscribe() {
   const totalPrice = calculateTotal();
 
   useEffect(() => {
-    // Crear payment intent con Stripe
+    // Crear subscription intent con Stripe (solo enviar planId y users, el servidor calcula el precio)
     fetch('/api/stripe/create-subscription-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         planId,
-        basePrice,
         users,
-        totalAmount: totalPrice
+        userEmail: null // No email yet, will be collected after payment
       })
     })
       .then(res => {

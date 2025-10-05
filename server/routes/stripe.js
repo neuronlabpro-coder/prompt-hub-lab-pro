@@ -99,9 +99,9 @@ router.post('/create-subscription-intent', async (req, res) => {
       return res.status(500).json({ error: 'Stripe not configured' });
     }
 
-    const { planId, basePrice, users, totalAmount } = req.body;
+    const { planId, users, userEmail } = req.body;
 
-    if (!planId || !basePrice || !users || !totalAmount) {
+    if (!planId || !users) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -110,30 +110,80 @@ router.post('/create-subscription-intent', async (req, res) => {
       return res.status(400).json({ error: 'Minimum 2 users required for multitenant' });
     }
 
-    // Create payment intent for subscription
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(totalAmount * 100), // Convert to cents
-      currency: 'eur', // European currency
+    // SERVER-SIDE PRICING (security: never trust client)
+    const planPricing = {
+      starter: { basePrice: 9, includedUsers: 1, pricePerUser: 10 },
+      pro: { basePrice: 29, includedUsers: 5, pricePerUser: 10 },
+      enterprise: { basePrice: 99, includedUsers: 10, pricePerUser: 10 }
+    };
+
+    const plan = planPricing[planId];
+    if (!plan) {
+      return res.status(400).json({ error: 'Invalid plan ID' });
+    }
+
+    // Calculate total on SERVER
+    const basePrice = plan.basePrice;
+    const additionalUsers = Math.max(0, users - plan.includedUsers);
+    const totalAmount = basePrice + (additionalUsers * plan.pricePerUser);
+
+    // Create or get Stripe customer
+    let customerId = null;
+    if (userEmail) {
+      const customers = await stripe.customers.list({
+        email: userEmail,
+        limit: 1
+      });
+
+      if (customers.data.length > 0) {
+        customerId = customers.data[0].id;
+      } else {
+        const customer = await stripe.customers.create({
+          email: userEmail,
+        });
+        customerId = customer.id;
+      }
+    } else {
+      // Create anonymous customer for now
+      const customer = await stripe.customers.create({});
+      customerId = customer.id;
+    }
+
+    // Create SUBSCRIPTION (not one-time payment)
+    const subscription = await stripe.subscriptions.create({
+      customer: customerId,
+      items: [{
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: `Plan ${planId.charAt(0).toUpperCase() + planId.slice(1)} - ${users} usuarios`,
+          },
+          recurring: {
+            interval: 'month',
+          },
+          unit_amount: Math.round(totalAmount * 100), // Convert to cents
+        },
+        quantity: 1,
+      }],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice.payment_intent'],
       metadata: {
         planId,
-        basePrice: basePrice.toString(),
         users: users.toString(),
+        basePrice: basePrice.toString(),
         totalAmount: totalAmount.toString(),
         subscriptionType: 'multitenant',
-      },
-      automatic_payment_methods: {
-        enabled: true,
       },
     });
 
     res.json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
+      clientSecret: subscription.latest_invoice.payment_intent.client_secret,
+      subscriptionId: subscription.id,
     });
   } catch (error) {
-    console.error('Error creating subscription intent:', error);
+    console.error('Error creating subscription:', error);
     res.status(500).json({ 
-      error: 'Error creating subscription intent',
+      error: 'Error creating subscription',
       message: error.message 
     });
   }
