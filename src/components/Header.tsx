@@ -87,15 +87,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
               </Button>
 
               
-              <Button
-                onClick={onOpenPlayground}
-                variant={currentView === 'playground' ? 'default' : 'outline'}
-                className="flex items-center gap-2"
-                size="sm"
-              >
-                <PlayCircle className="h-4 w-4" />
-                <span className="hidden lg:inline">Playground</span>
-              </Button>
+              {/* Playground desactivado - será parte de agentes futuros */}
 
               {/* Marketplace Button */}
               {onOpenMarketplace && (
