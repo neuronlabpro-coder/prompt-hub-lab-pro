@@ -56,7 +56,7 @@ const CATEGORY_LABELS = {
 
 export function SupportCenter() {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, getToken } = useAuth();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
@@ -88,9 +88,10 @@ export function SupportCenter() {
 
   const fetchMyTickets = async () => {
     try {
+      const token = await getToken();
       const response = await fetch('/api/support/tickets/my', {
         headers: {
-          'Authorization': `Bearer ${user?.id}`
+          'Authorization': `Bearer ${token}`
         }
       });
       const data = await response.json();
@@ -107,9 +108,10 @@ export function SupportCenter() {
 
   const fetchTicketDetails = async (ticketId: string) => {
     try {
+      const token = await getToken();
       const response = await fetch(`/api/support/tickets/${ticketId}`, {
         headers: {
-          'Authorization': `Bearer ${user?.id}`
+          'Authorization': `Bearer ${token}`
         }
       });
       const data = await response.json();
@@ -132,11 +134,12 @@ export function SupportCenter() {
 
     setCreating(true);
     try {
+      const token = await getToken();
       const response = await fetch('/api/support/tickets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user?.id}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(newTicket)
       });
@@ -163,11 +166,12 @@ export function SupportCenter() {
 
     setSending(true);
     try {
+      const token = await getToken();
       const response = await fetch(`/api/support/tickets/${selectedTicket.id}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user?.id}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ message: newReply })
       });

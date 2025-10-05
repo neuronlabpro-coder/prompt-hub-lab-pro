@@ -33,6 +33,7 @@ import { Pagination } from './components/Pagination';
 import { ToastContainer } from './components/ui/Toast';
 import { useToast } from './hooks/useToast';
 import { TokenWarningModal } from './components/TokenWarningModal';
+import { TokenUsageModal } from './components/TokenUsageModal';
 import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
 import { ReferralSettings } from './components/admin/ReferralSettings';
@@ -69,6 +70,7 @@ function AppContent() {
   
   // Token warning modal
   const [showTokenWarning, setShowTokenWarning] = useState(false);
+  const [showTokenUsage, setShowTokenUsage] = useState(false);
   
   // Filter and pagination state
   const [searchTerm, setSearchTerm] = useState('');
@@ -994,18 +996,29 @@ function AppContent() {
         onClose={() => setShowTokenWarning(false)}
         onPurchaseTokens={() => {
           setShowTokenWarning(false);
-          // Open token purchase modal
-          toast.info('Abriendo compra de tokens', 'Redirigiendo a la página de compra');
+          setShowTokenUsage(true);
         }}
         onUpgradePlan={() => {
           setShowTokenWarning(false);
-          // Open plan upgrade modal
-          toast.info('Abriendo actualización de plan', 'Redirigiendo a planes disponibles');
+          setShowTokenUsage(true);
         }}
         activePromotion={adminPromotions.find(p => p.active && p.show_popup) || null}
         user={{
           name: 'Usuario Demo',
           plan: 'Pro',
+          tokensUsed: 750000,
+          tokensLimit: 2000000,
+        }}
+      />
+
+      <TokenUsageModal
+        isOpen={showTokenUsage}
+        onClose={() => setShowTokenUsage(false)}
+        activePromotion={adminPromotions.find(p => p.active) || null}
+        user={{
+          name: user?.user_metadata?.name || user?.email?.split('@')[0] || 'Usuario Demo',
+          email: user?.email || '',
+          plan: user?.user_metadata?.plan || 'Pro',
           tokensUsed: 750000,
           tokensLimit: 2000000,
         }}

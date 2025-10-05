@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, ShoppingCart, MessageCircle } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, BarChart3, Shield, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';

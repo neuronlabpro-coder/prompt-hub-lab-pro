@@ -1,243 +1,32 @@
 # PromptHub v2 - Project Info
 
-## Quick Links
+## Overview
 
-📚 **Documentación Completa**: Ver carpeta `docs-project/`
-- `project-overview.md` - Arquitectura y características técnicas
-- `selfhost-guide.md` - Guía de instalación self-host
-- `README.md` - Índice de documentación
-
-💾 **Base de Datos**: Ver carpeta `supabase/`
-- `migrations/` - Migraciones SQL en orden cronológico
-- `seeds/` - Datos iniciales
-- `README.md` - Guía de uso de SQL
-
-🚀 **Landing Page**: `project-landing.md` (en raíz)
-- Especificaciones completas para diseño y desarrollo
-
-🐳 **Self-Host**: Ver carpeta `self-host/`
-- Docker Compose, Dockerfile, install.sh
-- seed.sql con datos de ejemplo
+PromptHub v2 is a comprehensive platform designed for managing, sharing, and monetizing AI prompts. It features a professional landing page, robust authentication, a user dashboard for prompt management, a categorized marketplace for selling prompts, and an integrated support system. The project aims to provide a streamlined experience for prompt engineers and AI enthusiasts to discover, utilize, and trade valuable prompts. It includes a simple e-commerce solution with Stripe integration for direct purchases and a self-hosting guide for easy deployment.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
 
-## Current State
+## System Architecture
 
-✅ **Sistema funcionando en Replit** con arquitectura simplificada:
-- **Frontend**: Express sirviendo archivos estáticos compilados (puerto 5000)
-- **Backend**: Rutas API en mismo servidor Express
-- Build: `npm run build` compila React a `/dist`
+The application runs on a simplified architecture using Express.js as a single server for both frontend and backend. The frontend is a React application compiled into static files served by Express. Supabase is used as the primary database, managing user data, prompts, categories, and marketplace information with applied migrations. The system supports full authentication via OAuth (Google/GitHub) and email/password, with role-based access for an admin panel. A key architectural decision was to simplify the e-commerce flow to direct purchase (no shopping cart) with Stripe integration, moving away from external solutions like Shopify. The project is designed for self-hosting with Docker Compose and Dockerfiles.
 
-### Funcionalidades Operativas:
-- ✅ Landing page profesional
-- ✅ Autenticación completa (OAuth Google/GitHub + Email/Password)
-- ✅ Dashboard de prompts (3 prompts de ejemplo cargados desde DB)
-- ✅ Sistema de categorías y proveedores desde Supabase
-- ✅ Panel admin (rutas protegidas por rol)
-- ✅ Logout con redirección automática a landing page
-- ✅ Playground para testing de prompts
-- ✅ **Marketplace** - Catálogo de prompts en venta con compra directa (sin carrito)
-- ✅ **Soporte** - Sistema de tickets integrado
-- ✅ **Ecommerce Simple** - Compra directa con Stripe (sin Shopify, sin carrito)
+**Key Features:**
 
-### Estructura Técnica:
-- Express en puerto 5000 (único servidor)
-- Build estático en `/dist`
-- Base de datos Supabase con migraciones aplicadas
-- Self-hosting preparado con Docker
+*   **Professional Landing Page:** Designed for high conversion with trust badges and analytics previews.
+*   **Comprehensive Authentication:** Supports OAuth (Google/GitHub) and email/password.
+*   **User Dashboard:** Displays prompt statistics, favorites, visits, copies, CTR, token usage, and top lists.
+*   **Prompt Management:** Categorization and provider management integrated with Supabase.
+*   **Marketplace:** Catalog of prompts for sale with direct purchase functionality.
+*   **Admin Panel:** Protected routes for managing products, users, and system settings.
+*   **Support System:** Integrated ticket management.
+*   **Token Usage Monitoring:** Modal for tracking token stats, history, and purchase options.
+*   **Self-Hosting:** Dockerized setup for easy deployment.
 
-### Workflows Configurados:
-1. **Start application** - `node --env-file=.env -r tsx server/index.js` (puerto 5000)
+## External Dependencies
 
-Ver `docs-project/project-overview.md` para detalles técnicos completos.
-
-## Últimos Cambios (Oct 2025)
-
-### 5 Oct 2025 (Tarde - PLAYGROUND Y DASHBOARD MEJORADOS ✅)
-- ✅ **Playground UX Mejorado - Bug "Pantalla Azul" Resuelto**:
-  - Agregado loading state con spinner mientras cargan providers
-  - Mensaje de alerta cuando no hay proveedores configurados (guía al usuario)
-  - Fix completo: ya no se queda en "pantalla azul sin nada"
-  - Usuario ve estados claros: Cargando → Sin providers → Contenido normal
-- ✅ **Dashboard Usuario - Fix División por Cero**:
-  - Corregido crash cuando usuario no tiene prompts (totalPrompts = 0)
-  - Guards agregados en TODAS las divisiones y .toFixed() calls
-  - Ahora funciona perfecto para usuarios nuevos (muestra 0.0% en vez de crash)
-  - Dashboard completo con: Totals, Favoritos, Visitas, Copias, CTR, Tokens, Categorías, Top Lists
-- ⚠️ **PROBLEMA CRÍTICO .replit PERSISTE**:
-  - .replit tiene `localPort = 3001` en vez de `localPort = 5000`
-  - Agent NO puede editar .replit (forbidden)
-  - Código está correcto, build exitoso, solo falta configuración manual del puerto
-  - **SOLUCIÓN USUARIO**: Editar `.replit` y cambiar `[[ports]]` a `localPort = 5000` y `externalPort = 80`
-- ✅ **Build Exitoso**: Frontend compilado sin errores
-- ✅ **Código Limpio**: Sin errores LSP
-
-### 5 Oct 2025 (Madrugada - SOPORTE Y MARKETPLACE REACTIVADOS ✅)
-- ✅ **Soporte y Marketplace COMPLETAMENTE REACTIVADOS**:
-  - Header.tsx: Props `onOpenMarketplace` y `onOpenSupport` agregados
-  - Botones visibles: Dashboard, Prompts, Playground, **Marketplace**, **Soporte**, Admin
-  - Importados iconos ShoppingCart y MessageCircle desde lucide-react
-  - Navegación completa funcionando (/marketplace, /soporte)
-- ✅ **Sistema Ecommerce Simple CONFIRMADO**:
-  - NO se usa Shopify (decisión arquitectónica cambiada)
-  - Sistema interno con compra directa (botón "Comprar" sin carrito)
-  - Stripe integrado para payments
-  - MyPurchasedPrompts muestra biblioteca de compras
-- ✅ **Archivos Self-Host Verificados**:
-  - docker-compose.yml - Variables de entorno sin hardcoded ✅
-  - Dockerfile - Configuración limpia con healthchecks ✅
-  - install.sh - Script interactivo con placeholders ✅
-  - seed.sql - Datos de ejemplo INTENCIONADOS (claramente marcados)
-- ✅ **Build y Deploy**: Frontend compilado sin errores, servidor en puerto 5000
-- ⚠️ **RECORDATORIO CRÍTICO**: Verificar `.replit` tiene `localPort = 5000` después de cada workflow restart
-
-### 4 Oct 2025 (Noche - ECOMMERCE SIMPLE IMPLEMENTADO ✅)
-- ✅ **Sistema de Ecommerce COMPLETO y FUNCIONANDO**:
-  - Admin: ProductManagement para crear productos (categoría, precio, imagen/video, activar/desactivar venta)
-  - Marketplace: Catálogo visual de prompts en venta (/marketplace)
-  - ProductDetail: Página detalle con botón comprar (/product/:id)
-  - MyPurchasedPrompts: Prompts comprados del usuario (/my-prompts) con scroll y copiar
-  - Descuentos por plan: Configurable desde admin (10%, 15%, 20%)
-  - Backend Stripe: Payment intents, webhooks, orders system completo
-- ⚠️ **IMPORTANTE - Configuración Puerto en .replit**:
-  - **PROBLEMA CRÍTICO**: El archivo `.replit` a veces se regenera automáticamente con puerto 3001
-  - **SÍNTOMA**: Preview muestra "Running" en pantalla negra aunque servidor funciona
-  - **SOLUCIÓN**: Editar `.replit` manualmente y cambiar `[[ports]]` a `localPort = 5000` y `externalPort = 80`
-  - **CAUSA**: Cuando se reconfiguran workflows, Replit puede resetear configuración de puertos
-  - **PREVENCIÓN**: Después de tocar workflows, verificar que `.replit` tenga puerto 5000
-- ✅ **CORS Arreglado**: Configurado `origin: true` para funcionar en Replit
-- ✅ **Build Completo**: Frontend compilado en /dist y funcionando
-- ✅ **Sin errores LSP**: Código limpio y listo
-
-### 4 Oct 2025 (Noche - Marketplace/Soporte ELIMINADOS - Preparación para Shopify)
-- ❌ **Marketplace, Soporte y Carrito ELIMINADOS por petición del usuario**:
-  - Usuario va a vincular tienda externa con Shopify
-  - Botones removidos del Header.tsx
-  - Imports limpiados (ShoppingCart, MessageCircle, useCart, Badge)
-  - Props eliminadas (onOpenMarketplace, onOpenSupport)
-  - Header ahora solo tiene: Dashboard, Prompts, Playground, Admin Panel
-- ✅ **Arquitectura Simplificada**:
-  - Eliminado Vite dev server (causaba 502 en Replit)
-  - Express sirve archivos estáticos desde /dist en puerto 5000
-  - Build: `npm run build` → Deploy: reiniciar workflow
-  - Un solo servidor, más estable y simple
-- ✅ **Content Security Policy Arreglado**:
-  - connectSrc permite Supabase, OpenAI, Anthropic, OpenRouter
-  - scriptSrc permite Stripe.js
-  - frameSrc permite iframes de Stripe
-- ✅ **Sin errores LSP** - Código limpio y listo para producción
-
-### 4 Oct 2025 (Noche - Marketplace, Soporte y Carrito REACTIVADOS ✅)
-- ✅ **TODOS LOS BUGS ARREGLADOS - Sistema 100% Operativo**:
-  - ✅ Marketplace, Soporte y Carrito reactivados y funcionando
-  - ✅ Todos los botones visibles en header
-  - ✅ Sin errores en backend ni consola del navegador
-  - ✅ Validaciones null completas en todos los endpoints de auth
-- ✅ **Backend Fixes Completos**:
-  - `server/routes/marketplace.js`: Agregadas validaciones `authError || !user` en 1 endpoint admin
-  - `server/routes/support.js`: Agregadas validaciones `authError || !user` en 5 endpoints
-  - Previene errores 500 cuando usuario es null después de `getUser()`
-- ✅ **Frontend Limpio**:
-  - Eliminados comentarios `false &&` que deshabilitaban botones
-  - Header.tsx restaurado a versión completa
-  - Marketplace carga correctamente con precios (4,99€, 5,99€, 3,99€)
-  - Soporte muestra mensaje de autenticación correctamente
-- ✅ **Workflow Consolidado**: Un solo workflow maneja frontend y backend
-  - Comando: `bash -c './node_modules/.bin/vite --host 0.0.0.0 --port 5000 & node --env-file=.env -r tsx server/index.js & wait'`
-  - Vite en puerto 5000 (público)
-  - Express en puerto 3001 (API interna)
-
-### 4 Oct 2025 (Noche - Marketplace y Soporte DESHABILITADOS)
-- 🚫 **MARKETPLACE Y SOPORTE DESHABILITADOS TEMPORALMENTE** (RESUELTO ARRIBA ✅):
-  - Bugs críticos en backend (validación de user null) causando errores constantes
-  - Botones removidos del header hasta que estén 100% estables
-  - Carrito también deshabilitado (depende de marketplace)
-  - **Funcionalidades operativas:** Dashboard, Prompts, Playground, Admin Panel
-- ✅ **Support.js Fixed**: Validación null agregada en endpoint `/tickets/my`
-- ⚠️ **Performance Issue Detectado y Revertido**: 
-  - **Problema:** `usePrompts()` carga todos los prompts en cada página
-  - **Intento de fix:** Parámetro `enabled` en hook - causó crash (hooks violation)
-  - **Estado:** Revertido a versión estable
-- ✅ **Consola Limpia**: Eliminados console.logs innecesarios de debug
-- ✅ **Admin Workflow Mejorado**: 
-  - WhatsApp removido del header cuando estás logueado (solo en landing)
-  - "Admin Panel" agregado al dropdown del usuario (color rojo)
-
-### 4 Oct 2025 (Noche - Landing Page Enterprise + WebSocket Fix)
-- ✅ **WebSocket/HMR Fix**: Eliminados errores ERR_CONNECTION_REFUSED en consola
-  - Problema: Vite intentaba conectar HMR a localhost (no funciona en Replit)
-  - Solución: Deshabilitado HMR en vite.config.ts (hmr: false)
-  - Consola ahora limpia sin errores de WebSocket
-- ✅ **Landing Page Enterprise Completa**: Diseño profesional con imágenes que generan confianza
-  - Hero section con imagen de fondo profesional (team collaboration)
-  - Sección "Trusted by Companies" con imagen empresas (1,200+ empresas globales)
-  - Dashboard Analytics preview con imagen dashboard real
-  - Trust badges: SOC 2, GDPR, 99.9% Uptime, Soporte 24/7
-  - 6 imágenes stock profesionales integradas desde attached_assets/
-- ✅ **Footer Completo**: TODOS los enlaces funcionando
-  - Producto: Marketplace (/marketplace), API Docs, Seguridad
-  - Recursos: Dashboard (/dashboard), Panel Admin (/admin/dashboard), Docs (/docs-site/*)
-  - Empresa: Centro de Soporte (/soporte), WhatsApp, Email, GitHub
-- ✅ **Dashboard Bug Fixed**: Hooks violation arreglado (dashboard ahora carga correctamente)
-  - Problema: useEffect después de return causaba pantalla azul infinita
-  - Solución: Movido hooks antes de returns (React Rules of Hooks)
-
-### 4 Oct 2025 (Noche - Auditoría Completa)
-- ⚠️ **CRÍTICO - MIGRACIÓN REQUERIDA**: Marketplace NO funciona
-  - Schema Supabase desactualizado - falta columnas: price, sales_count, is_for_sale, discount_eligible
-  - Error: `column prompts.price does not exist`
-  - ✅ Migración SQL creada: `supabase/migrations/001_add_marketplace_fields.sql`
-  - ✅ Backend actualizado para usar precios reales de DB
-  - 📋 Ver `MIGRATION_REQUIRED.md` para instrucciones completas
-  - **Acción requerida**: Ejecutar migración en Supabase SQL Editor
-- ✅ **Vite Workflow Arreglado**: Comando actualizado a `./node_modules/.bin/vite --host 0.0.0.0 --port 5000`
-- ✅ **LSP Errors Fixed**: Corregido TokenPromotion type (agregado updated_at)
-- ✅ **Auditoría Sistema Completa**:
-  - Landing page funcional ✅
-  - Login page funcional ✅
-  - Test auth configurado (7 usuarios) ✅
-  - Marketplace código actualizado ✅ (requiere migración DB)
-  - Database local vs Supabase identificado y documentado ✅
-
-### 4 Oct 2025 (Noche) - Sistema Completo con .env
-- ✅ **Configuración .env Completa**: Sistema portátil para Replit y Self-Host
-  - Archivo .env creado con todas las claves configuradas
-  - Workflow Backend actualizado: `node --env-file=.env -r tsx server/index.js`
-  - Variables cargadas correctamente antes de imports
-  - Sin warnings de Stripe ✅
-- ✅ **Stripe Integration 100%**: Sistema de pagos completamente implementado
-  - Tablas DB: orders, order_items, downloads
-  - Backend routes: create-payment-intent, webhook, orders, download
-  - Checkout page completa con Stripe Elements
-  - Sistema de descargas seguras con tokens (30 días, 5 descargas max)
-- ✅ **React Warning Fixed**: Navigate() movido a useEffect (no más warnings en consola)
-- ✅ **Claves Configuradas**:
-  - Supabase (URL, anon key, database URL)
-  - Stripe (public, secret, webhook secret)
-  - OpenAI, Anthropic, OpenRouter (opcional: Google Gemini)
-
-**ESTADO**: Sistema 100% funcional en Replit y listo para self-host
-
-### 4 Oct 2025 (Tarde) - Sistema de Login Funcional + Documentación
-- ✅ **Test Authentication System**: Login funcional sin Supabase
-  - 7 usuarios de prueba con contraseñas claras (Admin123!, Pro123!, etc.)
-  - Panel de ayuda visible en página de login
-  - Modo desarrollo automático (no requiere OAuth)
-- ✅ **ProtectedRoute Component**: Redirecciones automáticas
-- ✅ **Documentación Completa**: USUARIOS_PRUEBA.md, ESTADO_ACTUAL.md, ANALISIS_ECOMMERCE.md
-
-### 4 Oct 2025 (Mañana) - Sistema de Carrito Completo
-- ✅ **CartContext**: Context global para manejo del carrito con localStorage
-- ✅ **ShoppingCartDrawer**: Drawer lateral con lista de items, controles de cantidad, totales
-- ✅ **Header Badge**: Icono del carrito con badge mostrando cantidad de items
-- ✅ **Marketplace Integration**: Botón "Agregar al Carrito" integrado
-- ✅ **UX Best Practices**: Implementado según mejores prácticas de Shopify (70% reducción abandono)
-- ✅ **Logout Fixed**: Redirección automática a landing page al cerrar sesión
-
-### 3 Oct 2025 - Arquitectura y Performance
-- ✅ Arquitectura dual-server implementada (eliminado server/vite.ts conflictivo)
-- ✅ Marketplace schema alineado con estructura de DB real
-- ✅ Errores LSP corregidos en App.tsx
-- ✅ Performance significativamente mejorada con nueva arquitectura
+*   **Supabase:** Database, authentication, and real-time functionalities.
+*   **Stripe:** Payment processing for the e-commerce marketplace (Stripe Elements for checkout, Payment Intents API, Webhooks).
+*   **OpenAI, Anthropic, OpenRouter:** (Optional) APIs for AI model interactions, used in the playground.
+*   **lucide-react:** Icon library for UI elements.
