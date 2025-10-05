@@ -38,8 +38,9 @@ Preferred communication style: Simple, everyday language.
 - ✅ Panel admin (rutas protegidas por rol)
 - ✅ Logout con redirección automática a landing page
 - ✅ Playground para testing de prompts
-- ❌ **Marketplace/Soporte ELIMINADOS** (usuario conectará Shopify externamente)
-- ❌ **Carrito eliminado** (será gestionado por Shopify)
+- ✅ **Marketplace** - Catálogo de prompts en venta con compra directa (sin carrito)
+- ✅ **Soporte** - Sistema de tickets integrado
+- ✅ **Ecommerce Simple** - Compra directa con Stripe (sin Shopify, sin carrito)
 
 ### Estructura Técnica:
 - Express en puerto 5000 (único servidor)
@@ -53,6 +54,25 @@ Preferred communication style: Simple, everyday language.
 Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
+
+### 5 Oct 2025 (Madrugada - SOPORTE Y MARKETPLACE REACTIVADOS ✅)
+- ✅ **Soporte y Marketplace COMPLETAMENTE REACTIVADOS**:
+  - Header.tsx: Props `onOpenMarketplace` y `onOpenSupport` agregados
+  - Botones visibles: Dashboard, Prompts, Playground, **Marketplace**, **Soporte**, Admin
+  - Importados iconos ShoppingCart y MessageCircle desde lucide-react
+  - Navegación completa funcionando (/marketplace, /soporte)
+- ✅ **Sistema Ecommerce Simple CONFIRMADO**:
+  - NO se usa Shopify (decisión arquitectónica cambiada)
+  - Sistema interno con compra directa (botón "Comprar" sin carrito)
+  - Stripe integrado para payments
+  - MyPurchasedPrompts muestra biblioteca de compras
+- ✅ **Archivos Self-Host Verificados**:
+  - docker-compose.yml - Variables de entorno sin hardcoded ✅
+  - Dockerfile - Configuración limpia con healthchecks ✅
+  - install.sh - Script interactivo con placeholders ✅
+  - seed.sql - Datos de ejemplo INTENCIONADOS (claramente marcados)
+- ✅ **Build y Deploy**: Frontend compilado sin errores, servidor en puerto 5000
+- ⚠️ **RECORDATORIO CRÍTICO**: Verificar `.replit` tiene `localPort = 5000` después de cada workflow restart
 
 ### 4 Oct 2025 (Noche - ECOMMERCE SIMPLE IMPLEMENTADO ✅)
 - ✅ **Sistema de Ecommerce COMPLETO y FUNCIONANDO**:

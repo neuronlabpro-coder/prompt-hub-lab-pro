@@ -12,7 +12,7 @@ interface HeaderProps {
   onOpenMarketplace?: () => void;
   onOpenSupport?: () => void;
   onOpenProfile?: () => void;
-  currentView: 'prompts' | 'dashboard' | 'marketplace' | 'soporte';
+  currentView: 'prompts' | 'dashboard' | 'marketplace' | 'soporte' | 'playground';
   onToggleAdmin?: () => void;
   isAdmin?: boolean;
 }
@@ -89,7 +89,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
               
               <Button
                 onClick={onOpenPlayground}
-                variant="outline"
+                variant={currentView === 'playground' ? 'default' : 'outline'}
                 className="flex items-center gap-2"
                 size="sm"
               >
