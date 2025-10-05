@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, BarChart3, Users, DollarSign, Bot, Ticket, TrendingUp, FileText, Settings, LogOut, Calculator, PieChart, Tag, Gift, Building, Mail, MessageSquare } from 'lucide-react';
+import { Shield, BarChart3, Users, DollarSign, Bot, Ticket, TrendingUp, FileText, Settings, LogOut, Calculator, PieChart, Tag, Gift, Building, Mail, MessageSquare, Home } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 
@@ -114,6 +114,16 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout }: A
             </Button>
             
             <div className="flex items-center gap-4">
+              <Button
+                onClick={() => window.location.href = '/'}
+                variant="outline"
+                className="flex items-center gap-2"
+                size="sm"
+              >
+                <Home className="h-4 w-4" />
+                Ver Landing
+              </Button>
+              
               <Badge variant="success" className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 Sistema Operacional

@@ -305,6 +305,15 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
               <Button 
+                onClick={() => window.location.href = '/login'}
+                variant="outline" 
+                size="lg"
+                className="text-lg px-8 py-4 h-auto border-gray-600 hover:border-green-500"
+              >
+                <LayoutDashboard className="h-5 w-5 mr-2" />
+                Entrar
+              </Button>
+              <Button 
                 onClick={onContactSales}
                 variant="outline" 
                 size="lg"
