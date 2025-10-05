@@ -14,7 +14,7 @@ interface PlaygroundProps {
 }
 
 export function Playground({ isOpen, onClose, initialPrompt = '' }: PlaygroundProps) {
-  const { providers } = useProviders();
+  const { providers, loading: loadingProviders } = useProviders();
   const [prompt, setPrompt] = useState(initialPrompt);
   const [selectedProvider, setSelectedProvider] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
@@ -107,6 +107,37 @@ export function Playground({ isOpen, onClose, initialPrompt = '' }: PlaygroundPr
       </div>
 
       <div className="flex h-[calc(100vh-73px)]">
+        {/* Loading State */}
+        {loadingProviders && (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
+              <p className="text-gray-400">Cargando proveedores...</p>
+            </div>
+          </div>
+        )}
+
+        {/* No Providers State */}
+        {!loadingProviders && providers.length === 0 && (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center max-w-md">
+              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-6 mb-4">
+                <Settings className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-100 mb-2">No hay proveedores configurados</h3>
+                <p className="text-gray-400 mb-4">
+                  Para usar el Playground, un administrador debe configurar al menos un proveedor de IA en el panel de administración.
+                </p>
+                <Button onClick={onClose} variant="outline">
+                  Cerrar
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content - Only show if providers exist */}
+        {!loadingProviders && providers.length > 0 && (
+          <>
         {/* Left Panel - Prompt Editor */}
         <div className="flex-1 p-6 space-y-6 overflow-y-auto">
           {/* Model Selection */}
@@ -322,6 +353,8 @@ export function Playground({ isOpen, onClose, initialPrompt = '' }: PlaygroundPr
             </Card>
           )}
         </div>
+          </>
+        )}
       </div>
     </div>
   );
