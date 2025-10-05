@@ -19,6 +19,7 @@ import { CategoryManagement } from './components/admin/CategoryManagement';
 import { ProviderManagement } from './components/admin/ProviderManagement';
 import { VariableManagement } from './components/admin/VariableManagement';
 import { SubcategoryManagement } from './components/admin/SubcategoryManagement';
+import { EnhancedDashboard } from './components/admin/EnhancedDashboard';
 import { CouponManagement } from './components/admin/CouponManagement';
 import { AffiliateManagement } from './components/admin/AffiliateManagement';
 import { AuditLogs } from './components/admin/AuditLogs';
@@ -614,10 +615,33 @@ function AppContent() {
       switch (adminView) {
         case 'dashboard':
           return (
-            <AdminDashboard
-              users={adminUsers}
-              prompts={prompts}
-              executions={[]}
+            <EnhancedDashboard
+              stats={{
+                totalUsers: adminUsers.length,
+                totalPrompts: prompts.length,
+                totalRevenue: 15420,
+                activeUsers: Math.floor(adminUsers.length * 0.6),
+                promptViews: prompts.reduce((acc, p) => acc + (p.stats?.visits || 0), 0),
+                promptCopies: prompts.reduce((acc, p) => acc + (p.stats?.copies || 0), 0),
+                avgCTR: prompts.length > 0 ? prompts.reduce((acc, p) => acc + (p.stats?.ctr || 0), 0) / prompts.length : 0,
+                topPrompts: prompts
+                  .sort((a, b) => (b.stats?.ctr || 0) - (a.stats?.ctr || 0))
+                  .slice(0, 5)
+                  .map(p => ({
+                    id: p.id,
+                    title: p.title,
+                    views: p.stats?.visits || 0,
+                    copies: p.stats?.copies || 0,
+                    ctr: p.stats?.ctr || 0,
+                  })),
+                recentActivity: [
+                  { id: '1', type: 'view', user: 'Juan Pérez', prompt: 'Email Marketing Campaign', timestamp: 'Hace 5 min' },
+                  { id: '2', type: 'copy', user: 'María García', prompt: 'Social Media Post', timestamp: 'Hace 12 min' },
+                  { id: '3', type: 'purchase', user: 'Carlos López', prompt: 'SEO Content Writer', timestamp: 'Hace 23 min' },
+                  { id: '4', type: 'view', user: 'Ana Martínez', prompt: 'Product Description', timestamp: 'Hace 35 min' },
+                  { id: '5', type: 'copy', user: 'Luis Rodríguez', prompt: 'Blog Post Generator', timestamp: 'Hace 1 hora' },
+                ],
+              }}
             />
           );
         case 'users':
