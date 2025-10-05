@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { AlertTriangle, CreditCard, ArrowUp, X, Zap, Gift, Sparkles } from 'lucide-react';
+import { useEffect } from 'react';
+import { AlertTriangle, CreditCard, ArrowUp, X, Gift, Sparkles } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
-import { formatNumber, formatCurrency } from '../lib/utils';
+import { formatNumber } from '../lib/utils';
 import { TokenPromotion } from '../types';
 
 interface TokenWarningModalProps {
@@ -45,7 +45,6 @@ export function TokenWarningModal({
   if (!isOpen) return null;
 
   const isNearlyEmpty = tokenUsagePercent >= 90;
-  const isHigh = tokenUsagePercent >= 75;
   const hasPromotion = activePromotion && activePromotion.active;
 
   return (
