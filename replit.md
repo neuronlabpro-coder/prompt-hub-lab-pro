@@ -15,13 +15,17 @@ The application runs on a simplified architecture using Express.js as a single s
 **Key Features:**
 
 *   **Professional Landing Page:** Designed for high conversion with trust badges and analytics previews.
-*   **Comprehensive Authentication:** Supports OAuth (Google/GitHub) and email/password.
+*   **Comprehensive Authentication:** Supports OAuth (Google/GitHub) and email/password via Supabase. AuthProvider exposes getToken() for secure API authentication.
 *   **User Dashboard:** Displays prompt statistics, favorites, visits, copies, CTR, token usage, and top lists.
 *   **Prompt Management:** Categorization and provider management integrated with Supabase.
 *   **Marketplace:** Catalog of prompts for sale with direct purchase functionality.
 *   **Admin Panel:** Protected routes for managing products, users, and system settings.
-*   **Support System:** Integrated ticket management.
-*   **Token Usage Monitoring:** Modal for tracking token stats, history, and purchase options.
+*   **Support System:** Integrated ticket management with session-based authentication (fixed bug).
+*   **Token Usage Monitoring:** Complete token management system with:
+    - TokenUsageModal: Shows usage stats, 7-day history chart, purchase options with promotional bonuses, and plan upgrades
+    - TokenWarningModal: Automatic popup at 75%+ usage threshold with configurable frequency, links to purchase/upgrade
+    - Admin-configurable token promotions with percentage bonuses (10%/15%/20%)
+*   **Playground:** Disabled from navigation (reserved for future agents feature)
 *   **Self-Hosting:** Dockerized setup for easy deployment.
 
 ## External Dependencies
