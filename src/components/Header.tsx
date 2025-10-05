@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, BarChart3, Shield, ShoppingCart, MessageCircle } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, BarChart3, Shield, Store, MessageCircle } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -7,7 +7,6 @@ import { TokenUsageModal } from './TokenUsageModal';
 
 interface HeaderProps {
   onNewPrompt: () => void;
-  onOpenPlayground: () => void;
   onOpenDashboard: () => void;
   onOpenMarketplace?: () => void;
   onOpenSupport?: () => void;
@@ -17,7 +16,7 @@ interface HeaderProps {
   isAdmin?: boolean;
 }
 
-export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
+export function Header({ onNewPrompt, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
   const { user: authUser, signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
@@ -73,7 +72,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 size="sm"
               >
                 <BarChart3 className="h-4 w-4" />
-                <span className="hidden lg:inline">Dashboard</span>
+                <span className="hidden md:inline">Dashboard</span>
               </Button>
               
               <Button
@@ -83,7 +82,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                 size="sm"
               >
                 <Plus className="h-4 w-4" />
-                <span className="hidden lg:inline">{currentView === 'prompts' ? 'Prompts' : 'Nuevo'}</span>
+                <span className="hidden md:inline">{currentView === 'prompts' ? 'Prompts' : 'Nuevo'}</span>
               </Button>
 
               
@@ -97,8 +96,8 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                   className="flex items-center gap-2"
                   size="sm"
                 >
-                  <ShoppingCart className="h-4 w-4" />
-                  <span className="hidden lg:inline">Marketplace</span>
+                  <Store className="h-4 w-4" />
+                  <span className="hidden md:inline">Marketplace</span>
                 </Button>
               )}
 
@@ -111,7 +110,7 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenM
                   size="sm"
                 >
                   <MessageCircle className="h-4 w-4" />
-                  <span className="hidden lg:inline">Soporte</span>
+                  <span className="hidden md:inline">Soporte</span>
                 </Button>
               )}
 

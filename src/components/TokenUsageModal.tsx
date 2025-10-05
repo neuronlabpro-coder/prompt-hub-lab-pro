@@ -289,6 +289,29 @@ export function TokenUsageModal({ isOpen, onClose, activePromotion, user }: Toke
             </CardContent>
           </Card>
 
+          {/* Quick Actions - SIEMPRE VISIBLE */}
+          <div className="flex gap-3 mb-8">
+            <Button
+              onClick={() => setShowPurchaseModal(true)}
+              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              data-testid="button-buy-tokens-main"
+            >
+              <CreditCard className="h-4 w-4" />
+              Comprar Tokens
+            </Button>
+            {upgradeOptions.length > 0 && (
+              <Button
+                onClick={() => setShowUpgradeOptions(true)}
+                variant="outline"
+                className="flex-1 flex items-center justify-center gap-2"
+                data-testid="button-upgrade-plan-main"
+              >
+                <ArrowUp className="h-4 w-4" />
+                Actualizar Plan
+              </Button>
+            )}
+          </div>
+
           {/* Usage History */}
           <Card>
             <CardHeader>

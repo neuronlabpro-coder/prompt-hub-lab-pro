@@ -7,10 +7,7 @@ import { usePrompts, useCategories, useProviders } from './hooks/useSupabase';
 import { useAdminUsers, useAdminPlans } from './hooks/useAdminData';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
-import { CartProvider } from './contexts/CartContext';
-import { ShoppingCartDrawer } from './components/ShoppingCartDrawer';
 import { AdminLayout } from './components/admin/AdminLayout';
-import { AdminDashboard } from './components/admin/AdminDashboard';
 import { UserManagement } from './components/admin/UserManagement';
 import { AdminAccessBanner } from './components/AdminAccessBanner';
 import { PlanManagement } from './components/admin/PlanManagement';
@@ -44,9 +41,7 @@ import { ProductManagement } from './components/admin/ProductManagement';
 import { UserProfile } from './components/UserProfile';
 import { Marketplace } from './components/Marketplace';
 import { SupportCenter } from './components/SupportCenter';
-import Checkout from './pages/Checkout';
 import MarketplacePage from './pages/MarketplacePage';
-import ProductDetail from './pages/ProductDetail';
 import MyPurchasedPrompts from './pages/MyPurchasedPrompts';
 import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
@@ -1088,8 +1083,6 @@ function AppContent() {
       />
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
-      
-      <ShoppingCartDrawer />
     </div>
   );
 }
@@ -1098,9 +1091,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <CartProvider>
-          <AppContent />
-        </CartProvider>
+        <AppContent />
       </AuthProvider>
     </Router>
   );
