@@ -190,8 +190,30 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
       return;
     }
 
-    // TODO: Upload media file to backend when media is present
-    const mediaUrl = mediaFile ? mediaPreview : undefined; // Temporal: usar preview URL
+    let mediaUrl = undefined;
+
+    // Upload media file if present
+    if (mediaFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', mediaFile);
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al subir el archivo');
+        }
+
+        const data = await response.json();
+        mediaUrl = data.url;
+      } catch (error) {
+        toast.error('Error', 'No se pudo subir el archivo');
+        return;
+      }
+    }
     
     onSave({
       title: title.trim(),

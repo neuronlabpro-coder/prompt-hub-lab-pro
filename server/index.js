@@ -20,6 +20,7 @@ import newsletterRoutes from './routes/newsletter.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import supportRoutes from './routes/support.js';
 import stripeRoutes from './routes/stripe.js';
+import uploadRoutes from './routes/upload.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -62,11 +63,15 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/support', supportRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api', uploadRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// Serve uploaded files
+app.use('/uploads', express.static(join(__dirname, '../public/uploads')));
 
 // Serve static files from dist folder
 app.use(express.static(join(__dirname, '../dist')));
