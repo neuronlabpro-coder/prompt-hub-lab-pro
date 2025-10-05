@@ -92,6 +92,53 @@ router.post('/create-payment-intent', async (req, res) => {
   }
 });
 
+// POST /api/stripe/create-subscription-intent
+router.post('/create-subscription-intent', async (req, res) => {
+  try {
+    if (!stripe) {
+      return res.status(500).json({ error: 'Stripe not configured' });
+    }
+
+    const { planId, basePrice, users, totalAmount } = req.body;
+
+    if (!planId || !basePrice || !users || !totalAmount) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Validate minimum users for multitenant
+    if (users < 2) {
+      return res.status(400).json({ error: 'Minimum 2 users required for multitenant' });
+    }
+
+    // Create payment intent for subscription
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(totalAmount * 100), // Convert to cents
+      currency: 'eur', // European currency
+      metadata: {
+        planId,
+        basePrice: basePrice.toString(),
+        users: users.toString(),
+        totalAmount: totalAmount.toString(),
+        subscriptionType: 'multitenant',
+      },
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id,
+    });
+  } catch (error) {
+    console.error('Error creating subscription intent:', error);
+    res.status(500).json({ 
+      error: 'Error creating subscription intent',
+      message: error.message 
+    });
+  }
+});
+
 // POST /api/stripe/webhook
 router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];

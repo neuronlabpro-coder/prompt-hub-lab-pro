@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'wouter';
+import { useRouter } from '@/components/Router';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Button } from '@/components/ui/Button';
@@ -27,7 +27,7 @@ function SubscribeForm({ planDetails }: SubscribeFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
-  const [, navigate] = useLocation();
+  const { navigate } = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -110,7 +110,7 @@ function SubscribeForm({ planDetails }: SubscribeFormProps) {
 }
 
 export default function Subscribe() {
-  const [location, navigate] = useLocation();
+  const { navigate } = useRouter();
   const { toast } = useToast();
   const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(true);
@@ -152,7 +152,7 @@ export default function Subscribe() {
 
   useEffect(() => {
     // Crear payment intent con Stripe
-    fetch('/api/create-subscription-intent', {
+    fetch('/api/stripe/create-subscription-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
