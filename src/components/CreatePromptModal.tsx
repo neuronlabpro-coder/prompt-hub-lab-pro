@@ -31,6 +31,10 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
+  const [contentType, setContentType] = useState<'text' | 'image' | 'video'>('text');
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [mediaPreview, setMediaPreview] = useState<string>('');
+  const [isUploading, setIsUploading] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [showNewCategory, setShowNewCategory] = useState(false);
@@ -115,6 +119,42 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
       setContentEs(translatedContent);
     }
     setIsTranslating(false);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type based on content type
+    const validTypes = contentType === 'image' 
+      ? ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+      : ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
+
+    if (!validTypes.includes(file.type)) {
+      toast.error('Tipo de archivo inválido', `Por favor selecciona un archivo ${contentType === 'image' ? 'de imagen' : 'de video'} válido`);
+      return;
+    }
+
+    // Validate file size (max 500MB for video, 10MB for images)
+    const maxSize = contentType === 'video' ? 500 * 1024 * 1024 : 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('Archivo muy grande', `El tamaño máximo es ${contentType === 'video' ? '500MB' : '10MB'}`);
+      return;
+    }
+
+    setMediaFile(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setMediaPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveFile = () => {
+    setMediaFile(null);
+    setMediaPreview('');
   };
 
   const handleCategoryChange = (value: string) => {

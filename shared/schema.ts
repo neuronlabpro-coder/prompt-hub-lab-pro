@@ -4,6 +4,8 @@ import { pgTable, uuid, text, varchar, timestamp, bigint, numeric, integer, bool
 // Custom types/enums
 export const userRoleEnum = pgEnum('user_role', ['superadmin', 'admin', 'editor', 'viewer', 'user']);
 export const promptTypeEnum = pgEnum('prompt_type', ['system', 'user']);
+export const promptContentTypeEnum = pgEnum('prompt_content_type', ['text', 'image', 'video']);
+export const mediaTypeEnum = pgEnum('media_type', ['image', 'video']);
 export const couponTypeEnum = pgEnum('coupon_type', ['percentage', 'fixed']);
 export const couponScopeEnum = pgEnum('coupon_scope', ['plan', 'addon', 'global']);
 export const organizationMemberRoleEnum = pgEnum('organization_member_role', ['owner', 'admin', 'member']);
@@ -52,6 +54,15 @@ export const categories = pgTable('categories', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+// Subcategories table
+export const subcategories = pgTable('subcategories', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  name: text('name').notNull(),
+  description: text('description'),
+  categoryId: text('category_id').notNull().references(() => categories.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
 // Prompts table
 export const prompts = pgTable('prompts', {
   id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
@@ -59,8 +70,15 @@ export const prompts = pgTable('prompts', {
   contentEs: text('content_es').notNull(),
   contentEn: text('content_en').notNull(),
   category: text('category').notNull().references(() => categories.id),
+  subcategoryId: uuid('subcategory_id').references(() => subcategories.id),
   tags: text('tags').array().default(sql`'{}'::text[]`),
   type: promptTypeEnum('type').default('user'),
+  contentType: promptContentTypeEnum('content_type').default('text'),
+  mediaUrl: text('media_url'),
+  mediaType: mediaTypeEnum('media_type'),
+  variables: jsonb('variables').default(sql`'[]'::jsonb`),
+  isSystemPrompt: boolean('is_system_prompt').default(false),
+  preferredModelId: text('preferred_model_id').references(() => models.id),
   userId: uuid('user_id').references(() => users.id),
   isFavorite: boolean('is_favorite').default(false),
   createdAt: timestamp('created_at').defaultNow(),
@@ -254,4 +272,18 @@ export const downloads = pgTable('downloads', {
   downloadCount: integer('download_count').default(0),
   maxDownloads: integer('max_downloads').default(5),
   createdAt: timestamp('created_at').defaultNow(),
+});
+
+// Prompt variables table (for dynamic prompts)
+export const promptVariables = pgTable('prompt_variables', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  name: text('name').notNull(),
+  label: text('label').notNull(),
+  description: text('description'),
+  type: text('type').default('text').notNull(), // text, number, select, textarea
+  defaultValue: text('default_value'),
+  options: jsonb('options').default(sql`'[]'::jsonb`), // for select type
+  required: boolean('required').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
