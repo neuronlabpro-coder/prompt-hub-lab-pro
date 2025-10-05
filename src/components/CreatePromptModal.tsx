@@ -497,6 +497,16 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
               </div>
             </div>
 
+            {/* Variables Info */}
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+              <p className="text-sm text-blue-400">
+                💡 <strong>Usa variables</strong> para crear prompts dinámicos: <code className="bg-gray-700 px-1 rounded">{'{nombre}'}</code>, <code className="bg-gray-700 px-1 rounded">{'{tema}'}</code>, <code className="bg-gray-700 px-1 rounded">{'{objetivo}'}</code>
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Las variables se pueden gestionar desde el panel de administración
+              </p>
+            </div>
+
             {/* Content Tabs */}
             <div>
               <div className="flex border-b border-gray-700 mb-4">
