@@ -55,6 +55,25 @@ Ver `docs-project/project-overview.md` para detalles técnicos completos.
 
 ## Últimos Cambios (Oct 2025)
 
+### 5 Oct 2025 (Tarde - PLAYGROUND Y DASHBOARD MEJORADOS ✅)
+- ✅ **Playground UX Mejorado - Bug "Pantalla Azul" Resuelto**:
+  - Agregado loading state con spinner mientras cargan providers
+  - Mensaje de alerta cuando no hay proveedores configurados (guía al usuario)
+  - Fix completo: ya no se queda en "pantalla azul sin nada"
+  - Usuario ve estados claros: Cargando → Sin providers → Contenido normal
+- ✅ **Dashboard Usuario - Fix División por Cero**:
+  - Corregido crash cuando usuario no tiene prompts (totalPrompts = 0)
+  - Guards agregados en TODAS las divisiones y .toFixed() calls
+  - Ahora funciona perfecto para usuarios nuevos (muestra 0.0% en vez de crash)
+  - Dashboard completo con: Totals, Favoritos, Visitas, Copias, CTR, Tokens, Categorías, Top Lists
+- ⚠️ **PROBLEMA CRÍTICO .replit PERSISTE**:
+  - .replit tiene `localPort = 3001` en vez de `localPort = 5000`
+  - Agent NO puede editar .replit (forbidden)
+  - Código está correcto, build exitoso, solo falta configuración manual del puerto
+  - **SOLUCIÓN USUARIO**: Editar `.replit` y cambiar `[[ports]]` a `localPort = 5000` y `externalPort = 80`
+- ✅ **Build Exitoso**: Frontend compilado sin errores
+- ✅ **Código Limpio**: Sin errores LSP
+
 ### 5 Oct 2025 (Madrugada - SOPORTE Y MARKETPLACE REACTIVADOS ✅)
 - ✅ **Soporte y Marketplace COMPLETAMENTE REACTIVADOS**:
   - Header.tsx: Props `onOpenMarketplace` y `onOpenSupport` agregados

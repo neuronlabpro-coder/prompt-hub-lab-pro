@@ -1,8 +1,7 @@
 import React from 'react';
-import { BarChart3, TrendingUp, Eye, Copy, Heart, Zap, Users, Calendar } from 'lucide-react';
+import { BarChart3, TrendingUp, Eye, Copy, Heart, Zap, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
-import { Badge } from './ui/Badge';
-import { formatNumber, formatDate } from '../lib/utils';
+import { formatNumber } from '../lib/utils';
 import { Prompt } from '../types';
 
 interface DashboardProps {
@@ -129,7 +128,7 @@ export function Dashboard({ prompts }: DashboardProps) {
           <CardContent>
             <div className="text-2xl font-bold text-gray-100">{analytics.favoritePrompts}</div>
             <div className="text-xs text-gray-400 mt-1">
-              {((analytics.favoritePrompts / analytics.totalPrompts) * 100).toFixed(1)}% del total
+              {analytics.totalPrompts > 0 ? ((analytics.favoritePrompts / analytics.totalPrompts) * 100).toFixed(1) : '0.0'}% del total
             </div>
           </CardContent>
         </Card>
@@ -205,7 +204,7 @@ export function Dashboard({ prompts }: DashboardProps) {
                       <span className="text-gray-300 text-sm">{category.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-400">{percentage.toFixed(1)}%</span>
+                      <span className="text-xs text-gray-400">{analytics.totalPrompts > 0 ? percentage.toFixed(1) : '0.0'}%</span>
                       <span className="font-semibold text-gray-100 min-w-8 text-right">{count}</span>
                     </div>
                   </div>
@@ -319,28 +318,28 @@ export function Dashboard({ prompts }: DashboardProps) {
             <div className="bg-gray-900 p-4 rounded-lg">
               <div className="text-sm text-gray-400 mb-1">Promedio de Visitas</div>
               <div className="text-lg font-semibold text-gray-100">
-                {formatNumber(Math.round(analytics.totalVisits / analytics.totalPrompts))}
+                {analytics.totalPrompts > 0 ? formatNumber(Math.round(analytics.totalVisits / analytics.totalPrompts)) : '0'}
               </div>
               <div className="text-xs text-gray-500">por prompt</div>
             </div>
             <div className="bg-gray-900 p-4 rounded-lg">
               <div className="text-sm text-gray-400 mb-1">Promedio de Copias</div>
               <div className="text-lg font-semibold text-gray-100">
-                {formatNumber(Math.round(analytics.totalCopies / analytics.totalPrompts))}
+                {analytics.totalPrompts > 0 ? formatNumber(Math.round(analytics.totalCopies / analytics.totalPrompts)) : '0'}
               </div>
               <div className="text-xs text-gray-500">por prompt</div>
             </div>
             <div className="bg-gray-900 p-4 rounded-lg">
               <div className="text-sm text-gray-400 mb-1">CTR Promedio</div>
               <div className="text-lg font-semibold text-gray-100">
-                {analytics.avgCTR.toFixed(1)}%
+                {analytics.totalPrompts > 0 ? analytics.avgCTR.toFixed(1) : '0.0'}%
               </div>
               <div className="text-xs text-gray-500">conversión</div>
             </div>
             <div className="bg-gray-900 p-4 rounded-lg">
               <div className="text-sm text-gray-400 mb-1">Tokens Promedio</div>
               <div className="text-lg font-semibold text-gray-100">
-                {formatNumber(Math.round((analytics.totalTokensEs + analytics.totalTokensEn) / analytics.totalPrompts / 2))}
+                {analytics.totalPrompts > 0 ? formatNumber(Math.round((analytics.totalTokensEs + analytics.totalTokensEn) / analytics.totalPrompts / 2)) : '0'}
               </div>
               <div className="text-xs text-gray-500">por idioma</div>
             </div>
