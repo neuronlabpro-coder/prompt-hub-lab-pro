@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, ShoppingCart, MessageCircle } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -9,13 +9,15 @@ interface HeaderProps {
   onNewPrompt: () => void;
   onOpenPlayground: () => void;
   onOpenDashboard: () => void;
+  onOpenMarketplace?: () => void;
+  onOpenSupport?: () => void;
   onOpenProfile?: () => void;
   currentView: 'prompts' | 'dashboard' | 'marketplace' | 'soporte';
   onToggleAdmin?: () => void;
   isAdmin?: boolean;
 }
 
-export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
+export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
   const { user: authUser, signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
@@ -94,6 +96,32 @@ export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, onOpenP
                 <PlayCircle className="h-4 w-4" />
                 <span className="hidden lg:inline">Playground</span>
               </Button>
+
+              {/* Marketplace Button */}
+              {onOpenMarketplace && (
+                <Button
+                  onClick={onOpenMarketplace}
+                  variant={currentView === 'marketplace' ? 'default' : 'outline'}
+                  className="flex items-center gap-2"
+                  size="sm"
+                >
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="hidden lg:inline">Marketplace</span>
+                </Button>
+              )}
+
+              {/* Soporte Button */}
+              {onOpenSupport && (
+                <Button
+                  onClick={onOpenSupport}
+                  variant={currentView === 'soporte' ? 'default' : 'outline'}
+                  className="flex items-center gap-2"
+                  size="sm"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  <span className="hidden lg:inline">Soporte</span>
+                </Button>
+              )}
 
               {/* Admin Button */}
               {isAdmin && onToggleAdmin && (
