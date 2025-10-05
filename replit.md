@@ -17,9 +17,21 @@ The application runs on a simplified architecture using Express.js as a single s
 *   **Professional Landing Page:** Designed for high conversion with trust badges and analytics previews.
 *   **Comprehensive Authentication:** Supports OAuth (Google/GitHub) and email/password via Supabase. AuthProvider exposes getToken() for secure API authentication.
 *   **User Dashboard:** Displays prompt statistics, favorites, visits, copies, CTR, token usage, and top lists.
-*   **Prompt Management:** Categorization and provider management integrated with Supabase.
+*   **Advanced Prompt Management:** 
+    - Multi-type prompts: Text, Image, and Video with conditional UI
+    - File upload system with preview (images max 10MB, videos max 500MB)
+    - Automatic video compression via ffmpeg integration
+    - Dynamic variables system: Define reusable variables (text/number/select/textarea) that users can fill
+    - System prompts: Admin-flagged prompts available to all users regardless of ownership
+    - Subcategories: Hierarchical organization with parent category relationships
+    - Full categorization and provider management integrated with Supabase
 *   **Marketplace:** Catalog of prompts for sale with direct purchase functionality.
-*   **Admin Panel:** Protected routes for managing products, users, and system settings.
+*   **Admin Panel:** 
+    - Enhanced Dashboard: Real-time stats, top prompts by CTR, recent activity feed, growth trends
+    - Variables Management: CRUD for dynamic prompt variables with type validation
+    - Subcategory Management: Hierarchical category structure with cascading organization
+    - System Prompt Flags: Mark prompts as system-wide available
+    - Protected routes for managing products, users, plans, coupons, affiliates, and system settings
 *   **Support System:** Integrated ticket management with session-based authentication (fixed bug).
 *   **Token Usage Monitoring:** Complete token management system with:
     - TokenUsageModal: Shows usage stats, 7-day history chart, purchase options with promotional bonuses, and plan upgrades
@@ -33,4 +45,36 @@ The application runs on a simplified architecture using Express.js as a single s
 *   **Supabase:** Database, authentication, and real-time functionalities.
 *   **Stripe:** Payment processing for the e-commerce marketplace (Stripe Elements for checkout, Payment Intents API, Webhooks).
 *   **OpenAI, Anthropic, OpenRouter:** (Optional) APIs for AI model interactions, used in the playground.
+*   **ffmpeg:** Video compression and processing for uploaded media files.
+*   **multer:** Node.js middleware for handling multipart/form-data file uploads.
 *   **lucide-react:** Icon library for UI elements.
+
+## Recent Updates (Oct 2025)
+
+### Multi-Type Prompt System
+- Added support for Text, Image, and Video prompts with type selector
+- Implemented file upload UI with image preview and video preview placeholders
+- Created `/api/upload` endpoint with automatic video compression (ffmpeg)
+- Files stored in `public/uploads` directory served statically
+
+### Dynamic Variables System
+- Admin can define reusable variables: name, label, type (text/number/select/textarea), options, defaults
+- Variables available in prompt creation with `{variable_name}` syntax
+- VariableManagement component for CRUD operations in admin panel
+
+### System Prompts
+- New `is_system_prompt` flag allows admins to mark prompts available to all users
+- System prompts bypass ownership checks and appear in all user libraries
+- Checkbox in PromptManagement for easy toggling
+
+### Subcategory Hierarchy
+- SubcategoryManagement component for organizing prompts within categories
+- Parent-child relationship between categories and subcategories
+- Cascading organization and filtering support
+
+### Enhanced Admin Dashboard
+- Real-time statistics: total users, prompts, revenue, active users, views, copies, CTR
+- Top 5 prompts ranked by performance metrics
+- Recent activity feed showing user interactions
+- Growth trend indicators with percentage changes
+- Placeholder for future Chart.js integration
