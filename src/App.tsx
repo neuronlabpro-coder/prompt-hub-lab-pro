@@ -17,6 +17,8 @@ import { PlanManagement } from './components/admin/PlanManagement';
 import { PromptManagement } from './components/admin/PromptManagement';
 import { CategoryManagement } from './components/admin/CategoryManagement';
 import { ProviderManagement } from './components/admin/ProviderManagement';
+import { VariableManagement } from './components/admin/VariableManagement';
+import { SubcategoryManagement } from './components/admin/SubcategoryManagement';
 import { CouponManagement } from './components/admin/CouponManagement';
 import { AffiliateManagement } from './components/admin/AffiliateManagement';
 import { AuditLogs } from './components/admin/AuditLogs';
@@ -701,6 +703,43 @@ function AppContent() {
               onCreateModel={handleCreateModel}
               onUpdateModel={handleUpdateModel}
               onDeleteModel={handleDeleteModel}
+            />
+          );
+        case 'variables':
+          return (
+            <VariableManagement
+              variables={[]}
+              onCreateVariable={(variable) => {
+                console.log('Create variable:', variable);
+                toast.success('Variable creada', `"${variable.label}" creada exitosamente`);
+              }}
+              onUpdateVariable={(variableId, updates) => {
+                console.log('Update variable:', { variableId, updates });
+                toast.success('Variable actualizada', 'Los cambios han sido guardados');
+              }}
+              onDeleteVariable={(variableId) => {
+                console.log('Delete variable:', variableId);
+                toast.success('Variable eliminada', 'La variable ha sido eliminada');
+              }}
+            />
+          );
+        case 'subcategories':
+          return (
+            <SubcategoryManagement
+              subcategories={[]}
+              categories={categories}
+              onCreateSubcategory={(subcategory) => {
+                console.log('Create subcategory:', subcategory);
+                toast.success('Subcategoría creada', `"${subcategory.name}" creada exitosamente`);
+              }}
+              onUpdateSubcategory={(subcategoryId, updates) => {
+                console.log('Update subcategory:', { subcategoryId, updates });
+                toast.success('Subcategoría actualizada', 'Los cambios han sido guardados');
+              }}
+              onDeleteSubcategory={(subcategoryId) => {
+                console.log('Delete subcategory:', subcategoryId);
+                toast.success('Subcategoría eliminada', 'La subcategoría ha sido eliminada');
+              }}
             />
           );
         case 'coupons':

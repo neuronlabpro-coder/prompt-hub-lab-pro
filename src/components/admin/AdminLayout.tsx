@@ -19,6 +19,8 @@ export function AdminLayout({ children, currentView, onViewChange, onLogout }: A
     { id: 'prompts', label: 'Prompts', icon: FileText, badge: null },
     { id: 'products', label: 'Productos (Marketplace)', icon: Tag, badge: null },
     { id: 'categories', label: 'Categorías', icon: Tag, badge: null },
+    { id: 'subcategories', label: 'Subcategorías', icon: Tag, badge: null },
+    { id: 'variables', label: 'Variables', icon: Settings, badge: null },
     { id: 'plans', label: 'Planes', icon: DollarSign, badge: null },
     { id: 'providers', label: 'Proveedores IA', icon: Bot, badge: null },
     { id: 'coupons', label: 'Cupones', icon: Ticket, badge: null },

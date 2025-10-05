@@ -56,6 +56,7 @@ export function PromptManagement({
     tags: [] as string[],
     type: 'system' as 'system' | 'user',
     is_favorite: false,
+    is_system_prompt: false,
   });
 
   const [categoryForm, setCategoryForm] = useState({
@@ -256,6 +257,7 @@ export function PromptManagement({
       tags: [],
       type: 'system',
       is_favorite: false,
+      is_system_prompt: false,
     });
     setTagInput('');
   };
@@ -279,6 +281,7 @@ export function PromptManagement({
       tags: prompt.tags,
       type: prompt.type,
       is_favorite: prompt.is_favorite,
+      is_system_prompt: prompt.is_system_prompt || false,
     });
     setIsCreatingPrompt(true);
   };
@@ -534,6 +537,20 @@ export function PromptManagement({
                   />
                   <label htmlFor="is_favorite" className="text-sm text-gray-300">
                     Marcar como destacado
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="is_system_prompt"
+                    checked={promptForm.is_system_prompt}
+                    onChange={(e) => setPromptForm({ ...promptForm, is_system_prompt: e.target.checked })}
+                    className="rounded"
+                    data-testid="checkbox-is-system-prompt"
+                  />
+                  <label htmlFor="is_system_prompt" className="text-sm text-gray-300">
+                    <strong className="text-blue-400">Prompt del Sistema</strong> (disponible para todos los usuarios)
                   </label>
                 </div>
               </div>
