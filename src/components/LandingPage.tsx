@@ -116,7 +116,7 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
         'Análisis de rendimiento',
         'Soporte por email'
       ],
-      cta: 'Empezar Gratis',
+      cta: 'Suscribirse',
       popular: false
     },
     {
@@ -134,7 +134,7 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
         'Colaboración en equipo (5 usuarios)',
         'Soporte prioritario'
       ],
-      cta: 'Empezar Prueba',
+      cta: 'Suscribirse',
       popular: true
     },
     {
@@ -153,7 +153,7 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
         'SLA garantizado',
         'Onboarding personalizado'
       ],
-      cta: 'Contactar Ventas',
+      cta: 'Suscribirse',
       popular: false
     }
   ];
@@ -296,31 +296,27 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button 
-                onClick={onGetStarted}
+                onClick={() => {
+                  const pricingSection = document.getElementById('pricing');
+                  if (pricingSection) {
+                    pricingSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 size="lg" 
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 h-auto"
               >
                 <Rocket className="h-5 w-5 mr-2" />
-                Empezar Gratis - 14 Días
+                Ver Planes
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
               <Button 
-                onClick={() => window.location.href = '/login'}
+                onClick={() => window.location.href = 'https://wa.me/34623979013'}
                 variant="outline" 
                 size="lg"
                 className="text-lg px-8 py-4 h-auto border-gray-600 hover:border-green-500"
               >
-                <LayoutDashboard className="h-5 w-5 mr-2" />
-                Entrar
-              </Button>
-              <Button 
-                onClick={onContactSales}
-                variant="outline" 
-                size="lg"
-                className="text-lg px-8 py-4 h-auto border-gray-600 hover:border-blue-500"
-              >
-                <Users className="h-5 w-5 mr-2" />
-                Demo Personalizada
+                <MessageCircle className="h-5 w-5 mr-2" />
+                Hablar con Ventas
               </Button>
             </div>
 
@@ -572,13 +568,16 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
                   </ul>
                   
                   <Button 
-                    onClick={plan.id === 'enterprise' ? onContactSales : onGetStarted}
+                    onClick={() => {
+                      window.location.href = `/subscribe?plan=${plan.id}&price=${plan.price}`;
+                    }}
                     className={`w-full mt-6 ${
                       plan.popular 
                         ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700' 
                         : ''
                     }`}
                     variant={plan.popular ? 'default' : 'outline'}
+                    data-testid={`button-subscribe-${plan.id}`}
                   >
                     {plan.cta}
                   </Button>
@@ -703,21 +702,26 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                 <Button 
-                  onClick={onGetStarted}
+                  onClick={() => {
+                    const pricingSection = document.getElementById('pricing');
+                    if (pricingSection) {
+                      pricingSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                   size="lg" 
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4 h-auto"
                 >
                   <Rocket className="h-5 w-5 mr-2" />
-                  Empezar Gratis Ahora
+                  Ver Planes y Suscribirse
                   <ArrowRight className="h-5 w-5 ml-2" />
                 </Button>
                 <Button 
-                  onClick={onContactSales}
+                  onClick={() => window.location.href = 'https://wa.me/34623979013'}
                   variant="outline" 
                   size="lg"
-                  className="text-lg px-8 py-4 h-auto border-gray-600 hover:border-blue-500"
+                  className="text-lg px-8 py-4 h-auto border-gray-600 hover:border-green-500"
                 >
-                  <Phone className="h-5 w-5 mr-2" />
+                  <MessageCircle className="h-5 w-5 mr-2" />
                   Hablar con Ventas
                 </Button>
               </div>
@@ -725,7 +729,7 @@ export function LandingPage({ onGetStarted, onContactSales }: LandingPageProps) 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
                 <div className="flex items-center justify-center gap-2 text-green-400">
                   <CheckCircle className="h-4 w-4" />
-                  <span>14 días gratis, sin tarjeta</span>
+                  <span>Pago seguro con Stripe</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-green-400">
                   <CheckCircle className="h-4 w-4" />

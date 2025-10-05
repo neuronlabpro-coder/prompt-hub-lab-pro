@@ -43,6 +43,7 @@ import { Marketplace } from './components/Marketplace';
 import { SupportCenter } from './components/SupportCenter';
 import MarketplacePage from './pages/MarketplacePage';
 import MyPurchasedPrompts from './pages/MyPurchasedPrompts';
+import Subscribe from './pages/Subscribe';
 import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
 
 function AppContent() {
@@ -252,6 +253,27 @@ function AppContent() {
           </button>
         </div>
         <LoginForm />
+      </div>
+    );
+  }
+
+  // Show subscription page (NO AUTH REQUIRED - pago primero, registro después)
+  if (currentPath === '/subscribe' || currentPath.startsWith('/subscribe?')) {
+    return <Subscribe />;
+  }
+
+  // Show subscription success page (after payment)
+  if (currentPath === '/subscription-success' || currentPath.startsWith('/subscription-success?')) {
+    // TODO: Create subscription success page with auto-registration
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <h1 className="text-3xl font-bold text-green-400 mb-4">¡Pago Exitoso!</h1>
+          <p className="text-gray-300 mb-6">
+            Tu suscripción ha sido procesada. Estamos creando tu cuenta...
+          </p>
+          <Button onClick={() => navigate('/login')}>Continuar al Login</Button>
+        </div>
       </div>
     );
   }
