@@ -34,7 +34,6 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
   const [contentType, setContentType] = useState<'text' | 'image' | 'video'>('text');
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string>('');
-  const [isUploading, setIsUploading] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [showNewCategory, setShowNewCategory] = useState(false);
@@ -180,16 +179,24 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim() || !contentEs.trim()) {
       toast.warning('Campos requeridos', 'Por favor completa el título y contenido en español');
       return;
     }
 
+    if ((contentType === 'image' || contentType === 'video') && !mediaFile) {
+      toast.warning('Archivo requerido', `Por favor sube ${contentType === 'image' ? 'una imagen' : 'un video'}`);
+      return;
+    }
+
+    // TODO: Upload media file to backend when media is present
+    const mediaUrl = mediaFile ? mediaPreview : undefined; // Temporal: usar preview URL
+    
     onSave({
       title: title.trim(),
       content_es: contentEs.trim(),
-      content_en: contentEn.trim() || contentEs.trim(), // Fallback to Spanish if English is empty
+      content_en: contentEn.trim() || contentEs.trim(),
       category: selectedCategory,
       subcategory_id: selectedSubcategory || undefined,
       preferred_model_id: selectedModel || undefined,
@@ -202,6 +209,9 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
     setContentEn('');
     setSelectedSubcategory('');
     setSelectedModel('');
+    setContentType('text');
+    setMediaFile(null);
+    setMediaPreview('');
     setTags([]);
     setTagInput('');
     onClose();
@@ -217,8 +227,9 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
     setSelectedCategory('');
     setShowNewCategory(false);
     setNewCategoryName('');
-    setShowNewCategory(false);
-    setNewCategoryName('');
+    setContentType('text');
+    setMediaFile(null);
+    setMediaPreview('');
     onClose();
   };
 
@@ -291,6 +302,115 @@ export function CreatePromptModal({ isOpen, onClose, onSave }: CreatePromptModal
                 )}
               </div>
             </div>
+
+            {/* Content Type Selector */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Tipo de Prompt *
+              </label>
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setContentType('text')}
+                  className={`p-3 rounded-lg border-2 transition-all ${
+                    contentType === 'text'
+                      ? 'border-blue-500 bg-blue-500/20 text-blue-400'
+                      : 'border-gray-600 bg-gray-700/50 text-gray-400 hover:border-gray-500'
+                  }`}
+                  data-testid="button-type-text"
+                >
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-2xl">📝</span>
+                    <span className="text-sm font-medium">Texto</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContentType('image')}
+                  className={`p-3 rounded-lg border-2 transition-all ${
+                    contentType === 'image'
+                      ? 'border-blue-500 bg-blue-500/20 text-blue-400'
+                      : 'border-gray-600 bg-gray-700/50 text-gray-400 hover:border-gray-500'
+                  }`}
+                  data-testid="button-type-image"
+                >
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-2xl">🖼️</span>
+                    <span className="text-sm font-medium">Imagen</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContentType('video')}
+                  className={`p-3 rounded-lg border-2 transition-all ${
+                    contentType === 'video'
+                      ? 'border-blue-500 bg-blue-500/20 text-blue-400'
+                      : 'border-gray-600 bg-gray-700/50 text-gray-400 hover:border-gray-500'
+                  }`}
+                  data-testid="button-type-video"
+                >
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-2xl">🎥</span>
+                    <span className="text-sm font-medium">Video</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Media Upload for Image/Video */}
+            {(contentType === 'image' || contentType === 'video') && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  {contentType === 'image' ? 'Subir Imagen' : 'Subir Video'} *
+                </label>
+                {!mediaPreview ? (
+                  <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-gray-500 transition-colors">
+                    <input
+                      type="file"
+                      id="media-upload"
+                      accept={contentType === 'image' ? 'image/*' : 'video/*'}
+                      onChange={handleFileChange}
+                      className="hidden"
+                      data-testid="input-media-upload"
+                    />
+                    <label
+                      htmlFor="media-upload"
+                      className="cursor-pointer flex flex-col items-center gap-2"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-2xl">
+                        {contentType === 'image' ? '🖼️' : '🎥'}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-300">
+                          Click para seleccionar {contentType === 'image' ? 'imagen' : 'video'}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {contentType === 'image' 
+                            ? 'JPG, PNG, GIF, WEBP (máx. 10MB)'
+                            : 'MP4, WEBM, MOV (máx. 500MB)'}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="relative border border-gray-600 rounded-lg overflow-hidden">
+                    {contentType === 'image' ? (
+                      <img src={mediaPreview} alt="Preview" className="w-full h-48 object-cover" />
+                    ) : (
+                      <video src={mediaPreview} className="w-full h-48 object-cover" controls />
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleRemoveFile}
+                      className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                      data-testid="button-remove-media"
+                    >
+                      <X className="h-4 w-4 text-white" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Subcategory and Model */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
