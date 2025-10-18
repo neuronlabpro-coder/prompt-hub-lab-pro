@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
-import { Zap, User, Settings, LogOut, Plus, BarChart3, Shield, Store, MessageCircle } from 'lucide-react';
+import { Zap, User, Settings, LogOut, Plus, PlayCircle, BarChart3, Shield, MessageSquare } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { TokenUsageModal } from './TokenUsageModal';
+import { SupportModal } from './SupportModal';
 
 interface HeaderProps {
   onNewPrompt: () => void;
+  onOpenPlayground: () => void;
   onOpenDashboard: () => void;
-  onOpenMarketplace?: () => void;
-  onOpenSupport?: () => void;
-  onOpenProfile?: () => void;
-  currentView: 'prompts' | 'dashboard' | 'marketplace' | 'soporte' | 'playground';
+  currentView: 'prompts' | 'dashboard';
   onToggleAdmin?: () => void;
   isAdmin?: boolean;
 }
 
-export function Header({ onNewPrompt, onOpenDashboard, onOpenMarketplace, onOpenSupport, onOpenProfile, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
-  const { user: authUser, signOut } = useAuth();
+export function Header({ onNewPrompt, onOpenPlayground, onOpenDashboard, currentView, onToggleAdmin, isAdmin }: HeaderProps) {
+  const { signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
 
-  // User data from Supabase auth
+  // Mock user data - esto se reemplazará con datos reales de Clerk
   const user = {
-    name: authUser?.user_metadata?.name || authUser?.email?.split('@')[0] || 'Usuario',
-    email: authUser?.email || '',
-    plan: authUser?.user_metadata?.plan || 'Pro',
-    tokensUsed: 750000, // TODO: Get from database
-    tokensLimit: 2000000, // TODO: Get from plan info
+    name: 'Usuario Demo',
+    email: 'demo@prompthub.com',
+    plan: 'Pro',
+    tokensUsed: 750000,
+    tokensLimit: 2000000,
   };
 
   const tokenUsagePercent = (user.tokensUsed / user.tokensLimit) * 100;
@@ -64,55 +64,33 @@ export function Header({ onNewPrompt, onOpenDashboard, onOpenMarketplace, onOpen
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Button
                 onClick={onOpenDashboard}
                 variant={currentView === 'dashboard' ? 'default' : 'outline'}
                 className="flex items-center gap-2"
-                size="sm"
               >
                 <BarChart3 className="h-4 w-4" />
-                <span className="hidden md:inline">Dashboard</span>
+                Dashboard
               </Button>
               
               <Button
                 onClick={onNewPrompt}
                 variant={currentView === 'prompts' ? 'default' : 'outline'}
                 className="flex items-center gap-2"
-                size="sm"
               >
                 <Plus className="h-4 w-4" />
-                <span className="hidden md:inline">{currentView === 'prompts' ? 'Prompts' : 'Nuevo'}</span>
+                {currentView === 'prompts' ? 'Prompts' : 'Nuevo Prompt'}
               </Button>
-
               
-              {/* Playground desactivado - será parte de agentes futuros */}
-
-              {/* Marketplace Button */}
-              {onOpenMarketplace && (
-                <Button
-                  onClick={onOpenMarketplace}
-                  variant={currentView === 'marketplace' ? 'default' : 'outline'}
-                  className="flex items-center gap-2"
-                  size="sm"
-                >
-                  <Store className="h-4 w-4" />
-                  <span className="hidden md:inline">Marketplace</span>
-                </Button>
-              )}
-
-              {/* Soporte Button */}
-              {onOpenSupport && (
-                <Button
-                  onClick={onOpenSupport}
-                  variant={currentView === 'soporte' ? 'default' : 'outline'}
-                  className="flex items-center gap-2"
-                  size="sm"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  <span className="hidden md:inline">Soporte</span>
-                </Button>
-              )}
+              <Button
+                onClick={onOpenPlayground}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <PlayCircle className="h-4 w-4" />
+                Playground
+              </Button>
 
               {/* Admin Button */}
               {isAdmin && onToggleAdmin && (
@@ -199,40 +177,30 @@ export function Header({ onNewPrompt, onOpenDashboard, onOpenMarketplace, onOpen
                     </div>
 
                     <div className="py-1">
-                      {onOpenProfile && (
-                        <button
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
-                          onClick={() => {
-                            onOpenProfile();
-                            setShowUserMenu(false);
-                          }}
-                          data-testid="button-open-profile"
-                        >
-                          <Settings className="h-4 w-4" />
-                          Mi Perfil
-                        </button>
-                      )}
-                      {isAdmin && (
-                        <button
-                          className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-red-400"
-                          onClick={() => {
-                            window.location.href = '/admin/dashboard';
-                            setShowUserMenu(false);
-                          }}
-                          data-testid="button-admin-panel"
-                        >
-                          <Shield className="h-4 w-4" />
-                          Admin Panel
-                        </button>
-                      )}
                       <button
                         className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
-                        onClick={async () => {
-                          await signOut();
+                        onClick={() => {
                           setShowUserMenu(false);
-                          window.location.href = '/';
                         }}
-                        data-testid="button-logout"
+                      >
+                        <Settings className="h-4 w-4" />
+                        Configuración
+                      </button>
+                      <button
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          setShowSupportModal(true);
+                        }}
+                      >
+                        <MessageSquare className="h-4 w-4" />
+                        Soporte
+                      </button>
+                      <button
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-gray-700 flex items-center gap-2 text-gray-300"
+                        onClick={() => {
+                          signOut();
+                        }}
                       >
                         <LogOut className="h-4 w-4" />
                         Cerrar sesión
@@ -250,6 +218,15 @@ export function Header({ onNewPrompt, onOpenDashboard, onOpenMarketplace, onOpen
         isOpen={showTokenModal}
         onClose={() => setShowTokenModal(false)}
         user={user}
+      />
+
+      <SupportModal
+        isOpen={showSupportModal}
+        onClose={() => setShowSupportModal(false)}
+        onCreateTicket={(ticket) => {
+          console.log('Creating support ticket:', ticket);
+          // In real app, this would save to Supabase
+        }}
       />
     </>
   );

@@ -369,12 +369,8 @@ function AppContent() {
   };
 
   const handleImprovePrompt = async (prompt: Prompt) => {
-    try {
-      await improvePrompt(prompt.id, 'es');
-      toast.success('Prompt mejorado', 'El prompt ha sido mejorado exitosamente');
-    } catch (error) {
-      toast.error('Error al mejorar', error instanceof Error ? error.message : 'Error desconocido');
-    }
+    setImprovementPrompt(prompt);
+    setIsImprovementPreviewOpen(true);
   };
 
   const handleTranslatePrompt = async (prompt: Prompt, language: 'es' | 'en') => {
