@@ -9,10 +9,8 @@ import { ArrowLeft, Users, CreditCard, Check, AlertCircle, Loader2 } from 'lucid
 import { useToast } from '@/hooks/useToast';
 import { formatCurrency } from '@/lib/utils';
 
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePromise = stripePublicKey ? loadStripe(stripePublicKey) : null;
 
 interface SubscribeFormProps {
   planDetails: {
@@ -151,6 +149,10 @@ export default function Subscribe() {
   const totalPrice = calculateTotal();
 
   useEffect(() => {
+    if (!stripePromise) {
+      setLoading(false);
+      return;
+    }
     // Crear subscription intent con Stripe (solo enviar planId y users, el servidor calcula el precio)
     fetch('/api/stripe/create-subscription-intent', {
       method: 'POST',
@@ -179,6 +181,36 @@ export default function Subscribe() {
         setLoading(false);
       });
   }, [users, planId, basePrice, totalPrice]);
+
+  if (!stripePromise) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="mb-4"
+            data-testid="button-back-to-home"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver
+          </Button>
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle>Pagos deshabilitados</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-300">
+                El módulo de pagos no está configurado. Añade
+                <span className="font-semibold"> VITE_STRIPE_PUBLIC_KEY</span>
+                para habilitar suscripciones.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   if (loading || !clientSecret) {
     return (

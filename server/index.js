@@ -28,13 +28,25 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const connectSrc = [
+  "'self'",
+  "https://*.supabase.co",
+  "https://api.openai.com",
+  "https://api.anthropic.com",
+  "https://openrouter.ai",
+];
+if (supabaseUrl) {
+  connectSrc.push(supabaseUrl);
+}
+
 // Middleware
 app.use(helmet({
   crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "https://*.supabase.co", "https://api.openai.com", "https://api.anthropic.com", "https://openrouter.ai"],
+      connectSrc,
       styleSrc: ["'self'", "'unsafe-inline'"],
       scriptSrc: ["'self'", "https://js.stripe.com"],
       imgSrc: ["'self'", "data:", "https:"],

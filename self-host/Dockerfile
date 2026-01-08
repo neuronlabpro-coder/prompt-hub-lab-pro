@@ -5,14 +5,14 @@ WORKDIR /app
 # Copiar archivos de dependencias
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm ci --only=production && npm cache clean --force
+# Instalar dependencias (incluye dev para build)
+RUN npm ci && npm cache clean --force
 
 # Copiar código fuente
 COPY . .
 
-# Build frontend
-RUN npm run build
+# Build frontend y limpiar dev deps
+RUN npm run build && npm prune --omit=dev
 
 # ============================================
 # Imagen de producción
@@ -30,6 +30,8 @@ COPY --from=builder /app/node_modules ./node_modules
 # Copiar código de producción
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server ./server
+COPY --from=builder /app/shared ./shared
+COPY --from=builder /app/src/lib ./src/lib
 COPY --from=builder /app/package*.json ./
 
 # Crear directorios necesarios
