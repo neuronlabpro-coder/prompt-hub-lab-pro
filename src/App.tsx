@@ -5,6 +5,7 @@ import { LandingPage } from './components/LandingPage';
 import { Router, useRouter } from './components/Router';
 import { usePrompts, useCategories, useProviders } from './hooks/useSupabase';
 import { useAdminUsers, useAdminPlans } from './hooks/useAdminData';
+import { supabase } from './lib/supabase';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
 import { AdminLayout } from './components/admin/AdminLayout';
@@ -38,16 +39,18 @@ import { TokenPromotions } from './components/admin/TokenPromotions';
 import { OrganizationPlanManagement } from './components/admin/OrganizationPlanManagement';
 import { ReferralSettings } from './components/admin/ReferralSettings';
 import { ProductManagement } from './components/admin/ProductManagement';
+import { SupportTickets } from './components/admin/SupportTickets';
+import { EmailTemplates } from './components/admin/EmailTemplates';
 import { UserProfile } from './components/UserProfile';
 import { Marketplace } from './components/Marketplace';
 import { SupportCenter } from './components/SupportCenter';
 import MarketplacePage from './pages/MarketplacePage';
 import MyPurchasedPrompts from './pages/MyPurchasedPrompts';
 import Subscribe from './pages/Subscribe';
-import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt } from './types';
+import { User, Plan, Coupon, Affiliate, Role, TokenPromotion, OrganizationPlan, Prompt, EmailTemplate, SupportTicket, SupportResponse } from './types';
 
 function AppContent() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, getToken } = useAuth();
   const { toasts, removeToast, toast } = useToast();
   const { prompts, loading: promptsLoading, improvePrompt, translatePrompt, incrementStat, toggleFavorite } = usePrompts();
   const { categories } = useCategories();
@@ -89,9 +92,181 @@ function AppContent() {
   const [adminAffiliates, setAdminAffiliates] = useState<Affiliate[]>([]);
   const [adminPromotions, setAdminPromotions] = useState<TokenPromotion[]>([]);
   const [adminOrgPlans, setAdminOrgPlans] = useState<OrganizationPlan[]>([]);
+  const [adminSupportTickets, setAdminSupportTickets] = useState<SupportTicket[]>([]);
+  const [adminSupportUsers, setAdminSupportUsers] = useState<any[]>([]);
+  const [adminSupportLoading, setAdminSupportLoading] = useState(false);
+  const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
+  const [emailTemplatesLoading, setEmailTemplatesLoading] = useState(false);
 
   // Check if user is admin - MUST be defined before using in JSX
   const isUserAdmin = user?.user_metadata?.role === 'superadmin' || user?.user_metadata?.role === 'admin';
+
+  const loadAdminSupportTickets = React.useCallback(async () => {
+    const token = await getToken();
+    if (!token) return;
+    setAdminSupportLoading(true);
+    try {
+      const response = await fetch('/api/support/admin/tickets', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'No se pudieron cargar los tickets');
+      }
+
+      const tickets = (data.data || []) as SupportTicket[];
+      setAdminSupportTickets(tickets);
+
+      const userMap = new Map();
+      (data.data || []).forEach((ticket: any) => {
+        const userInfo = ticket.users;
+        if (!userInfo) return;
+        const name = userInfo.name || userInfo.full_name || 'Usuario';
+        userMap.set(userInfo.id, { id: userInfo.id, name, email: userInfo.email || '' });
+      });
+      setAdminSupportUsers(Array.from(userMap.values()));
+    } catch (error: any) {
+      console.error('Admin support load error:', error);
+      toast.error('Error', error.message || 'No se pudieron cargar los tickets');
+    } finally {
+      setAdminSupportLoading(false);
+    }
+  }, [getToken, toast]);
+
+  const handleAdminUpdateTicket = React.useCallback(async (ticketId: string, updates: Partial<SupportTicket>) => {
+    const token = await getToken();
+    if (!token) return;
+    try {
+      const response = await fetch(`/api/support/admin/tickets/${ticketId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updates),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'No se pudo actualizar el ticket');
+      }
+      await loadAdminSupportTickets();
+    } catch (error: any) {
+      console.error('Admin support update error:', error);
+      toast.error('Error', error.message || 'No se pudo actualizar el ticket');
+    }
+  }, [getToken, loadAdminSupportTickets, toast]);
+
+  const handleAdminAddResponse = React.useCallback(async (ticketId: string, response: Omit<SupportResponse, 'id' | 'created_at'>) => {
+    const token = await getToken();
+    if (!token) return;
+    try {
+      const res = await fetch(`/api/support/tickets/${ticketId}/reply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ message: response.message, is_internal: response.is_internal }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'No se pudo enviar la respuesta');
+      }
+      await loadAdminSupportTickets();
+    } catch (error: any) {
+      console.error('Admin support reply error:', error);
+      toast.error('Error', error.message || 'No se pudo enviar la respuesta');
+    }
+  }, [getToken, loadAdminSupportTickets, toast]);
+
+  const loadEmailTemplates = React.useCallback(async () => {
+    setEmailTemplatesLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('email_templates')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setEmailTemplates((data || []) as EmailTemplate[]);
+    } catch (error: any) {
+      console.error('Email templates load error:', error);
+      toast.error('Error', error.message || 'No se pudieron cargar las plantillas');
+      setEmailTemplates([]);
+    } finally {
+      setEmailTemplatesLoading(false);
+    }
+  }, [toast]);
+
+  const handleCreateEmailTemplate = React.useCallback(async (template: Omit<EmailTemplate, 'id' | 'created_at' | 'updated_at'>) => {
+    try {
+      const { data, error } = await supabase
+        .from('email_templates')
+        .insert([template])
+        .select()
+        .single();
+      if (error) throw error;
+      setEmailTemplates(prev => [data as EmailTemplate, ...prev]);
+    } catch (error: any) {
+      console.error('Email template create error:', error);
+      toast.error('Error', error.message || 'No se pudo crear la plantilla');
+    }
+  }, [toast]);
+
+  const handleUpdateEmailTemplate = React.useCallback(async (templateId: string, updates: Partial<EmailTemplate>) => {
+    try {
+      const { data, error } = await supabase
+        .from('email_templates')
+        .update(updates)
+        .eq('id', templateId)
+        .select()
+        .single();
+      if (error) throw error;
+      setEmailTemplates(prev => prev.map(t => (t.id === templateId ? (data as EmailTemplate) : t)));
+    } catch (error: any) {
+      console.error('Email template update error:', error);
+      toast.error('Error', error.message || 'No se pudo actualizar la plantilla');
+    }
+  }, [toast]);
+
+  const handleDeleteEmailTemplate = React.useCallback(async (templateId: string) => {
+    try {
+      const { error } = await supabase
+        .from('email_templates')
+        .delete()
+        .eq('id', templateId);
+      if (error) throw error;
+      setEmailTemplates(prev => prev.filter(t => t.id !== templateId));
+    } catch (error: any) {
+      console.error('Email template delete error:', error);
+      toast.error('Error', error.message || 'No se pudo eliminar la plantilla');
+    }
+  }, [toast]);
+
+  const handleTestEmailTemplate = React.useCallback(async (templateId: string) => {
+    if (!user?.email) {
+      toast.error('Error', 'No se encontró email del usuario');
+      return;
+    }
+    try {
+      const response = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: user.email,
+          template_id: templateId,
+          variables: {},
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'No se pudo enviar el email');
+      }
+      toast.success('Email enviado', 'Se envió un email de prueba');
+    } catch (error: any) {
+      console.error('Email template test error:', error);
+      toast.error('Error', error.message || 'No se pudo enviar el email');
+    }
+  }, [toast, user?.email]);
 
   // Admin mode toggle
   const toggleAdminMode = () => {
@@ -104,6 +279,16 @@ function AppContent() {
       toast.error('Acceso denegado', 'No tienes permisos de administrador');
     }
   };
+
+  React.useEffect(() => {
+    if (!isAdminMode || adminView !== 'support') return;
+    loadAdminSupportTickets();
+  }, [isAdminMode, adminView, loadAdminSupportTickets]);
+
+  React.useEffect(() => {
+    if (!isAdminMode || adminView !== 'emails') return;
+    loadEmailTemplates();
+  }, [isAdminMode, adminView, loadEmailTemplates]);
 
   // Check for token usage warning
   React.useEffect(() => {
@@ -865,14 +1050,45 @@ function AppContent() {
               }}
             />
           );
-        case 'emails':
-        case 'support':
         case 'smtp':
           return (
             <div className="text-center py-12">
               <h3 className="text-xl font-semibold text-white mb-4">Sección en desarrollo</h3>
               <p className="text-gray-400">Esta funcionalidad estará disponible pronto</p>
             </div>
+          );
+        case 'support':
+          if (adminSupportLoading) {
+            return (
+              <div className="text-center py-12">
+                <p className="text-gray-400">Cargando tickets...</p>
+              </div>
+            );
+          }
+          return (
+            <SupportTickets
+              tickets={adminSupportTickets}
+              users={adminSupportUsers}
+              onUpdateTicket={handleAdminUpdateTicket}
+              onAddResponse={handleAdminAddResponse}
+            />
+          );
+        case 'emails':
+          if (emailTemplatesLoading) {
+            return (
+              <div className="text-center py-12">
+                <p className="text-gray-400">Cargando plantillas...</p>
+              </div>
+            );
+          }
+          return (
+            <EmailTemplates
+              templates={emailTemplates}
+              onCreateTemplate={handleCreateEmailTemplate}
+              onUpdateTemplate={handleUpdateEmailTemplate}
+              onDeleteTemplate={handleDeleteEmailTemplate}
+              onTestTemplate={handleTestEmailTemplate}
+            />
           );
         default:
           return (

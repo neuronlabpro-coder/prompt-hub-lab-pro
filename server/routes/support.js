@@ -148,7 +148,7 @@ router.get('/tickets/:id', async (req, res) => {
         assigned_to,
         users!support_tickets_assigned_to_fkey (
           id,
-          full_name,
+          name,
           email
         )
       `)
@@ -182,7 +182,7 @@ router.get('/tickets/:id', async (req, res) => {
         user_id,
         users (
           id,
-          full_name,
+          name,
           email
         )
       `)
@@ -209,7 +209,7 @@ router.get('/tickets/:id', async (req, res) => {
 router.post('/tickets/:id/reply', async (req, res) => {
   try {
     const { id } = req.params;
-    const { message } = req.body;
+    const { message, is_internal = false } = req.body;
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
@@ -251,6 +251,8 @@ router.post('/tickets/:id/reply', async (req, res) => {
       return res.status(403).json({ success: false, error: 'Sin permisos' });
     }
 
+    const internalFlag = isAdmin ? Boolean(is_internal) : false;
+
     // Create response
     const { data: response, error: responseError } = await supabase
       .from('support_responses')
@@ -259,7 +261,7 @@ router.post('/tickets/:id/reply', async (req, res) => {
         user_id: user.id,
         message,
         is_admin_response: isAdmin,
-        is_internal: false
+        is_internal: internalFlag
       }])
       .select(`
         id,
@@ -268,7 +270,7 @@ router.post('/tickets/:id/reply', async (req, res) => {
         created_at,
         users (
           id,
-          full_name,
+          name,
           email
         )
       `)
@@ -338,7 +340,7 @@ router.get('/admin/tickets', async (req, res) => {
         assigned_to,
         users!support_tickets_user_id_fkey (
           id,
-          full_name,
+          name,
           email
         )
       `)
