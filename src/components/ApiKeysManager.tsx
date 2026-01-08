@@ -19,7 +19,7 @@ interface ApiKey {
 
 export function ApiKeysManager() {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, getToken } = useAuth();
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -34,10 +34,14 @@ export function ApiKeysManager() {
 
   const fetchApiKeys = async () => {
     try {
-      // En producción, esto vendría de Supabase con el token del usuario
+      const token = await getToken();
+      if (!token) {
+        setApiKeys([]);
+        return;
+      }
       const response = await fetch('/api/api-keys', {
         headers: {
-          'Authorization': `Bearer ${user?.id}`, // Ajustar según tu auth
+          'Authorization': `Bearer ${token}`,
         }
       });
 
@@ -63,11 +67,15 @@ export function ApiKeysManager() {
 
     setCreating(true);
     try {
+      const token = await getToken();
+      if (!token) {
+        throw new Error('Sesión inválida');
+      }
       const response = await fetch('/api/api-keys', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user?.id}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ name: newKeyName.trim() })
       });
@@ -96,10 +104,14 @@ export function ApiKeysManager() {
     }
 
     try {
+      const token = await getToken();
+      if (!token) {
+        throw new Error('Sesión inválida');
+      }
       const response = await fetch(`/api/api-keys/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${user?.id}`,
+          'Authorization': `Bearer ${token}`,
         }
       });
 

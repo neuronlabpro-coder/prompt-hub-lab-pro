@@ -33,15 +33,20 @@ router.get('/prompts', async (req, res) => {
         type,
         tags,
         created_at,
-        category,
+        category_id,
         price,
         sales_count,
         is_for_sale,
-        discount_eligible
+        discount_eligible,
+        categories (
+          name,
+          icon,
+          color
+        )
       `);
 
     if (category) {
-      query = query.eq('category', category);
+      query = query.eq('category_id', category);
     }
 
     if (search) {
@@ -96,11 +101,16 @@ router.get('/prompts/:id', async (req, res) => {
         type,
         tags,
         created_at,
-        category,
+        category_id,
         price,
         sales_count,
         is_for_sale,
-        discount_eligible
+        discount_eligible,
+        categories (
+          name,
+          icon,
+          color
+        )
       `)
       .eq('id', id)
       .single();
@@ -253,7 +263,12 @@ router.get('/my-purchases', async (req, res) => {
           content_es,
           content_en,
           type,
-          category
+          category_id,
+          categories (
+            name,
+            icon,
+            color
+          )
         )
       `)
       .eq('buyer_id', user.id)

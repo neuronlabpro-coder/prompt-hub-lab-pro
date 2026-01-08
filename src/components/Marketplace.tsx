@@ -33,7 +33,7 @@ interface PromptDetails extends MarketplacePrompt {
 
 export function Marketplace() {
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, getToken } = useAuth();
   const { addItem } = useCart();
   const [prompts, setPrompts] = useState<MarketplacePrompt[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,9 +70,11 @@ export function Marketplace() {
 
   const fetchMyPurchases = async () => {
     try {
+      const token = await getToken();
+      if (!token) return;
       const response = await fetch('/api/marketplace/my-purchases', {
         headers: {
-          'Authorization': `Bearer ${user?.id}`
+          'Authorization': `Bearer ${token}`
         }
       });
       const data = await response.json();
@@ -87,9 +89,10 @@ export function Marketplace() {
 
   const fetchPromptDetails = async (promptId: string) => {
     try {
+      const token = user ? await getToken() : null;
       const response = await fetch(`/api/marketplace/prompts/${promptId}`, {
-        headers: user ? {
-          'Authorization': `Bearer ${user.id}`
+        headers: token ? {
+          'Authorization': `Bearer ${token}`
         } : {}
       });
       const data = await response.json();
@@ -113,11 +116,15 @@ export function Marketplace() {
 
     setPurchasing(true);
     try {
+      const token = await getToken();
+      if (!token) {
+        throw new Error('Sesión inválida');
+      }
       const response = await fetch('/api/marketplace/purchase', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.id}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           prompt_id: selectedPrompt.id,
